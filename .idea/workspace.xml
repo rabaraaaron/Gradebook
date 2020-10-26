@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f08bf5d1-3d3b-48a2-b2ba-fd16aa6d873c" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Nexus_6_API_25]" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1io48a14GCjx7ahugSTWQRZS24b" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/grade_book_test/lib/main.dart" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/grade_book_test" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Dart Command Line App.main.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f08bf5d1-3d3b-48a2-b2ba-fd16aa6d873c" name="Default Changelist" comment="" />
+      <created>1602560452991</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602560452991</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="309" y="175" key="#Plugins" timestamp="1602560509459">
+      <screen x="0" y="22" width="1680" height="1024" />
+    </state>
+    <state x="309" y="175" key="#Plugins/0.22.1680.1024@0.22.1680.1024" timestamp="1602560509459" />
+    <state x="464" y="255" key="#main.dart" timestamp="1602560832574">
+      <screen x="0" y="22" width="1680" height="1024" />
+    </state>
+    <state x="464" y="255" key="#main.dart/0.22.1680.1024@0.22.1680.1024" timestamp="1602560832574" />
+    <state x="255" y="148" key="SettingsEditor" timestamp="1602630608454">
+      <screen x="0" y="22" width="1680" height="1024" />
+    </state>
+    <state x="255" y="148" key="SettingsEditor/0.22.1680.1024@0.22.1680.1024" timestamp="1602630608454" />
+  </component>
+</project>
