@@ -46,6 +46,7 @@ class _Login extends State<Login> {
       value: _checked,
       onChanged: (bool value) {
         setState(() {
+
           //todo: this is not working, needs to be fixed
           _checked = true; //this is not working
         });
