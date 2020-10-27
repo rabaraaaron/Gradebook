@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/pages/login.dart';
 import 'package:gradebook/pages/sign_up.dart';
 import 'package:gradebook/pages/welcome.dart';
+import 'package:gradebook/pages/Terms.dart';
+import 'package:gradebook/pages/TermClasses.dart';
 
 void main(){
 runApp(Gradebook());
@@ -29,7 +31,9 @@ class _GradebookState extends State<Gradebook>{
       routes: {
         '/': (context) => Welcome(),
         '/Login': (context) => Login(),
-        '/Sign_up': (context) => SignUp()
+        '/Sign_up': (context) => SignUp(),
+        '/Terms': (context) => TermsPage(),
+        '/home': (context) => TermClasses(),
       },
 
       );

@@ -17,14 +17,16 @@ class _TermsPageState extends State<TermsPage> {
         title: Text("Terms", textScaleFactor: 1.75,),
         backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white,), iconSize: 30,
-            onPressed: null, color: Colors.black,),
+        leading: IconButton(
+            icon: Icon(Icons.donut_small, color: Colors.white,),
+            iconSize: 0,
+            onPressed: (){}),
         actions: [IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.white,
             onPressed: () async{
               await showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    newTermPopUp(context, terms),
+                    newClassPopUp(context, terms),
               );
               setState(() {});
             }
@@ -53,7 +55,7 @@ class _TermsPageState extends State<TermsPage> {
                       color: Colors.white,
                       child: InkWell(
                         onTap: (){
-                          print("${terms[index]} tapped");
+                          Navigator.pushNamed(context, "/home");
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
@@ -115,7 +117,7 @@ class _TermsPageState extends State<TermsPage> {
 
 
 
-Widget newTermPopUp(BuildContext context, List<String> terms) {
+Widget newClassPopUp(BuildContext context, List<String> terms) {
   var termYear;
   var term;
   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
@@ -134,7 +136,7 @@ Widget newTermPopUp(BuildContext context, List<String> terms) {
       child: Form(
           child: Column(children: [
             DropdownButton(
-              hint: Text("Term"),
+              hint: Text(""),
               onChanged: (str) {
                 setState(var str){
                   term = str;
@@ -160,7 +162,7 @@ Widget newTermPopUp(BuildContext context, List<String> terms) {
             RaisedButton(onPressed: (){
               terms.insert(0, "$term");
               Navigator.pop(context);
-              }, child: Text("Submit"))
+              }, child: Text("Add"))
           ])),
       width: 100,
       height: 175,
