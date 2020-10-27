@@ -10,6 +10,7 @@ class _WelcomeState extends State<Welcome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Welcome to Gradebook"),
       ),
       body: Stack(

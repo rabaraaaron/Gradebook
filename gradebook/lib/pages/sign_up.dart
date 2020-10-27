@@ -57,6 +57,7 @@ class _SignUp extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Sign up"),
+        centerTitle: true,
       ),
       body: Center(
         child: Container(

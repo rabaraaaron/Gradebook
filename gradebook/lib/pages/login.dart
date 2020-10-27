@@ -16,7 +16,6 @@ class _Login extends State<Login> {
       obscureText: false,
       style: style,
       decoration: InputDecoration(
-          //contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
@@ -24,7 +23,6 @@ class _Login extends State<Login> {
       obscureText: true,
       style: style,
       decoration: InputDecoration(
-          //contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Password",
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
@@ -51,12 +49,12 @@ class _Login extends State<Login> {
           _checked = true; //this is not working
         });
       },
-      //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
     );
 
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Login"),
       ),
       body: Center(
