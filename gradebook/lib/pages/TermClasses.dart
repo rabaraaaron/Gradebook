@@ -14,7 +14,11 @@ class _TermsPageState extends State<TermClasses> {
     Random rand = new Random();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fall 2020", textScaleFactor: 1.75,),
+        title: Text(
+          "Fall 2020",
+          textScaleFactor: 1.75,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
         leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white,), iconSize: 30,
@@ -24,7 +28,7 @@ class _TermsPageState extends State<TermClasses> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    newTermPopUp(context, classes),
+                    newClassPopUp(context, classes),
               );
               setState(() {});
             }
@@ -41,7 +45,6 @@ class _TermsPageState extends State<TermClasses> {
               child: Center(child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(10),
-                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -50,7 +53,6 @@ class _TermsPageState extends State<TermClasses> {
                         padding: EdgeInsets.all(10.0),),
                       Expanded(
                         child: Material(
-                          color: Colors.white,
                           child: InkWell(
                             onTap: (){
                               // Navigator.push(context, )
@@ -82,9 +84,11 @@ class _TermsPageState extends State<TermClasses> {
 
 
 
-Widget newTermPopUp(BuildContext context, List<String> terms) {
-  var termYear;
-  var term;
+Widget newClassPopUp(BuildContext context, List<String> terms) {
+  final classTitleController = TextEditingController();
+  final creditHoursController = TextEditingController();
+
+  var termClass;
   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
   List<DropdownMenuItem> listOfTerms = [];
   for(var l = 0; l < listOfTermsRaw.length; l++){
@@ -96,39 +100,34 @@ Widget newTermPopUp(BuildContext context, List<String> terms) {
   }
 
   return AlertDialog(
-      title: Text("Add a new Term"),
+      title: Text("Add a new Class"),
       content: SizedBox(
         child: Form(
             child: Column(children: [
-              DropdownButton(
-                hint: Text("Term"),
-                onChanged: (str) {
-                  setState(var str){
-                    term = str;
-                  }
-                  setState((str) { });
-                },
-                value: term,
-                isExpanded: true,
-                items: listOfTerms,
+              TextFormField(
+                controller: classTitleController,
+                decoration: const InputDecoration(
+                  labelText: 'Class Title',
+                ),
               ),
-              DropdownButton(
-                hint: Text("Year"),
-                onChanged: (value) {
-                  setState(var value){
-                    term = value;
-                  }
-                  setState((value) { });
-                },
-                value: term,
-                isExpanded: true,
-                items: listOfYears,
+              TextFormField(
+                controller: creditHoursController,
+                decoration: const InputDecoration(
+                  labelText: 'Credit Hours',
+                ),
               ),
-              RaisedButton(onPressed: (){
-                terms.insert(0, "$term");
-                Navigator.pop(context);
-              }, child: Text("Submit"))
-            ])),
+              RaisedButton(
+                  onPressed: (){
+                    terms.insert(0, classTitleController.text);
+                    if(int.parse(creditHoursController.text) is int){
+                      print(creditHoursController.text);
+                    }
+                    Navigator.pop(context);
+              },
+                  child: Text("Submit")
+              )
+            ])
+        ),
         width: 100,
         height: 175,
       ));

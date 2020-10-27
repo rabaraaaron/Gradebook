@@ -32,7 +32,10 @@ class _Login extends State<Login> {
             style: TextStyle(fontSize: 30),),
             color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(),
-            onPressed: () {Navigator.pushNamed(context, '/home');},
+            onPressed: () {
+              Navigator.pushNamed(context, '/Terms');
+              Navigator.pushNamed(context, '/home');
+              },
             padding: const EdgeInsets.all(18.0),
           );
     bool _checked = true;
