@@ -118,7 +118,11 @@ Widget _newClassPopUp(BuildContext context, List<String> classes) {
               setState(value);
             },
           ),
-          RaisedButton(onPressed: (){classes.add(newClass);}, child: Text("Submit"))
+          RaisedButton(
+              onPressed: (){
+                if ()
+                classes.add(newClass);
+                }, child: Text("Submit"))
         ]))
       ],
     ),
