@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/pages/login.dart';
 import 'package:gradebook/pages/sign_up.dart';
 import 'package:gradebook/pages/welcome.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main(){
 runApp(Gradebook());
@@ -17,6 +18,8 @@ class Gradebook extends StatefulWidget {
 }
 
 class _GradebookState extends State<Gradebook>{
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
 
 
   @override
