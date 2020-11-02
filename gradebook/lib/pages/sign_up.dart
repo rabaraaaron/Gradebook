@@ -50,7 +50,7 @@ class _SignUp extends State<SignUp> {
         style: TextStyle(fontSize: 30),),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(),
-      onPressed: () {Navigator.pushNamed(context, '/home');},
+      onPressed: () {Navigator.pushNamed(context, '/Terms');},
       padding: const EdgeInsets.all(18.0),
 
     )

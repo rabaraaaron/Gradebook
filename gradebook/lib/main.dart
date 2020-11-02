@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/pages/login.dart';
 import 'package:gradebook/pages/sign_up.dart';
 import 'package:gradebook/pages/welcome.dart';
+//import 'package:firebase_core/firebase_core.dart';
+import 'package:gradebook/pages/Terms.dart';
+import 'package:gradebook/pages/TermClasses.dart';
 
 void main(){
 runApp(Gradebook());
@@ -17,6 +20,8 @@ class Gradebook extends StatefulWidget {
 }
 
 class _GradebookState extends State<Gradebook>{
+  //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
 
   @override
   Widget build(BuildContext context)  {
@@ -28,7 +33,9 @@ class _GradebookState extends State<Gradebook>{
       routes: {
         '/': (context) => Welcome(),
         '/Login': (context) => Login(),
-        '/Sign_up': (context) => SignUp()
+        '/Sign_up': (context) => SignUp(),
+        '/Terms': (context) => TermsPage(),
+        '/home': (context) => TermClasses(),
       },
 
       );

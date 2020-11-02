@@ -27,17 +27,20 @@ class _Login extends State<Login> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
-    final loginButon = SizedBox(
-      width: 400,
-        child: RaisedButton(
-      child: Text('login',
-        style: TextStyle(fontSize: 30),),
-      color: Theme.of(context).primaryColor,
-      shape: RoundedRectangleBorder(),
-      onPressed: () {Navigator.pushNamed(context, '/home');},
-      padding: const EdgeInsets.all(18.0),
-    )
-    );
+
+
+    final loginButon = RaisedButton(
+            child: Text('              login               ',
+            style: TextStyle(fontSize: 30),),
+            color: Theme.of(context).primaryColor,
+            shape: RoundedRectangleBorder(),
+            onPressed: () {
+              Navigator.pushNamed(context, '/Terms');
+              Navigator.pushNamed(context, '/home');
+              },
+            padding: const EdgeInsets.all(18.0),
+          );
+
     bool _checked = true;
     final checkbox = CheckboxListTile(
       title: Text("Keep me logged in"),
