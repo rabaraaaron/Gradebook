@@ -32,7 +32,7 @@ class _TermsPageState extends State<TermsPage> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    newClassPopUp(context, terms),
+                    NewTermsPopUp(context, terms),
               );
               setState(() {});
             }
@@ -64,7 +64,7 @@ class _TermsPageState extends State<TermsPage> {
                     child: Material(
                       child: InkWell(
                         onTap: (){
-                          Navigator.pushNamed(context, "/home");
+                          Navigator.pushNamed(context, "/Home");
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
@@ -87,55 +87,85 @@ class _TermsPageState extends State<TermsPage> {
 }
 
 
+class NewTermsPopUp extends StatefulWidget {
+  var c;
+  var termsList;
 
-Widget newClassPopUp(BuildContext context, List<String> terms) {
-  var term;
-  List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", ""];
-  List<DropdownMenuItem> listOfTerms = [];
-  for(var l = 0; l < listOfTermsRaw.length; l++){
-    listOfTerms.insert(0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
+  NewTermsPopUp(context, terms){
+    c = context;
+    termsList = terms;
   }
-  List<DropdownMenuItem> listOfYears = [];
-  for(var i = 2015; i <= DateTime.now().year; i++){
-    listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
-  }
-
-  return AlertDialog(
-    title: Text("Add a new Term"),
-    content: SizedBox(
-      child: Form(
-          child: Column(children: [
-            DropdownButton(
-              hint: Text(""),
-              onChanged: (str) {
-                setState(var str){
-                  term = str;
-                }
-                setState((str) { });
-              },
-              value: term,
-              isExpanded: true,
-              items: listOfTerms,
-            ),
-            DropdownButton(
-              hint: Text("Year"),
-              onChanged: (value) {
-                setState(var value){
-                  term = value;
-                }
-                setState((value) { });
-              },
-              value: term,
-              isExpanded: true,
-              items: listOfYears,
-            ),
-            RaisedButton(onPressed: (){
-              terms.insert(0, "$term");
-              Navigator.pop(context);
-              }, child: Text("Add"))
-          ])),
-      width: 100,
-      height: 175,
-    ));
+  @override
+  _NewTermsPopUpState createState() => _NewTermsPopUpState(c, termsList);
 }
+
+class _NewTermsPopUpState extends State<NewTermsPopUp> {
+  var thisContext;
+  var thisTerms;
+  var termYear;
+  var addedTerm;
+
+  _NewTermsPopUpState(context, terms){
+    thisContext = context;
+    thisTerms = terms;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
+    List<DropdownMenuItem> listOfTerms = [];
+    for(var l = 0; l < listOfTermsRaw.length; l++){
+      listOfTerms.insert(0, DropdownMenuItem(
+        child: Text("${listOfTermsRaw[l]}"),
+        value: listOfTermsRaw[l],
+      ));
+    }
+    List<DropdownMenuItem> listOfYears = [];
+    for(var i = 2015; i <= DateTime.now().year; i++){
+      listOfYears.insert(0, DropdownMenuItem(
+        child: Text("$i"),
+        value: i,
+      ));
+    }
+
+    return AlertDialog(
+        title: Text("Add a new Term"),
+        content: SizedBox(
+          child: Form(
+              child: Column(children: [
+                DropdownButton(
+                  hint: Text("Term"),
+                  value: addedTerm,
+                  items: listOfTerms,
+                  onChanged: (newTerm) {
+                    setState(() {
+                      addedTerm = newTerm;
+                    });
+                  },
+                  isExpanded: true,
+                ),
+                DropdownButton(
+                  hint: Text("Year"),
+                  onChanged: (newYear) {
+                    setState(() {
+                      termYear = newYear;
+                    });
+                  },
+                  value: termYear,
+                  isExpanded: true,
+                  items: listOfYears,
+                ),
+                RaisedButton(onPressed: (){
+                  thisTerms.insert(0, "$addedTerm" + " " + "$termYear");
+                  Navigator.pop(context);
+                }, child: Text("Add"))
+              ])),
+          width: 100,
+          height: 175,
+        ));
+  }
+}
+
 
