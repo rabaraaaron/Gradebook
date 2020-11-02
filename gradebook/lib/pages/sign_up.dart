@@ -43,15 +43,17 @@ class _SignUp extends State<SignUp> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
-    final registerBtn =
-    RaisedButton(
-      child: Text('           Register           ',
+    final registerBtn = SizedBox(
+      width: 400,
+        child: RaisedButton(
+      child: Text('Register',
         style: TextStyle(fontSize: 30),),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(),
       onPressed: () {Navigator.pushNamed(context, '/Terms');},
       padding: const EdgeInsets.all(18.0),
 
+    )
     );
 
     return Scaffold(

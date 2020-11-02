@@ -27,6 +27,7 @@ class _Login extends State<Login> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
+
     final loginButton = RaisedButton(
             child: Text('              login               ',
             style: TextStyle(fontSize: 30),),
@@ -38,12 +39,13 @@ class _Login extends State<Login> {
               },
             padding: const EdgeInsets.all(18.0),
           );
+
     bool _checked = true;
     final checkbox = CheckboxListTile(
       title: Text("Keep me logged in"),
       //secondary: Icon(Icons.beach_access),
       controlAffinity:
-        ListTileControlAffinity.leading,
+      ListTileControlAffinity.leading,
       value: _checked,
       onChanged: (bool value) {
         setState(() {
@@ -52,13 +54,14 @@ class _Login extends State<Login> {
           _checked = true; //this is not working
         });
       },
+      //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
     );
 
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: Text("Login"),
+        centerTitle: true,
       ),
       body: Center(
         child: Container(
