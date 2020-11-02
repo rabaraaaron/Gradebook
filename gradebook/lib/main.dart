@@ -4,6 +4,7 @@ import 'package:gradebook/pages/sign_up.dart';
 import 'package:gradebook/pages/welcome.dart';
 import 'package:gradebook/pages/Terms.dart';
 import 'package:gradebook/pages/TermClasses.dart';
+import 'package:gradebook/pages/Categories.dart';
 
 void main(){
 runApp(Gradebook());
@@ -33,9 +34,9 @@ class _GradebookState extends State<Gradebook>{
         '/Login': (context) => Login(),
         '/Sign_up': (context) => SignUp(),
         '/Terms': (context) => TermsPage(),
-        '/home': (context) => TermClasses(),
+        '/Home': (context) => TermClasses(),
+        '/Categories': (context) => Categories(),
       },
-
-      );
+    );
   }
 }

@@ -26,7 +26,7 @@ class _TermsPageState extends State<TermsPage> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    newClassPopUp(context, terms),
+                    NewTermsPopUp(context, terms),
               );
               setState(() {});
             }
@@ -55,7 +55,7 @@ class _TermsPageState extends State<TermsPage> {
                       color: Colors.white,
                       child: InkWell(
                         onTap: (){
-                          Navigator.pushNamed(context, "/home");
+                          Navigator.pushNamed(context, "/Home");
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
@@ -64,108 +64,152 @@ class _TermsPageState extends State<TermsPage> {
                       ),
                     ),
                   ),
-                  Container(
-                    child: DropdownButton(
-                      icon: Icon(Icons.arrow_forward_ios_rounded,),
-                      iconEnabledColor: Colors.grey,
-                      iconDisabledColor: Colors.black,
-                      iconSize: 30,
-                      onTap: (){},
-                    ),
-                    padding: EdgeInsets.all(5.0),
-                  ),
                 ],
               )
             )),
           ),
         )
-
-        // child: ListView.builder(
-        //   itemBuilder: (context, index){
-        //     return ListTile(
-        //       title: Text(terms[index],
-        //         textAlign: TextAlign.center,
-        //         textScaleFactor: 1.5,
-        //       ),
-        //       tileColor: Theme.of(context).primaryColorLight,
-        //       leading: Icon(Icons.ac_unit, color: Colors.black, size: 30,),
-        //       onTap: (null),
-        //       trailing: DropdownButton(
-        //         icon: Icon(Icons.arrow_forward_ios_rounded,),
-        //         iconEnabledColor: Colors.grey,
-        //         iconDisabledColor: Colors.black,
-        //         iconSize: 25,
-        //         onTap: (){
-        //         },
-        //       ),
-        //     );
-        //   },
-        //   itemExtent: 75.0,
-        //   itemCount: terms.length,),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (null),
-        tooltip: 'Next page',
-        child: Icon(
-            Icons.add,
-            color: Colors.black,
-        ),
-      ), //
     );
   }
 }
 
 
 
-Widget newClassPopUp(BuildContext context, List<String> terms) {
+// Widget newClassPopUp(BuildContext context, List<String> terms) {
+//   var termYear;
+//   var term;
+//   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
+//   List<DropdownMenuItem> listOfTerms = [];
+//   for(var l = 0; l < listOfTermsRaw.length; l++){
+//     listOfTerms.insert(0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
+//   }
+//   List<DropdownMenuItem> listOfYears = [];
+//   for(var i = 2015; i <= DateTime.now().year; i++){
+//     listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
+//   }
+//
+//   return AlertDialog(
+//     title: Text("Add a new Term"),
+//     content: SizedBox(
+//       child: Form(
+//           child: Column(children: [
+//             DropdownButton(
+//               hint: Text(""),
+//               onChanged: (str) {
+//                 setState(var str){
+//                   term = str;
+//                 }
+//                 setState((str) { });
+//               },
+//               value: term,
+//               isExpanded: true,
+//               items: listOfTerms,
+//             ),
+//             DropdownButton(
+//               hint: Text("Year"),
+//               onChanged: (value) {
+//                 setState(var value){
+//                   term = value;
+//                 }
+//                 setState((value) { });
+//               },
+//               value: term,
+//               isExpanded: true,
+//               items: listOfYears,
+//             ),
+//             RaisedButton(onPressed: (){
+//               terms.insert(0, "$term");
+//               Navigator.pop(context);
+//               }, child: Text("Add"))
+//           ])),
+//       width: 100,
+//       height: 175,
+//     ));
+// }
+
+
+
+class NewTermsPopUp extends StatefulWidget {
+  var c;
+  var termsList;
+
+  NewTermsPopUp(context, terms){
+    c = context;
+    termsList = terms;
+  }
+  @override
+  _NewTermsPopUpState createState() => _NewTermsPopUpState(c, termsList);
+}
+
+class _NewTermsPopUpState extends State<NewTermsPopUp> {
+  var thisContext;
+  var thisTerms;
   var termYear;
   var term;
-  List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
-  List<DropdownMenuItem> listOfTerms = [];
-  for(var l = 0; l < listOfTermsRaw.length; l++){
-    listOfTerms.insert(0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
-  }
-  List<DropdownMenuItem> listOfYears = [];
-  for(var i = 2015; i <= DateTime.now().year; i++){
-    listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
+
+  _NewTermsPopUpState(context, terms){
+    thisContext = context;
+    thisTerms = terms;
   }
 
-  return AlertDialog(
-    title: Text("Add a new Term"),
-    content: SizedBox(
-      child: Form(
-          child: Column(children: [
-            DropdownButton(
-              hint: Text(""),
-              onChanged: (str) {
-                setState(var str){
-                  term = str;
-                }
-                setState((str) { });
-              },
-              value: term,
-              isExpanded: true,
-              items: listOfTerms,
-            ),
-            DropdownButton(
-              hint: Text("Year"),
-              onChanged: (value) {
-                setState(var value){
-                  term = value;
-                }
-                setState((value) { });
-              },
-              value: term,
-              isExpanded: true,
-              items: listOfYears,
-            ),
-            RaisedButton(onPressed: (){
-              terms.insert(0, "$term");
-              Navigator.pop(context);
-              }, child: Text("Add"))
-          ])),
-      width: 100,
-      height: 175,
-    ));
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
+    List<DropdownMenuItem> listOfTerms = [];
+    for(var l = 0; l < listOfTermsRaw.length; l++){
+      listOfTerms.insert(0, DropdownMenuItem(
+        child: Text("${listOfTermsRaw[l]}"),
+        value: listOfTermsRaw[l],
+      ));
+    }
+    List<DropdownMenuItem> listOfYears = [];
+    for(var i = 2015; i <= DateTime.now().year; i++){
+      listOfYears.insert(0, DropdownMenuItem(
+        child: Text("$i"),
+        value: i,
+      ));
+    }
+
+    return AlertDialog(
+        title: Text("Add a new Term"),
+        content: SizedBox(
+          child: Form(
+              child: Column(children: [
+                DropdownButton(
+                  hint: Text("Term"),
+                  value: term,
+                  items: listOfTerms,
+                  onChanged: (newTerm) {
+                    setState(() {
+                      term = newTerm;
+                    });
+                  },
+                  isExpanded: true,
+                ),
+                DropdownButton(
+                  hint: Text("Year"),
+                  onChanged: (newYear) {
+                    setState(() {
+                      termYear = newYear;
+                    });
+                  },
+                  value: termYear,
+                  isExpanded: true,
+                  items: listOfYears,
+                ),
+                RaisedButton(onPressed: (){
+                  thisTerms.insert(0, "$term" + " " + "$termYear");
+                  Navigator.pop(context);
+                }, child: Text("Add"))
+              ])),
+          width: 100,
+          height: 175,
+        ));
+  }
 }
+
 

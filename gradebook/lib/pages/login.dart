@@ -29,12 +29,15 @@ class _Login extends State<Login> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
-    final loginButon = RaisedButton(
+    final loginButton = RaisedButton(
             child: Text('              login               ',
             style: TextStyle(fontSize: 30),),
             color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(),
-            onPressed: () {Navigator.pushNamed(context, '/home');},
+            onPressed: () {
+              Navigator.pushNamed(context, '/Terms');
+              Navigator.pushNamed(context, '/Home');
+              },
             padding: const EdgeInsets.all(18.0),
           );
     bool _checked = true;
@@ -73,7 +76,7 @@ class _Login extends State<Login> {
                 passwordField,
                 checkbox,
                 SizedBox(height: 45.0),
-                loginButon,
+                loginButton,
                 SizedBox(height: 15.0,),
               ],
             ),

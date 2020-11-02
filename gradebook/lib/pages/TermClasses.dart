@@ -46,7 +46,7 @@ class _TermsPageState extends State<TermClasses> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        child: Icon(Icons.chevron_right, size: 50,),
+                        child: Icon(Icons.computer, size: 50,),
                         padding: EdgeInsets.all(10.0),),
                       Expanded(
                         child: Material(
@@ -82,50 +82,24 @@ class _TermsPageState extends State<TermClasses> {
 
 
 
-Widget newTermPopUp(BuildContext context, List<String> terms) {
-  var termYear;
-  var term;
-  List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
-  List<DropdownMenuItem> listOfTerms = [];
-  for(var l = 0; l < listOfTermsRaw.length; l++){
-    listOfTerms.insert(0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
-  }
-  List<DropdownMenuItem> listOfYears = [];
-  for(var i = 2015; i <= DateTime.now().year; i++){
-    listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
-  }
+Widget newTermPopUp(BuildContext context, List<String> classes) {
+  final TextEditingController classController = new TextEditingController();
+  var classTitle;
 
   return AlertDialog(
-      title: Text("Add a new Term"),
+      title: Text("Add a new Class"),
       content: SizedBox(
         child: Form(
             child: Column(children: [
-              DropdownButton(
-                hint: Text("Term"),
-                onChanged: (str) {
-                  setState(var str){
-                    term = str;
-                  }
-                  setState((str) { });
-                },
-                value: term,
-                isExpanded: true,
-                items: listOfTerms,
-              ),
-              DropdownButton(
-                hint: Text("Year"),
-                onChanged: (value) {
-                  setState(var value){
-                    term = value;
-                  }
-                  setState((value) { });
-                },
-                value: term,
-                isExpanded: true,
-                items: listOfYears,
+              TextFormField(
+                controller: classController,
+                decoration: InputDecoration(
+                  labelText: 'Course Title',
+                ),
               ),
               RaisedButton(onPressed: (){
-                terms.insert(0, "$term");
+                classTitle = classController.text;
+                classes.insert(0, "$classTitle");
                 Navigator.pop(context);
               }, child: Text("Submit"))
             ])),
