@@ -49,7 +49,7 @@ class _TermsPageState extends State<TermClasses> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        child: Icon(Icons.chevron_right, size: 50,),
+                        child: Icon(Icons.computer, size: 50,),
                         padding: EdgeInsets.all(10.0),),
                       Expanded(
                         child: Material(
@@ -98,6 +98,7 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
   for(var i = 2015; i <= DateTime.now().year; i++){
     listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
   }
+
 
   return AlertDialog(
       title: Text("Add a new Class"),
