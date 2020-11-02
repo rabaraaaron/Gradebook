@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TermsPage extends StatefulWidget {
   @override
@@ -38,37 +39,56 @@ class _TermsPageState extends State<TermsPage> {
             }
         )],
       ),
-      body: Center(
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-            color: Colors.black,
-          ),
-          itemCount: terms.length,
-          itemBuilder: (context, index) => Container(
-            child: Center(child: Container(
+      body: ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.black,
+        ),
+        itemCount: terms.length,
+        itemBuilder: (context, index) => Container(
+          child: Slidable(
+            closeOnScroll: true,
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: .25,
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                closeOnTap: true,
+                caption: 'Edit',
+                color: Colors.grey[50],
+                iconWidget: Icon(Icons.edit, color: Colors.blue,),
+                onTap: () => null,
+              ),
+              IconSlideAction(
+                closeOnTap: true,
+                caption: 'Delete',
+                color: Colors.grey[50],
+                iconWidget: Icon(Icons.delete, color: Colors.red,),
+              )
+            ],
+            child: Container(
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                  Container(
-                    child: IconButton(
-                      icon: Icon(Icons.ac_unit, color: Colors.black,),
-                      iconSize: 35.0,
-                      onPressed: (){
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: IconButton(
+                        icon: Icon(Icons.ac_unit, color: Colors.black,),
+                        iconSize: 35.0,
+                        onPressed: (){
                         print("Icons pressed");
-                      },
+                        },
+                      ),
                     ),
-                    padding: EdgeInsets.all(10.0),),
-                  Expanded(
-                    child: Material(
-                      child: InkWell(
-                        onTap: (){
+                    Expanded(
+                      child: Material(
+                        child: InkWell(
+                          onTap: (){
                           Navigator.pushNamed(context, "/Home");
                         },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text(
+                          child: new Padding(
+                            padding: new EdgeInsets.all(20.0),
+                            child: Text(
                             "${terms[index]}",
                             textScaleFactor: 2,
                           ),
@@ -78,9 +98,9 @@ class _TermsPageState extends State<TermsPage> {
                   ),
                 ],
               )
-            )),
+            ),
           ),
-        )
+        ),
       ),
     );
   }

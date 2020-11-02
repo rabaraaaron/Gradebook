@@ -34,49 +34,47 @@ class _TermsPageState extends State<TermClasses> {
             }
         )],
       ),
-      body: Center(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: Colors.black,
-            ),
-            itemCount: classes.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.all(0.0),
-              child: Center(child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Icon(Icons.computer, size: 50,),
-                        padding: EdgeInsets.all(10.0),),
-                      Expanded(
-                        child: Material(
-                          child: InkWell(
-                            onTap: (){
-                              // Navigator.push(context, )
-                            },
-                            child: new Padding(
-                              padding: new EdgeInsets.all(20.0),
-                              child: Text("${classes[index]}", textScaleFactor: 2,),
-                            ),
-                          ),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.black,
+        ),
+        itemCount: classes.length,
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.all(0.0),
+          child: Center(child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Icon(Icons.computer, size: 50,),
+                    padding: EdgeInsets.all(10.0),),
+                  Expanded(
+                    child: Material(
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.pushNamed(context, '/Categories');
+                        },
+                        child: new Padding(
+                          padding: new EdgeInsets.all(20.0),
+                          child: Text("${classes[index]}", textScaleFactor: 2,),
                         ),
                       ),
-                      Container(
-                        child: Text(
-                          "A+",
-                          textScaleFactor: 2.0,
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      "A+",
+                      textScaleFactor: 2.0,
 
-                        ),
-                        padding: EdgeInsets.all(5.0),
-                      ),
-                    ],
-                  )
-              )),
-            ),
-          )
+                    ),
+                    padding: EdgeInsets.all(5.0),
+                  ),
+                ],
+              )
+          )),
+        ),
       ),
     );
   }
@@ -108,12 +106,14 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
               TextFormField(
                 controller: classTitleController,
                 decoration: const InputDecoration(
+                  hintText: "ex CS 101",
                   labelText: 'Class Title',
                 ),
               ),
               TextFormField(
                 controller: creditHoursController,
                 decoration: const InputDecoration(
+                  hintText: "ex 4",
                   labelText: 'Credit Hours',
                 ),
               ),
@@ -125,7 +125,7 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
                     }
                     Navigator.pop(context);
               },
-                  child: Text("Submit")
+                  child: Text("Add")
               )
             ])
         ),
