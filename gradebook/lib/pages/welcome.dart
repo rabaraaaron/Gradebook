@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -11,7 +12,10 @@ class _WelcomeState extends State<Welcome> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Welcome to Gradebook"),
+        title: Text(
+          "Gradebook",
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: Stack(
         children: <Widget>[
@@ -27,7 +31,7 @@ class _WelcomeState extends State<Welcome> {
                 right: 20,
                 bottom: 40,
                 child: RaisedButton(
-                  child: Text('Sign up', style: TextStyle(fontSize: 30),
+                  child: Text('Sign up', style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
@@ -42,9 +46,9 @@ class _WelcomeState extends State<Welcome> {
                 //top: 20,
                 left: 20,
                 right: 20,
-                bottom: 120,
+                bottom: 125,
                 child: RaisedButton(
-                  child: Text('login', style: TextStyle(fontSize: 30),
+                  child: Text('login', style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(

@@ -15,10 +15,8 @@ class _CategoriesState extends State<Categories> {
       appBar: AppBar(
         title: Text(
           "Categories",
-          textScaleFactor: 1.75,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headline1,
         ),
-        backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white,),
@@ -26,7 +24,7 @@ class _CategoriesState extends State<Categories> {
             onPressed: (){
               Navigator.pop(context);
             }),
-        actions: [IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.white,
+        actions: [IconButton(icon: Icon(Icons.add), iconSize: 35, color: Colors.white,
             onPressed: () async{
               await showDialog(
                 context: context,
@@ -38,48 +36,50 @@ class _CategoriesState extends State<Categories> {
         )],
       ),
 
-      body: Center(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: Colors.black,
-            ),
-            itemCount: categories.length,
-            itemBuilder: (context, index) => Container(
-              child: Center(child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: IconButton(
-                          icon: Icon(Icons.chevron_right, color: Colors.black, size: 35,),
-                          onPressed: (){
-                            print("Icons pressed");
-                          },
-                        ),
-                        padding: EdgeInsets.all(10.0),),
-                      Expanded(
-                        child: Material(
-                          child: InkWell(
-                            onTap: (){
-                              //Todo: make items in categories drop down
-                            },
-                            child: new Padding(
-                              padding: new EdgeInsets.all(20.0),
-                              child: Text(
-                                "${categories[index]}",
-                                textScaleFactor: 2,
-                              ),
-                            ),
-                          ),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.white,
+          indent: 25.0,
+          endIndent: 25.0,
+        ),
+        itemCount: categories.length,
+        itemBuilder: (context, index) => Container(
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.chevron_right,
+                        size: 35,
+                      ),
+                      onPressed: (){
+                        print("Icons pressed");
+                      },
+                    ),
+                    padding: EdgeInsets.all(10.0),),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        //Todo: make items in categories drop down
+                      },
+                      child: new Padding(
+                        padding: new EdgeInsets.all(20.0),
+                        child: Text(
+                          "${categories[index]}",
+                          style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
-                    ],
-                  )
-              )),
-            ),
-          )
+                    ),
+                  ),
+                  Text("20%", textScaleFactor: 2,style: Theme.of(context).textTheme.headline3,)
+                ],
+              )
+          ),
+        ),
       ),
     );
   }
@@ -113,7 +113,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text("Add a new Category"),
+        title: Text("Add a new Category", style: Theme.of(context).textTheme.headline2,),
         content: SizedBox(
           child: Form(
               child: Column(children: [

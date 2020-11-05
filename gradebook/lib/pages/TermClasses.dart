@@ -16,14 +16,12 @@ class _TermsPageState extends State<TermClasses> {
       appBar: AppBar(
         title: Text(
           "Fall 2020",
-          textScaleFactor: 1.75,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headline1,
         ),
-        backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
         leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white,), iconSize: 30,
           onPressed: (){Navigator.pop(context);}, color: Colors.black,),
-        actions: [IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.white,
+        actions: [IconButton(icon: Icon(Icons.add), iconSize: 35, color: Colors.white,
             onPressed: () async{
               await showDialog(
                 context: context,
@@ -36,7 +34,9 @@ class _TermsPageState extends State<TermClasses> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
-          color: Colors.black,
+          color: Colors.white,
+          indent: 25.0,
+          endIndent: 25.0,
         ),
         itemCount: classes.length,
         itemBuilder: (context, index) => Padding(
@@ -51,25 +51,33 @@ class _TermsPageState extends State<TermClasses> {
                     child: Icon(Icons.computer, size: 50,),
                     padding: EdgeInsets.all(10.0),),
                   Expanded(
-                    child: Material(
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, '/Categories');
-                        },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text("${classes[index]}", textScaleFactor: 2,),
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, '/Categories');
+                      },
+                      child: new Padding(
+                        padding: new EdgeInsets.all(20.0),
+                        child: Text(
+                          "${classes[index]}",
+                          style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    child: Text(
-                      "A+",
-                      textScaleFactor: 2.0,
-
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text("3.53", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                        ),
+                        VerticalDivider(
+                          width: 20,
+                        ),
+                        Container(
+                          child: Text("A+", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                        ),
+                      ],
                     ),
-                    padding: EdgeInsets.all(5.0),
                   ),
                 ],
               )
@@ -99,7 +107,7 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
 
 
   return AlertDialog(
-      title: Text("Add a new Class"),
+      title: Text("Add a new Class", style: Theme.of(context).textTheme.headline2,),
       content: SizedBox(
         child: Form(
             child: Column(children: [

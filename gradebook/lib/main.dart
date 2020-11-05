@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/pages/login.dart';
 import 'package:gradebook/pages/sign_up.dart';
 import 'package:gradebook/pages/welcome.dart';
@@ -28,9 +29,18 @@ class _GradebookState extends State<Gradebook>{
   Widget build(BuildContext context)  {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        accentColor: Colors.blue,
+        brightness: Brightness.dark,
+        accentColor: Colors.white,
+        fontFamily: GoogleFonts.quicksand().toStringShort(),
+        textTheme: TextTheme(
+          headline1: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.w400),
+          headline2: TextStyle(fontSize: 30.0, color: Colors.white, fontWeight: FontWeight.w300),
+          headline3: TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w100),
+          headline4: TextStyle(fontSize: 40.0, color: Colors.white, fontWeight: FontWeight.w100),
+        ),
+
       ),
+
       routes: {
         '/': (context) => Welcome(),
         '/Login': (context) => Login(),

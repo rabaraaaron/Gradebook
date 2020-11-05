@@ -9,26 +9,48 @@ class TermsPage extends StatefulWidget {
 
 class _TermsPageState extends State<TermsPage> {
   List<String> terms = ["Fall 2020", "J-term 2021", "Spring 2021", "Summer 2021"];
+  final SlidableController slidableController = SlidableController();
+  final GlobalKey scaffoldKey = new GlobalKey();
+
+  Center drawerMenu = new Center(
+
+  );
 
   @override
   Widget build(BuildContext context) {
     Random rand = new Random();
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(child: Text("Header")),
+            ListTile(title: Text("Settings"),),
+            ListTile(title: Text("Membership"),),
+            ListTile(title: Text("Help")),
+            ListTile(title: Text("Log Out")),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           "Terms",
-          textScaleFactor: 1.75,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headline1,
         ),
-        backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.menu_rounded, color: Colors.white,),
-            iconSize: 30,
-            onPressed: (){
-              print("Menu Selected");
-            }),
-        actions: [IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.white,
+        leading: Builder(
+          builder: (context) =>
+          Center(
+            child: IconButton(
+                icon: Icon(Icons.menu_sharp, color: Colors.white,),
+                iconSize: 30,
+                onPressed: (){
+                  Scaffold.of(context).openDrawer();
+                  print("Menu Selected");
+                }),
+          ),
+        ),
+        actions: [IconButton(icon: Icon(Icons.add_sharp), iconSize: 35, color: Colors.white,
             onPressed: () async{
               await showDialog(
                 context: context,
@@ -41,27 +63,27 @@ class _TermsPageState extends State<TermsPage> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
-          color: Colors.black,
+          color: Colors.white,
+          indent: 25.0,
+          endIndent: 25.0,
         ),
         itemCount: terms.length,
         itemBuilder: (context, index) => Container(
           child: Slidable(
-            closeOnScroll: true,
+            controller: slidableController,
             actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: .25,
+            actionExtentRatio: .2,
             secondaryActions: <Widget>[
               IconSlideAction(
+                color: Colors.transparent,
                 closeOnTap: true,
-                caption: 'Edit',
-                color: Colors.grey[50],
-                iconWidget: Icon(Icons.edit, color: Colors.blue,),
+                iconWidget: Icon(Icons.edit, color: Colors.white, size: 35,),
                 onTap: () => null,
               ),
               IconSlideAction(
+                color: Colors.transparent,
                 closeOnTap: true,
-                caption: 'Delete',
-                color: Colors.grey[50],
-                iconWidget: Icon(Icons.delete, color: Colors.red,),
+                iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
               )
             ],
             child: Container(
@@ -73,7 +95,7 @@ class _TermsPageState extends State<TermsPage> {
                     Container(
                       padding: EdgeInsets.all(10.0),
                       child: IconButton(
-                        icon: Icon(Icons.ac_unit, color: Colors.black,),
+                        icon: Icon(Icons.ac_unit),
                         iconSize: 35.0,
                         onPressed: (){
                         print("Icons pressed");
@@ -81,21 +103,20 @@ class _TermsPageState extends State<TermsPage> {
                       ),
                     ),
                     Expanded(
-                      child: Material(
-                        child: InkWell(
-                          onTap: (){
+                      child: GestureDetector(
+                        onTap: (){
                           Navigator.pushNamed(context, "/Home");
-                        },
-                          child: new Padding(
-                            padding: new EdgeInsets.all(20.0),
-                            child: Text(
-                            "${terms[index]}",
-                            textScaleFactor: 2,
+                      },
+                        child: new Padding(
+                          padding: new EdgeInsets.all(20.0),
+                          child: Text(
+                          "${terms[index]}",
+                            style: Theme.of(context).textTheme.headline2,
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    Text("4.0", style: Theme.of(context).textTheme.headline3, textScaleFactor: 2,),
                 ],
               )
             ),
@@ -151,12 +172,12 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
     }
 
     return AlertDialog(
-        title: Text("Add a new Term"),
+        title: Text("Add a new Term", style: Theme.of(context).textTheme.headline2,),
         content: SizedBox(
           child: Form(
               child: Column(children: [
                 DropdownButton(
-                  hint: Text("Term"),
+                  hint: Text("Term", style: Theme.of(context).textTheme.headline3,),
                   value: addedTerm,
                   items: listOfTerms,
                   onChanged: (newTerm) {
@@ -167,7 +188,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                   isExpanded: true,
                 ),
                 DropdownButton(
-                  hint: Text("Year"),
+                  hint: Text("Year", style: Theme.of(context).textTheme.headline3,),
                   onChanged: (newYear) {
                     setState(() {
                       termYear = newYear;
@@ -180,7 +201,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                 RaisedButton(onPressed: (){
                   thisTerms.insert(0, "$addedTerm" + " " + "$termYear");
                   Navigator.pop(context);
-                }, child: Text("Add"))
+                }, child: Text("Add",),)
               ])),
           width: 100,
           height: 175,

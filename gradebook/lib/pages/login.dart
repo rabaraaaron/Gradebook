@@ -14,14 +14,14 @@ class _Login extends State<Login> {
 
     final emailField = TextField(
       obscureText: false,
-      style: style,
+      style: Theme.of(context).textTheme.headline2,
       decoration: InputDecoration(
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
     final passwordField = TextField(
       obscureText: true,
-      style: style,
+      style: Theme.of(context).textTheme.headline2,
       decoration: InputDecoration(
           hintText: "Password",
           border:
@@ -29,8 +29,14 @@ class _Login extends State<Login> {
     );
 
     final loginButton = RaisedButton(
-            child: Text('              login               ',
-            style: TextStyle(fontSize: 30),),
+            child: SizedBox(
+              width: 305.0,
+              height: 55.0,
+              child: Center(
+                child: Text('login',
+                style: Theme.of(context).textTheme.headline4,),
+              ),
+            ),
             color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(),
             onPressed: () {
@@ -42,7 +48,7 @@ class _Login extends State<Login> {
 
     bool _checked = true;
     final checkbox = CheckboxListTile(
-      title: Text("Keep me logged in"),
+      title: Text("Keep me logged in", style: Theme.of(context).textTheme.headline3,),
       //secondary: Icon(Icons.beach_access),
       controlAffinity:
       ListTileControlAffinity.leading,
@@ -60,12 +66,11 @@ class _Login extends State<Login> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text("Login", style: Theme.of(context).textTheme.headline1,),
         centerTitle: true,
       ),
       body: Center(
         child: Container(
-          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(36.0),
             child: Column(

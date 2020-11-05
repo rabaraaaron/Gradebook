@@ -7,14 +7,13 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
   Widget build(BuildContext context) {
 
     final nameField = TextField(
       obscureText: false,
-      style: style,
+      style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Name",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
@@ -22,14 +21,14 @@ class _SignUp extends State<SignUp> {
 
     final emailField = TextField(
       obscureText: false,
-      style: style,
+      style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
     final passwordField = TextField(
       obscureText: true,
-      style: style,
+      style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Password",
           border:
@@ -37,7 +36,7 @@ class _SignUp extends State<SignUp> {
     );
     final renterPasswordField = TextField(
       obscureText: true,
-      style: style,
+      style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Enter password again",
           border:
@@ -47,7 +46,7 @@ class _SignUp extends State<SignUp> {
       width: 400,
         child: RaisedButton(
       child: Text('Register',
-        style: TextStyle(fontSize: 30),),
+        style: Theme.of(context).textTheme.headline4,),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(),
       onPressed: () {Navigator.pushNamed(context, '/Terms');},
@@ -58,12 +57,11 @@ class _SignUp extends State<SignUp> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign up"),
+        title: Text("Sign up", style: Theme.of(context).textTheme.headline1,),
         centerTitle: true,
       ),
       body: Center(
         child: Container(
-          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(36.0),
             child: Column(
