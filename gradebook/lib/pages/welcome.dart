@@ -11,10 +11,7 @@ class _WelcomeState extends State<Welcome> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          "Gradebook",
-          style: Theme.of(context).textTheme.headline1,
-        ),
+        title: Text("Welcome to Gradebook"),
       ),
       body: Stack(
         children: <Widget>[
@@ -25,12 +22,12 @@ class _WelcomeState extends State<Welcome> {
           Stack(
             children: [
               Positioned(
-                top: 600,
+                //top: 20,
                 left: 20,
                 right: 20,
-                bottom: 100,
+                bottom: 40,
                 child: RaisedButton(
-                  child: Text('Sign up', style: Theme.of(context).textTheme.headline4,
+                  child: Text('Sign up', style: TextStyle(fontSize: 30),
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
@@ -42,12 +39,12 @@ class _WelcomeState extends State<Welcome> {
                 ),
               ),
               Positioned(
-                top: 500,
+                //top: 20,
                 left: 20,
                 right: 20,
-                bottom: 200,
+                bottom: 120,
                 child: RaisedButton(
-                  child: Text('login', style: Theme.of(context).textTheme.headline4,
+                  child: Text('login', style: TextStyle(fontSize: 30),
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(

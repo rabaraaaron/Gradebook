@@ -36,15 +36,15 @@ class _TermsPageState extends State<TermsPage> {
         centerTitle: true,
         leading: Builder(
           builder: (context) =>
-          Center(
-            child: IconButton(
-                icon: Icon(Icons.menu_sharp, color: Colors.white,),
-                iconSize: 30,
-                onPressed: (){
-                  Scaffold.of(context).openDrawer();
-                  print("Menu Selected");
-                }),
-          ),
+              Center(
+                child: IconButton(
+                    icon: Icon(Icons.menu_sharp, color: Colors.white,),
+                    iconSize: 30,
+                    onPressed: (){
+                      Scaffold.of(context).openDrawer();
+                      print("Menu Selected");
+                    }),
+              ),
         ),
         actions: [IconButton(icon: Icon(Icons.add_sharp), iconSize: 35, color: Colors.white,
             onPressed: () async{
@@ -94,7 +94,7 @@ class _TermsPageState extends State<TermsPage> {
                         icon: Icon(Icons.ac_unit),
                         iconSize: 35.0,
                         onPressed: (){
-                        print("Icons pressed");
+                          print("Icons pressed");
                         },
                       ),
                     ),
@@ -102,19 +102,19 @@ class _TermsPageState extends State<TermsPage> {
                       child: GestureDetector(
                         onTap: (){
                           Navigator.pushNamed(context, "/Home");
-                      },
+                        },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
                           child: Text(
-                          "${terms[index]}",
+                            "${terms[index]}",
                             style: Theme.of(context).textTheme.headline2,
                           ),
                         ),
                       ),
                     ),
                     Text("4.0", style: Theme.of(context).textTheme.headline3, textScaleFactor: 2,),
-                ],
-              )
+                  ],
+                )
             ),
           ),
         ),

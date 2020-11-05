@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 
@@ -33,7 +34,15 @@ class _TermsPageState extends State<TermClasses> {
               );
               setState(() {});
             }
-        )],
+        ),
+          FlatButton.icon(
+              onPressed: () async {
+                await AuthService().signOut();
+
+              },
+              icon: Icon(Icons.exit_to_app, color: Colors.white),
+              label: Text('Logout',
+                  style: TextStyle(color: Colors.white))),],
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
@@ -149,7 +158,7 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
                       print(creditHoursController.text);
                     }
                     Navigator.pop(context);
-              },
+                  },
                   child: Text("Add")
               )
             ])
@@ -158,4 +167,5 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
         height: 175,
       ));
 }
+
 

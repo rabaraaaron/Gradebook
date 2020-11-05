@@ -1,4 +1,8 @@
+
 import 'package:flutter/material.dart';
+import 'package:gradebook/pages/loading.dart';
+import 'package:gradebook/services/auth_service.dart';
+import 'package:gradebook/services/validator_service.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -6,32 +10,55 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  // From and page init state
+  String email = '';
+  String password = '';
+  String name = '';
+  String error = '';
+
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
+
 
   @override
   Widget build(BuildContext context) {
 
-    final nameField = TextField(
+    final nameField = TextFormField(
       obscureText: false,
       style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Name",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+      validator: (val) =>
+          ValidatorService().validateName(val),
+      onChanged: (val) =>
+          setState(() => name = val),
     );
 
-    final emailField = TextField(
+    final emailField = TextFormField(
       obscureText: false,
       style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+      validator: (val) =>
+          ValidatorService().validateEmail(val),
+      onChanged: (val) =>
+          setState(() => email = val),
     );
-    final passwordField = TextField(
+    final passwordField = TextFormField(
       obscureText: true,
       style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Password",
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+      validator: (val) =>
+          ValidatorService().validatePassword(val),
+      onChanged: (val) =>
+          setState(() => password = val),
+
     );
     final renterPasswordField = TextField(
       obscureText: true,
@@ -41,47 +68,74 @@ class _SignUp extends State<SignUp> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
     );
-    final registerBtn = SizedBox(
-      width: 400,
-        child: RaisedButton(
-      child: Text('Register',
-        style: Theme.of(context).textTheme.headline4,),
+    final registerBtn =
+    RaisedButton(
+      child: Text('           Register           ',
+        style: TextStyle(fontSize: 30),),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(),
-      onPressed: () {Navigator.pushNamed(context, '/Terms');},
+      onPressed: () async {
+        // Navigator.pushNamed(context, '/Terms');
+        if (_formKey.currentState.validate()) {
+          setState(() => loading = true);
+          dynamic result =
+          await _auth.regEmailPass(
+              email, password, name);
+          loading = false;
+          if (result == null) {
+            setState(() => error =
+            'Something went wrong. Please try again.');
+          }
+        }
+        else
+          setState(() => error = '');
+        },
       padding: const EdgeInsets.all(18.0),
 
-    )
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Sign up", style: Theme.of(context).textTheme.headline1,),
-        centerTitle: true,
-      ),
-      body: Center(
+
+
+
+    Widget _register(context){
+      return loading ? Loading() : Center(
         child: Container(
           child: Padding(
             padding: const EdgeInsets.all(36.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                nameField,
-                SizedBox(height: 25.0),
-                emailField,
-                SizedBox(height: 25.0),
-                passwordField,
-                SizedBox(height: 25.0,),
-                renterPasswordField,
-                SizedBox(height: 25.0,),
-                registerBtn,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  nameField,
+                  SizedBox(height: 25.0),
+                  emailField,
+                  SizedBox(height: 25.0),
+                  passwordField,
+                  SizedBox(height: 25.0,),
+                  renterPasswordField,
+                  SizedBox(height: 25.0,),
+                  registerBtn,
 
-              ],
+                ],
+              ),
             ),
           ),
         ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Sign up"),
+        centerTitle: true,
       ),
+      body: _register(context)
     );
+
+
+
   }
+
 }
