@@ -12,10 +12,6 @@ class _TermsPageState extends State<TermsPage> {
   final SlidableController slidableController = SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
-  Center drawerMenu = new Center(
-
-  );
-
   @override
   Widget build(BuildContext context) {
     Random rand = new Random();
@@ -24,11 +20,11 @@ class _TermsPageState extends State<TermsPage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            DrawerHeader(child: Text("Header")),
-            ListTile(title: Text("Settings"),),
-            ListTile(title: Text("Membership"),),
-            ListTile(title: Text("Help")),
-            ListTile(title: Text("Log Out")),
+            DrawerHeader(child: Text("Header", style: Theme.of(context).textTheme.headline2,)),
+            ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline5,)),
+            ListTile(title: Text("Log Out", style: Theme.of(context).textTheme.headline5,)),
           ],
         ),
       ),

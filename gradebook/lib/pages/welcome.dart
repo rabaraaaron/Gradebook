@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Welcome extends StatefulWidget {
   @override
@@ -26,10 +25,10 @@ class _WelcomeState extends State<Welcome> {
           Stack(
             children: [
               Positioned(
-                //top: 20,
+                top: 600,
                 left: 20,
                 right: 20,
-                bottom: 40,
+                bottom: 100,
                 child: RaisedButton(
                   child: Text('Sign up', style: Theme.of(context).textTheme.headline4,
                   ),
@@ -43,10 +42,10 @@ class _WelcomeState extends State<Welcome> {
                 ),
               ),
               Positioned(
-                //top: 20,
+                top: 500,
                 left: 20,
                 right: 20,
-                bottom: 125,
+                bottom: 200,
                 child: RaisedButton(
                   child: Text('login', style: Theme.of(context).textTheme.headline4,
                   ),

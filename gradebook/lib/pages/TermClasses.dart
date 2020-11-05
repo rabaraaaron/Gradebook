@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 
 class TermClasses extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class TermClasses extends StatefulWidget {
 
 class _TermsPageState extends State<TermClasses> {
   List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
+  final SlidableController slidableController = new SlidableController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,47 +44,62 @@ class _TermsPageState extends State<TermClasses> {
         itemCount: classes.length,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.all(0.0),
-          child: Center(child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Icon(Icons.computer, size: 50,),
-                    padding: EdgeInsets.all(10.0),),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.pushNamed(context, '/Categories');
-                      },
-                      child: new Padding(
-                        padding: new EdgeInsets.all(20.0),
-                        child: Text(
-                          "${classes[index]}",
-                          style: Theme.of(context).textTheme.headline2,
+          child: Slidable(
+            controller: slidableController,
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: .2,
+            secondaryActions: [
+              IconSlideAction(
+                color: Colors.transparent,
+                closeOnTap: true,
+                iconWidget: Icon(Icons.edit, color: Colors.white, size: 35,),
+                onTap: () => null,
+              ),
+              IconSlideAction(
+                color: Colors.transparent,
+                closeOnTap: true,
+                iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
+              )
+            ],
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Icon(Icons.computer, size: 50,),
+                      padding: EdgeInsets.all(10.0),),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, '/Categories');
+                        },
+                        child: new Padding(
+                          padding: new EdgeInsets.all(20.0),
+                          child: Text(
+                            "${classes[index]}",
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Text("3.53", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
-                        ),
-                        VerticalDivider(
-                          width: 20,
-                        ),
-                        Container(
-                          child: Text("A+", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
-                        ),
-                      ],
+                    Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Text("A", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                          ),
+                          Container(
+                            child: Text("97%", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )
-          )),
+                  ],
+                )
+            ),
+          ),
         ),
       ),
     );
@@ -94,7 +112,6 @@ Widget newClassPopUp(BuildContext context, List<String> terms) {
   final classTitleController = TextEditingController();
   final creditHoursController = TextEditingController();
 
-  var termClass;
   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
   List<DropdownMenuItem> listOfTerms = [];
   for(var l = 0; l < listOfTermsRaw.length; l++){
