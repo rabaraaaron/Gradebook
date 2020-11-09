@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,19 +12,47 @@ class TermClassesPage extends StatefulWidget {
 class _TermsPageState extends State<TermClassesPage> {
   final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
+  final GlobalKey scaffoldKey = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     Random rand = new Random();
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline2,)),
+            ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline5,)),
+            ListTile(
+              title: Text("Log Out", style: Theme.of(context).textTheme.headline5,),
+              onTap: () async {
+                await AuthService().signOut();
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           "Fall 2020",
           style: Theme.of(context).textTheme.headline1,
         ),
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white,), iconSize: 30,
-          onPressed: (){Navigator.pop(context);}, color: Colors.black,),
+        leading:
+          Builder(
+            builder: (context) =>
+                Center(
+                  child: IconButton(
+                      icon: Icon(Icons.menu_sharp, color: Colors.white,),
+                      iconSize: 30,
+                      onPressed: (){
+                        Scaffold.of(context).openDrawer();
+                      }),
+                ),
+          ),
         actions: [IconButton(icon: Icon(Icons.add), iconSize: 35, color: Colors.white,
             onPressed: () async{
               await showDialog(
@@ -35,80 +62,79 @@ class _TermsPageState extends State<TermClassesPage> {
               );
               setState(() {});
             }
-        ),
-          FlatButton.icon(
-              onPressed: () async {
-                await AuthService().signOut();
-
-              },
-              icon: Icon(Icons.exit_to_app, color: Colors.white),
-              label: Text('Logout',
-                  style: TextStyle(color: Colors.white))),
+          ),
         ],
       ),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-          color: Colors.white,
-          indent: 25.0,
-          endIndent: 25.0,
-        ),
-        itemCount: classes.length,
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.all(0.0),
-          child: Slidable(
-            controller: slidableController,
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: .2,
-            secondaryActions: [
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
-                onTap: () => null,
-              ),
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
-              )
-            ],
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Icon(Icons.computer, size: 50,),
-                      padding: EdgeInsets.all(10.0),),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, '/Categories');
-                        },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text(
-                            "${classes[index]}",
-                            style: Theme.of(context).textTheme.headline2,
+      body: GestureDetector(
+        onHorizontalDragEnd: (details){
+          if(details.primaryVelocity > 0){
+            Navigator.pop(context);
+          }
+        },
+        child: ListView.separated(
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.white,
+            indent: 25.0,
+            endIndent: 25.0,
+          ),
+          itemCount: classes.length,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.all(0.0),
+            child: Slidable(
+              controller: slidableController,
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: .2,
+              secondaryActions: [
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
+                  onTap: () => null,
+                ),
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
+                )
+              ],
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Icon(Icons.computer, size: 50,),
+                        padding: EdgeInsets.all(10.0),),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pushNamed(context, '/Categories');
+                          },
+                          child: new Padding(
+                            padding: new EdgeInsets.all(20.0),
+                            child: Text(
+                              "${classes[index]}",
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            child: Text("A", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
-                          ),
-                          Container(
-                            child: Text("97%", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
-                          ),
-                        ],
+                      Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Text("A", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                            ),
+                            Container(
+                              child: Text("97%", textScaleFactor: 2, style: Theme.of(context).textTheme.headline3,),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                )
+                    ],
+                  )
+              ),
             ),
           ),
         ),

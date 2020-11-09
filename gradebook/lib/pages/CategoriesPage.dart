@@ -1,7 +1,6 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
-
+import 'package:gradebook/services/auth_service.dart';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -11,12 +10,28 @@ class CategoriesPage extends StatefulWidget {
 class _CategoriesPageState extends State<CategoriesPage> {
   List<String> categoriesStrings = ["Assignments", "Homework", "Quizzes", "Exams","Other"];
   Map categoriesData = new HashMap<String, List<String>>();
+  final GlobalKey scaffoldKey = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline2,)),
+            ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline5,),),
+            ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline5,)),
+            ListTile(
+              title: Text("Log Out", style: Theme.of(context).textTheme.headline5,),
+              onTap: () async {
+                await AuthService().signOut();
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           "Categories",
@@ -26,12 +41,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
               .headline1,
         ),
         centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white,),
-            iconSize: 30,
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+        leading:
+          Builder(
+            builder: (context) =>
+                Center(
+                  child: IconButton(
+                      icon: Icon(Icons.menu_sharp, color: Colors.white,),
+                      iconSize: 30,
+                      onPressed: (){
+                        Scaffold.of(context).openDrawer();
+                      }),
+                ),
+          ),
         actions: [
           IconButton(icon: Icon(Icons.add), iconSize: 35, color: Colors.white,
               onPressed: () async {

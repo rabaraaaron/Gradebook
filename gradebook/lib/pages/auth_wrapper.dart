@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gradebook/pages/TermClassesPage.dart';
+import 'package:gradebook/pages/TermsPage.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/user.dart';
 import 'WelcomePage.dart';
@@ -17,7 +17,7 @@ class Wrapper extends StatelessWidget {
         return WelcomePage();
       } else {
         print("Terms");
-        return TermClassesPage();
+        return TermsPage();
       }
   }
 }

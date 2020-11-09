@@ -136,8 +136,6 @@ class _SignUpPageState extends State<SignUpPage> {
       body: _register(context)
     );
 
-
-
   }
 
 }

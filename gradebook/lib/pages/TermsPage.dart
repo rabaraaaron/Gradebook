@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gradebook/services/auth_service.dart';
+
 
 class TermsPage extends StatefulWidget {
   @override
@@ -13,6 +15,19 @@ class _TermsPageState extends State<TermsPage> {
   final GlobalKey scaffoldKey = new GlobalKey();
 
   @override
+  void initState() {
+    _pushTermClassesOnStartup().then((value){
+    });
+    super.initState();
+  }
+
+  Future _pushTermClassesOnStartup() async {
+    await Future.delayed(Duration(seconds: 1));
+    Navigator.pop(context);
+    // Navigator.pushNamed(context, '/Home');
+  }
+
+  @override
   Widget build(BuildContext context) {
     Random rand = new Random();
     return Scaffold(
@@ -20,11 +35,17 @@ class _TermsPageState extends State<TermsPage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            DrawerHeader(child: Text("Header", style: Theme.of(context).textTheme.headline2,)),
+            DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline2,)),
             ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline5,),),
             ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline5,),),
             ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline5,)),
-            ListTile(title: Text("Log Out", style: Theme.of(context).textTheme.headline5,)),
+            ListTile(
+              title: Text("Log Out",
+                  style: Theme.of(context).textTheme.headline5,),
+              onTap: () async {
+                await AuthService().signOut();
+              },
+            ),
           ],
         ),
       ),
@@ -42,7 +63,6 @@ class _TermsPageState extends State<TermsPage> {
                     iconSize: 30,
                     onPressed: (){
                       Scaffold.of(context).openDrawer();
-                      print("Menu Selected");
                     }),
               ),
         ),
