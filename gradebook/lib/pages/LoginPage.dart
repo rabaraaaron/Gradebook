@@ -22,8 +22,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     var emailField = TextFormField(
       obscureText: false,
       style: Theme.of(context).textTheme.headline2,
@@ -115,8 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                         checkbox,
                         SizedBox(height: 45.0),
                         loginButton,
-                        SizedBox(
-                          height: 15.0,
+                        SizedBox(height: 15.0),
+                        Text(
+                          error,
+                          style: TextStyle(color: Colors.red, fontSize: 14),
                         ),
                       ],
                     ),
