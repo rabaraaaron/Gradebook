@@ -11,9 +11,12 @@ class Wrapper extends StatelessWidget {
     final user = Provider.of<GradeBookUser>(context);
 
 
+
       if (user == null) {
+        print("welcome");
         return WelcomePage();
       } else {
+        print("Terms");
         return TermClassesPage();
       }
   }
