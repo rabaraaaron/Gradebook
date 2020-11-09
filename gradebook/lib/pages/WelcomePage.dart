@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Welcome extends StatefulWidget {
+class WelcomePage extends StatefulWidget {
   @override
-  _WelcomeState createState() => _WelcomeState();
+  _WelcomePageState createState() => _WelcomePageState();
 }
 
-class _WelcomeState extends State<Welcome> {
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Welcome to Gradebook"),
+        title: Text("Welcome to Gradebook", style: Theme.of(context).textTheme.headline1,),
       ),
       body: Stack(
         children: <Widget>[
@@ -27,7 +27,9 @@ class _WelcomeState extends State<Welcome> {
                 right: 20,
                 bottom: 40,
                 child: RaisedButton(
-                  child: Text('Sign up', style: TextStyle(fontSize: 30),
+                  child: Text(
+                    'Sign up',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
@@ -44,7 +46,9 @@ class _WelcomeState extends State<Welcome> {
                 right: 20,
                 bottom: 120,
                 child: RaisedButton(
-                  child: Text('login', style: TextStyle(fontSize: 30),
+                  child: Text(
+                      'login',
+                      style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(

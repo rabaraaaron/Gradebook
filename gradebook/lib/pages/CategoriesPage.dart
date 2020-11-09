@@ -1,16 +1,21 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 
-class Categories extends StatefulWidget {
+class CategoriesPage extends StatefulWidget {
   @override
-  _CategoriesState createState() => _CategoriesState();
+  _CategoriesPageState createState() => _CategoriesPageState();
 }
 
-class _CategoriesState extends State<Categories> {
-  List<String> categories = ["Assignments", "Homework", "Quizzes", "Exams","Other"];
+class _CategoriesPageState extends State<CategoriesPage> {
+  List<String> categoriesStrings = ["Assignments", "Homework", "Quizzes", "Exams","Other"];
+  Map categoriesData = new HashMap<String, List<String>>();
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,7 +38,7 @@ class _CategoriesState extends State<Categories> {
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) =>
-                      newCategoriesPopUp(context, categories),
+                      newCategoriesPopUp(context, categoriesStrings),
                 );
                 setState(() {});
               }
@@ -48,7 +53,7 @@ class _CategoriesState extends State<Categories> {
               indent: 25.0,
               endIndent: 25.0,
             ),
-        itemCount: categories.length,
+        itemCount: categoriesStrings.length,
         itemBuilder: (context, index) =>
             Container(
               child: Container(
@@ -61,16 +66,11 @@ class _CategoriesState extends State<Categories> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        child: IconButton(
-                          icon: Icon(
+                        child: Icon(
                             Icons.chevron_right,
-                            size: 35,
+                            size: 50,
                           ),
-                          onPressed: () {
-                            print("Icons pressed");
-                          },
                         ),
-                        padding: EdgeInsets.all(10.0),),
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
@@ -79,7 +79,7 @@ class _CategoriesState extends State<Categories> {
                           child: new Padding(
                             padding: new EdgeInsets.all(20.0),
                             child: Text(
-                              "${categories[index]}",
+                              "${categoriesStrings[index]}",
                               style: Theme
                                   .of(context)
                                   .textTheme
@@ -147,3 +147,20 @@ class _CategoriesState extends State<Categories> {
   }
 }
 
+
+class Categories{
+  String categoryName;
+  List<String> categoryItems = new List<String>();
+
+  Categories(String categoryName){
+    this.categoryName = categoryName;
+  }
+
+  void add(String itemName){
+    categoryItems.add(itemName);
+  }
+
+  void delete(String itemName){
+    categoryItems.remove(itemName);
+  }
+}

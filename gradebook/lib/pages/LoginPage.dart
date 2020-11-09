@@ -5,12 +5,12 @@ import 'loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _Login createState() => _Login();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _Login extends State<Login> {
+class _LoginPageState extends State<LoginPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   String email = '';
   String password = '';

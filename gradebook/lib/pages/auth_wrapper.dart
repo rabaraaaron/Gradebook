@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gradebook/pages/TermClasses.dart';
+import 'package:gradebook/pages/TermClassesPage.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/user.dart';
-import 'welcome.dart';
+import 'WelcomePage.dart';
 
 class Wrapper extends StatelessWidget {
   @override
@@ -12,9 +12,9 @@ class Wrapper extends StatelessWidget {
 
 
       if (user == null) {
-        return Welcome();
+        return WelcomePage();
       } else {
-        return TermClasses();
+        return TermClassesPage();
       }
   }
 }
