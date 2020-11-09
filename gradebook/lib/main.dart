@@ -96,7 +96,7 @@ class _GradebookState extends State<Gradebook> {
           },
         ),
       );
-    else
-      return Loading();
+    // else
+    //   return Loading();
   }
 }

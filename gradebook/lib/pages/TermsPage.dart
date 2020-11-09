@@ -23,8 +23,8 @@ class _TermsPageState extends State<TermsPage> {
 
   Future _pushTermClassesOnStartup() async {
     await Future.delayed(Duration(seconds: 1));
-    Navigator.pop(context);
-    // Navigator.pushNamed(context, '/Home');
+    //Navigator.pop(context);
+     //Navigator.pushNamed(context, '/Home');
   }
 
   @override
@@ -43,6 +43,7 @@ class _TermsPageState extends State<TermsPage> {
               title: Text("Log Out",
                   style: Theme.of(context).textTheme.headline5,),
               onTap: () async {
+                //Navigator.pop(context);
                 await AuthService().signOut();
               },
             ),

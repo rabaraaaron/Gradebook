@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var emailField = TextFormField(
+
       obscureText: false,
       style: Theme.of(context).textTheme.headline2,
       validator: (val) => ValidatorService().validateEmail(val),
@@ -63,14 +64,17 @@ class _LoginPageState extends State<LoginPage> {
           print("validation passed");
           setState(() => loading = true);
           dynamic result = await _auth.signInEmailPass(email, password);
-          loading = false;
+
           if (result == null) {
-            setState(() => error =
-                'There was an error with your login. Please try again.');
+            setState(() {
+            error = 'There was an error with your login. Please try again.';
+            loading = false;
+            });
           }
         } else
+          //loading = false;
           setState(
-            () {},
+            () {}
           );
       },
       padding: const EdgeInsets.all(18.0),
@@ -95,9 +99,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget _login(context) {
-      return loading
-          ? Loading()
-          : Center(
+      return loading ? Loading() : Center(
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
