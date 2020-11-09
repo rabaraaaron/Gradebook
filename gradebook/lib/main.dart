@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/user.dart';
-import 'package:gradebook/pages/Categories.dart';
+import 'package:gradebook/pages/CategoriesPage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';
 import 'package:gradebook/pages/loading.dart';
-import 'package:gradebook/pages/login.dart';
-import 'package:gradebook/pages/sign_up.dart';
+import 'package:gradebook/pages/LoginPage.dart';
+import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gradebook/pages/Terms.dart';
-import 'package:gradebook/pages/TermClasses.dart';
+import 'package:gradebook/pages/TermsPage.dart';
+import 'package:gradebook/pages/TermClassesPage.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
 
@@ -61,12 +62,12 @@ class _GradebookState extends State<Gradebook> {
           theme: ThemeData(
             brightness: Brightness.dark,
             accentColor: Colors.white,
-            // fontFamily: GoogleFonts.quicksand().toStringShort(),
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
             textTheme: TextTheme(
               headline1: TextStyle(
-                  fontSize: 40.0,
+                  fontSize: 30.0,
                   color: Colors.white,
-                  fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.w300),
               headline2: TextStyle(
                   fontSize: 30.0,
                   color: Colors.white,
@@ -87,11 +88,11 @@ class _GradebookState extends State<Gradebook> {
           ),
           home: Wrapper(),
           routes: {
-            '/Login': (context) => Login(),
-            '/Sign_up': (context) => SignUp(),
+            '/Login': (context) => LoginPage(),
+            '/Sign_up': (context) => SignUpPage(),
             '/Terms': (context) => TermsPage(),
-            '/Home': (context) => TermClasses(),
-            '/Categories': (context) => Categories(),
+            '/Home': (context) => TermClassesPage(),
+            '/Categories': (context) => CategoriesPage(),
           },
         ),
       );

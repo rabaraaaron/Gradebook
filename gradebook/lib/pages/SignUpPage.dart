@@ -4,12 +4,12 @@ import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
 
-class SignUp extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignUp createState() => _SignUp();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUp extends State<SignUp> {
+class _SignUpPageState extends State<SignUpPage> {
   // From and page init state
   String email = '';
   String password = '';
@@ -70,8 +70,10 @@ class _SignUp extends State<SignUp> {
     );
     final registerBtn =
     RaisedButton(
-      child: Text('           Register           ',
-        style: TextStyle(fontSize: 30),),
+      child: Center(
+        child: Text('Register',
+          style: Theme.of(context).textTheme.headline4,),
+      ),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(),
       onPressed: () async {

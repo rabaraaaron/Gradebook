@@ -1,16 +1,17 @@
 import 'dart:math';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 
-class TermClasses extends StatefulWidget {
+class TermClassesPage extends StatefulWidget {
   @override
   _TermsPageState createState() => _TermsPageState();
 }
 
-class _TermsPageState extends State<TermClasses> {
-  List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
+class _TermsPageState extends State<TermClassesPage> {
+  final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
 
   @override
@@ -42,7 +43,8 @@ class _TermsPageState extends State<TermClasses> {
               },
               icon: Icon(Icons.exit_to_app, color: Colors.white),
               label: Text('Logout',
-                  style: TextStyle(color: Colors.white))),],
+                  style: TextStyle(color: Colors.white))),
+        ],
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
@@ -61,7 +63,7 @@ class _TermsPageState extends State<TermClasses> {
               IconSlideAction(
                 color: Colors.transparent,
                 closeOnTap: true,
-                iconWidget: Icon(Icons.edit, color: Colors.white, size: 35,),
+                iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
                 onTap: () => null,
               ),
               IconSlideAction(
