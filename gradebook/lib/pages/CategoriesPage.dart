@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/auth_service.dart';
 
 class CategoriesPage extends StatefulWidget {
@@ -11,6 +12,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   List<String> categoriesStrings = ["Assignments", "Homework", "Quizzes", "Exams","Other"];
   Map categoriesData = new HashMap<String, List<String>>();
   final GlobalKey scaffoldKey = new GlobalKey();
+  final SlidableController slidableController = new SlidableController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,23 @@ class _CategoriesPageState extends State<CategoriesPage> {
             ),
         itemCount: categoriesStrings.length,
         itemBuilder: (context, index) =>
-            Container(
+            Slidable(
+              controller: slidableController,
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: .2,
+              secondaryActions: [
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
+                  onTap: () => null,
+                ),
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
+                )
+              ],
               child: Container(
                   width: MediaQuery
                       .of(context)
