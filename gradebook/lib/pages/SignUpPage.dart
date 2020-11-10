@@ -102,32 +102,34 @@ class _SignUpPageState extends State<SignUpPage> {
 
 
     Widget _register(context){
-      return loading ? Loading() : Center(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(36.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  nameField,
-                  SizedBox(height: 25.0),
-                  emailField,
-                  SizedBox(height: 25.0),
-                  passwordField,
-                  SizedBox(height: 25.0,),
-                  renterPasswordField,
-                  SizedBox(height: 25.0,),
-                  registerBtn,
+      return loading ? Loading() : ListView(
+        children:[ Center(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    nameField,
+                    SizedBox(height: 25.0),
+                    emailField,
+                    SizedBox(height: 25.0),
+                    passwordField,
+                    SizedBox(height: 25.0,),
+                    renterPasswordField,
+                    SizedBox(height: 25.0,),
+                    registerBtn,
 
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      );
+      ]);
     }
 
     return Scaffold(
