@@ -15,19 +15,6 @@ class _TermsPageState extends State<TermsPage> {
   final SlidableController slidableController = SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
-  // @override
-  // void initState() {
-  //   _pushTermClassesOnStartup().then((value){
-  //   });
-  //   super.initState();
-  // }
-
-  // Future _pushTermClassesOnStartup() async {
-  //   await Future.delayed(Duration(seconds: 1));
-  //   //Navigator.pop(context);
-  //    //Navigator.pushNamed(context, '/Home');
-  // }
-
   @override
   Widget build(BuildContext context) {
     Random rand = new Random();
@@ -78,7 +65,7 @@ class _TermsPageState extends State<TermsPage> {
               IconSlideAction(
                 color: Colors.transparent,
                 closeOnTap: true,
-                iconWidget: Icon(Icons.edit, color: Colors.white, size: 35,),
+                iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
                 onTap: () => null,
               ),
               IconSlideAction(
