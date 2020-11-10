@@ -31,6 +31,7 @@ class Gradebook extends StatefulWidget {
 class _GradebookState extends State<Gradebook> {
   bool _initialized = false;
   bool _error = false;
+  bool stayLoggedIn = false;
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -56,7 +57,6 @@ class _GradebookState extends State<Gradebook> {
 
   @override
   Widget build(BuildContext context) {
-    if (_initialized)
       return StreamProvider<GradeBookUser>.value(
         value: AuthService().gradebookuser,
         child: MaterialApp(

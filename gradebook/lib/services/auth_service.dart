@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/user.dart';
+import 'package:gradebook/services/user_service.dart';
 
 
 class AuthService {
@@ -39,7 +40,7 @@ class AuthService {
       User user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       // User profile
-      // await UserService(uid: user.uid).updateUserDocument(user.uid, user.email, displayName: displayName);
+      await UserService(uid: user.uid).updateUserDocument(user.uid, user.email, displayName: displayName);
       return _userFromFirebaseUser(user);
     }
     catch(e){

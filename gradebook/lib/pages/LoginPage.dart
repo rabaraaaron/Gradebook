@@ -64,6 +64,8 @@ class _LoginPageState extends State<LoginPage> {
           print("validation passed");
           setState(() => loading = true);
           dynamic result = await _auth.signInEmailPass(email, password);
+          if(result != null)
+            Navigator.pop(context);
 
           if (result == null) {
             setState(() {

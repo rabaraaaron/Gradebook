@@ -83,6 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
           dynamic result =
           await _auth.regEmailPass(
               email, password, name);
+          if(result != null)
+            Navigator.pop(context);
           loading = false;
           if (result == null) {
             setState(() => error =

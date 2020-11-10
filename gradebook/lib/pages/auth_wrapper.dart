@@ -8,12 +8,15 @@ import 'WelcomePage.dart';
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final user = Provider.of<GradeBookUser>(context);
 
-
       if (user == null) {
+        print("welcome");
         return WelcomePage();
       } else {
+        print("Terms");
+
         return TermsPage();
       }
   }

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidGradleBuildConfiguration">
+    <option name="SYNC_PROJECT_BEFORE_BUILD" value="true" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f08bf5d1-3d3b-48a2-b2ba-fd16aa6d873c" name="Default Changelist" comment="" />
+    <list default="true" id="f08bf5d1-3d3b-48a2-b2ba-fd16aa6d873c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/grade-book.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/grade-book.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,9 +29,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gradebook" />
+    <property name="settings.editor.selected.configurable" value="gradle.compiler" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\AndroidStudioProjects\grade-book\gradebook\lib" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="main.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" nameIsGenerated="true">
@@ -34,7 +45,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -49,17 +60,39 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="352" y="459" key="#PSD" timestamp="1604610261413">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="352" y="459" key="#PSD/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604610261413" />
     <state x="309" y="175" key="#Plugins" timestamp="1602560509459">
       <screen x="0" y="22" width="1680" height="1024" />
     </state>
     <state x="309" y="175" key="#Plugins/0.22.1680.1024@0.22.1680.1024" timestamp="1602560509459" />
-    <state x="464" y="255" key="#main.dart" timestamp="1602560832574">
-      <screen x="0" y="22" width="1680" height="1024" />
+    <state x="289" y="368" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604610413137">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
+    <state x="289" y="368" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604610413137" />
+    <state x="707" y="319" key="#main.dart" timestamp="1604616968655">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="707" y="319" key="#main.dart/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604616968655" />
     <state x="464" y="255" key="#main.dart/0.22.1680.1024@0.22.1680.1024" timestamp="1602560832574" />
-    <state x="255" y="148" key="SettingsEditor" timestamp="1602630608454">
-      <screen x="0" y="22" width="1680" height="1024" />
+    <state x="486" y="482" key="FileChooserDialogImpl" timestamp="1604617043001">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
+    <state x="486" y="482" key="FileChooserDialogImpl/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604617043001" />
+    <state x="206" y="523" key="IDE.errors.dialog" timestamp="1604616467191">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="206" y="523" key="IDE.errors.dialog/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604616467191" />
+    <state x="389" y="172" key="SettingsEditor" timestamp="1604616862455">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="389" y="172" key="SettingsEditor/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604616862455" />
     <state x="255" y="148" key="SettingsEditor/0.22.1680.1024@0.22.1680.1024" timestamp="1602630608454" />
+    <state x="498" y="420" width="672" height="678" key="search.everywhere.popup" timestamp="1604610308378">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="498" y="420" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/-1920.0.1920.1040@0.0.2560.1400" timestamp="1604610308378" />
   </component>
 </project>
