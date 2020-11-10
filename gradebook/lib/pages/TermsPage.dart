@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/auth_service.dart';
+import 'package:gradebook/utils/menuDrawer.dart';
 
 
 class TermsPage extends StatefulWidget {
@@ -32,23 +33,7 @@ class _TermsPageState extends State<TermsPage> {
     Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline2,)),
-            ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline5,),),
-            ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline5,),),
-            ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline5,)),
-            ListTile(
-              title: Text("Log Out",
-                  style: Theme.of(context).textTheme.headline5,),
-              onTap: () async {
-                await AuthService().signOut();
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MenuDrawer(),
       appBar: AppBar(
         title: Text(
           "Terms",
