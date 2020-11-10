@@ -57,6 +57,7 @@ class _GradebookState extends State<Gradebook> {
 
   @override
   Widget build(BuildContext context) {
+    if(_initialized)
       return StreamProvider<GradeBookUser>.value(
         value: AuthService().gradebookuser,
         child: MaterialApp(
@@ -98,7 +99,7 @@ class _GradebookState extends State<Gradebook> {
           },
         ),
       );
-    // else
-    //   return Loading();
+    else
+      return Loading();
   }
 }

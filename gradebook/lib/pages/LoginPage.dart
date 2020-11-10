@@ -101,33 +101,35 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget _login(context) {
-      return loading ? Loading() : Center(
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(36.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        emailField,
-                        SizedBox(height: 25.0),
-                        passwordField,
-                        checkbox,
-                        SizedBox(height: 45.0),
-                        loginButton,
-                        SizedBox(height: 15.0),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        ),
-                      ],
+      return loading ? Loading() : ListView(
+        children:[ Center(
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          emailField,
+                          SizedBox(height: 25.0),
+                          passwordField,
+                          checkbox,
+                          SizedBox(height: 45.0),
+                          loginButton,
+                          SizedBox(height: 15.0),
+                          Text(
+                            error,
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            );
+      ]);
     }
 
     return Scaffold(
