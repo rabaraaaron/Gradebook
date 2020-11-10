@@ -29,6 +29,9 @@ class _TermsPageState extends State<TermClassesPage> {
             ListTile(
               title: Text("Log Out", style: Theme.of(context).textTheme.headline5,),
               onTap: () async {
+                while (Navigator.canPop(context))
+                if(Navigator.canPop(context))
+                  Navigator.pop(context);
                 await AuthService().signOut();
               },
             ),
