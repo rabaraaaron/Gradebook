@@ -43,7 +43,8 @@ class _TermsPageState extends State<TermsPage> {
               title: Text("Log Out",
                   style: Theme.of(context).textTheme.headline5,),
               onTap: () async {
-                //Navigator.pop(context);
+                // Navigator.popUntil(context, ModalRoute.withName('/Welcome'));
+                // Navigator.pushNamed(context, '/Welcome');
                 await AuthService().signOut();
               },
             ),

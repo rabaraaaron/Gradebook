@@ -30,6 +30,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             ListTile(
               title: Text("Log Out", style: Theme.of(context).textTheme.headline5,),
               onTap: () async {
+
                 await AuthService().signOut();
               },
             ),
@@ -75,7 +76,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         children: [
           ExpansionTile(
             backgroundColor: Colors.grey[800],
-            title: Text("Assinments      25%" , textScaleFactor: 2),
+            title: Text("Assignments      25%" , textScaleFactor: 2),
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),

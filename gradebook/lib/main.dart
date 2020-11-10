@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/user.dart';
 import 'package:gradebook/pages/CategoriesPage.dart';
+import 'package:gradebook/pages/WelcomePage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';
 import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/pages/LoginPage.dart';
@@ -93,6 +94,7 @@ class _GradebookState extends State<Gradebook> {
             '/Terms': (context) => TermsPage(),
             '/Home': (context) => TermClassesPage(),
             '/Categories': (context) => CategoriesPage(),
+            '/Welcome': (context) => WelcomePage(),
           },
         ),
       );
