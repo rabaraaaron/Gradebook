@@ -16,6 +16,8 @@ class _SignUpPageState extends State<SignUpPage> {
   String name = '';
   String error = '';
 
+
+
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -29,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
       style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Name",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
       validator: (val) =>
           ValidatorService().validateName(val),
       onChanged: (val) =>
@@ -41,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
       style: Theme.of(context).textTheme.headline3,
       decoration: InputDecoration(
           hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
       validator: (val) =>
           ValidatorService().validateEmail(val),
       onChanged: (val) =>
@@ -53,7 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
       decoration: InputDecoration(
           hintText: "Password",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
       validator: (val) =>
           ValidatorService().validatePassword(val),
       onChanged: (val) =>
@@ -66,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
       decoration: InputDecoration(
           hintText: "Enter password again",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
     );
     final registerBtn =
     RaisedButton(
@@ -75,14 +77,14 @@ class _SignUpPageState extends State<SignUpPage> {
           style: Theme.of(context).textTheme.headline4,),
       ),
       color: Theme.of(context).primaryColor,
-      shape: RoundedRectangleBorder(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       onPressed: () async {
         // Navigator.pushNamed(context, '/Terms');
         if (_formKey.currentState.validate()) {
           setState(() => loading = true);
           dynamic result =
           await _auth.regEmailPass(
-              email, password, name);
+              context, email, password, name);
           if(result != null)
             Navigator.pop(context);
           loading = false;

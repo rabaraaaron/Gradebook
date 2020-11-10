@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -22,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
     var emailField = TextFormField(
 
       obscureText: false,
@@ -29,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       validator: (val) => ValidatorService().validateEmail(val),
       decoration: InputDecoration(
           hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
       onChanged: (val) {
         setState(() => email = val);
       },
@@ -40,16 +43,18 @@ class _LoginPageState extends State<LoginPage> {
       validator: (val) => ValidatorService().validatePassword(val),
       decoration: InputDecoration(
           hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
       onChanged: (val) {
         setState(() => password = val);
       },
     );
 
     final loginButton = RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       child: SizedBox(
         width: 305.0,
         height: 55.0,
+
         child: Center(
           child: Text(
             'login',
@@ -58,12 +63,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       color: Theme.of(context).primaryColor,
-      shape: RoundedRectangleBorder(),
+
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           print("validation passed");
           setState(() => loading = true);
-          dynamic result = await _auth.signInEmailPass(email, password);
+          dynamic result = await _auth.signInEmailPass(context, email, password);
           if(result != null)
             Navigator.pop(context);
 
@@ -84,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
 
     bool _checked = true;
     final checkbox = CheckboxListTile(
+      activeColor: Theme.of(context).primaryColor,
       title: Text(
         "Keep me logged in",
         style: Theme.of(context).textTheme.headline3,
@@ -133,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
             "Login",

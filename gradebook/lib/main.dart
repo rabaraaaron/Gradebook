@@ -63,7 +63,9 @@ class _GradebookState extends State<Gradebook> {
         child: MaterialApp(
           theme: ThemeData(
             brightness: Brightness.dark,
-            accentColor: Colors.white,
+            primaryColor: Colors.grey[700],
+            backgroundColor: Colors.brown[300],
+            accentColor: Colors.red,
             fontFamily: GoogleFonts.quicksand().toStringShort(),
             textTheme: TextTheme(
               headline1: TextStyle(

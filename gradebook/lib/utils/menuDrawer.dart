@@ -17,7 +17,7 @@ class MenuDrawer extends StatelessWidget {
               while (Navigator.canPop(context))
                 if(Navigator.canPop(context))
                   Navigator.pop(context);
-              await AuthService().signOut();
+              await AuthService().signOut(context);
             },
           ),
         ],

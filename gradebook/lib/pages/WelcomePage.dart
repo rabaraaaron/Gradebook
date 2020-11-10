@@ -32,8 +32,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                   onPressed: () {
                     Navigator.pushNamed(context, '/Sign_up');
                   },
@@ -46,13 +45,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 right: 20,
                 bottom: 130,
                 child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                   child: Text('login', style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    //borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    // side: BorderRadius(color: Colors.black),
-                  ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/Login');
                   },
