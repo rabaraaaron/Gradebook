@@ -14,18 +14,18 @@ class _TermsPageState extends State<TermsPage> {
   final SlidableController slidableController = SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
-  @override
-  void initState() {
-    _pushTermClassesOnStartup().then((value){
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _pushTermClassesOnStartup().then((value){
+  //   });
+  //   super.initState();
+  // }
 
-  Future _pushTermClassesOnStartup() async {
-    await Future.delayed(Duration(seconds: 1));
-    Navigator.pop(context);
-    // Navigator.pushNamed(context, '/Home');
-  }
+  // Future _pushTermClassesOnStartup() async {
+  //   await Future.delayed(Duration(seconds: 1));
+  //   //Navigator.pop(context);
+  //    //Navigator.pushNamed(context, '/Home');
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -44,11 +44,9 @@ class _WelcomePageState extends State<WelcomePage> {
                 //top: 20,
                 left: 20,
                 right: 20,
-                bottom: 120,
+                bottom: 130,
                 child: RaisedButton(
-                  child: Text(
-                      'login',
-                      style: Theme.of(context).textTheme.headline4,
+                  child: Text('login', style: Theme.of(context).textTheme.headline4,
                   ),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
