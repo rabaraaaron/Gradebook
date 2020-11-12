@@ -18,10 +18,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
   int weight = 20;
 
 
-
-
-
-
   List<ExpansionTile> expansionList = [];
 
 
