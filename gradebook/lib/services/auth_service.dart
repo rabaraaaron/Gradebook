@@ -30,7 +30,7 @@ class AuthService {
       return _userFromFirebaseUser(user);
     }
     catch(e){
-      display(context, e.message, "Error logging in");
+      displayMessage(context, e.message, "Error logging in");
 
     //   print("signInEmailPass error");
     //   print(e.toString());
@@ -48,7 +48,7 @@ class AuthService {
       return _userFromFirebaseUser(user);
     }
     catch(e){
-      display(context, e.message, "Error creating user");
+      displayMessage(context, e.message, "Error creating user");
       print("regemailpass error");
       print(e.toString());
       return null;
@@ -61,13 +61,28 @@ class AuthService {
       return await _auth.signOut();
     }
     catch(e){
-      display(context, e.message, "Error signing out");
+      displayMessage(context, e.message, "Error signing out");
       print('signout error');
       print(e.toString());
       return null;
     }
   }
-  void display(context, String msg, String title){
+  Future resetPassword (context, String email) async {
+    try{
+
+      // User profile
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
+
+    }
+    catch(e){
+      displayMessage(context, e.message, "Reset password Error ");
+      print("ResetPassword error");
+      print(e.toString());
+      return false;
+    }
+  }
+  void displayMessage(context, String msg, String title){
     Flushbar(
       title: title,
       message: msg,

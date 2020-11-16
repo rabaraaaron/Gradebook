@@ -1,3 +1,4 @@
+import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
 import '../text_input_decoration.dart';
@@ -88,22 +89,11 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     bool _checked = true;
-    final checkbox = CheckboxListTile(
-      activeColor: Theme.of(context).primaryColor,
-      title: Text(
-        "Keep me logged in",
-        style: Theme.of(context).textTheme.headline3,
-      ),
-      //secondary: Icon(Icons.beach_access),
-      controlAffinity: ListTileControlAffinity.leading,
-      value: _checked,
-      onChanged: (bool value) {
-        setState(() {
-          //todo: this is not working, needs to be fixed
-          _checked = true; //this is not working
-        });
+    final forgotPasswordButton = FlatButton(
+      child: Text("Forgot password?"),
+      onPressed: (){
+        Navigator.pushNamed(context, '/resetPassword');
       },
-      //controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
     );
 
     Widget _login(context) {
@@ -121,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                           emailField,
                           SizedBox(height: 25.0),
                           passwordField,
-                          checkbox,
+                          //checkbox,
+                          forgotPasswordButton,
                           SizedBox(height: 45.0),
                           loginButton,
                           SizedBox(height: 15.0),

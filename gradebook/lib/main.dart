@@ -10,6 +10,7 @@ import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradebook/pages/TermsPage.dart';
 import 'package:gradebook/pages/TermClassesPage.dart';
+import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
 
@@ -98,6 +99,7 @@ class _GradebookState extends State<Gradebook> {
             '/Home': (context) => TermClassesPage(),
             '/Categories': (context) => CategoriesPage(),
             '/Welcome': (context) => WelcomePage(),
+            '/resetPassword': (context) => ResetPassword(),
           },
         ),
       );
