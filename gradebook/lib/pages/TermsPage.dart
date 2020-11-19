@@ -213,18 +213,19 @@ class TermsPage extends StatefulWidget {
 class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Term>>.value(value: TermService().terms,
-    child: TermsList(),);
+    return StreamProvider<List<Term>>.value(
+      value: TermService().terms,
+      child: TermsList(),
+    );
   }
 }
 
-class TermsList extends StatefulWidget{
+class TermsList extends StatefulWidget {
   @override
   _TermsListState createState() => _TermsListState();
 }
-class _TermsListState extends State<TermsList>{
 
-
+class _TermsListState extends State<TermsList> {
   final SlidableController slidableController = SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
@@ -242,26 +243,32 @@ class _TermsListState extends State<TermsList>{
         ),
         centerTitle: true,
         leading: Builder(
-          builder: (context) =>
-              Center(
-                child: IconButton(
-                    icon: Icon(Icons.menu_sharp, color: Colors.white,),
-                    iconSize: 30,
-                    onPressed: (){
-                      Scaffold.of(context).openDrawer();
-                    }),
-              ),
+          builder: (context) => Center(
+            child: IconButton(
+                icon: Icon(
+                  Icons.menu_sharp,
+                  color: Colors.white,
+                ),
+                iconSize: 30,
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                }),
+          ),
         ),
-        actions: [IconButton(icon: Icon(Icons.add_sharp), iconSize: 35, color: Colors.white,
-            onPressed: () async{
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) =>
-                    NewTermsPopUp(context, terms),
-              );
-              setState(() {});
-            }
-        )],
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add_sharp),
+              iconSize: 35,
+              color: Colors.white,
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      NewTermsPopUp(context, terms),
+                );
+                setState(() {});
+              })
+        ],
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(
@@ -279,13 +286,24 @@ class _TermsListState extends State<TermsList>{
               IconSlideAction(
                 color: Colors.transparent,
                 closeOnTap: true,
-                iconWidget: Icon(Icons.more_vert, color: Colors.white, size: 35,),
+                iconWidget: Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 35,
+                ),
                 onTap: () => null,
               ),
               IconSlideAction(
                 color: Colors.transparent,
                 closeOnTap: true,
-                iconWidget: Icon(Icons.delete, color: Colors.white, size: 35,),
+                iconWidget: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                  size: 35,
+                ),
+                onTap: () async {
+                  await TermService().deleteTerm("${terms[index].name}", terms[index].year);
+                },
               )
             ],
             child: Container(
@@ -299,14 +317,14 @@ class _TermsListState extends State<TermsList>{
                       child: IconButton(
                         icon: Icon(Icons.ac_unit),
                         iconSize: 35.0,
-                        onPressed: (){
+                        onPressed: () {
                           print("Icons pressed");
                         },
                       ),
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pushNamed(context, "/Home");
                         },
                         child: new Padding(
@@ -318,10 +336,13 @@ class _TermsListState extends State<TermsList>{
                         ),
                       ),
                     ),
-                    Text("4.0", style: Theme.of(context).textTheme.headline3, textScaleFactor: 2,),
+                    Text(
+                      "${terms[index].gpa}",
+                      style: Theme.of(context).textTheme.headline3,
+                      textScaleFactor: 2,
+                    ),
                   ],
-                )
-            ),
+                )),
           ),
         ),
       ),
@@ -329,12 +350,11 @@ class _TermsListState extends State<TermsList>{
   }
 }
 
-
 class NewTermsPopUp extends StatefulWidget {
   var c;
   var termsList;
 
-  NewTermsPopUp(context, terms){
+  NewTermsPopUp(context, terms) {
     c = context;
     termsList = terms;
   }
@@ -348,69 +368,83 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
   var termYear;
   var addedTerm;
 
-  _NewTermsPopUpState(context, terms){
+  _NewTermsPopUpState(context, terms) {
     thisContext = context;
     thisTerms = terms;
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     TermService term = new TermService();
 
     List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
     List<DropdownMenuItem> listOfTerms = [];
-    for(var l = 0; l < listOfTermsRaw.length; l++){
-      listOfTerms.insert(0, DropdownMenuItem(
-        child: Text("${listOfTermsRaw[l]}"),
-        value: listOfTermsRaw[l],
-      ));
+    for (var l = 0; l < listOfTermsRaw.length; l++) {
+      listOfTerms.insert(
+          0,
+          DropdownMenuItem(
+            child: Text("${listOfTermsRaw[l]}"),
+            value: listOfTermsRaw[l],
+          ));
     }
     List<DropdownMenuItem> listOfYears = [];
-    for(var i = 2015; i <= DateTime.now().year; i++){
-      listOfYears.insert(0, DropdownMenuItem(
-        child: Text("$i"),
-        value: i,
-      ));
+    for (var i = 2015; i <= DateTime.now().year; i++) {
+      listOfYears.insert(
+          0,
+          DropdownMenuItem(
+            child: Text("$i"),
+            value: i,
+          ));
     }
 
     return AlertDialog(
-        title: Text("Add a new Term", style: Theme.of(context).textTheme.headline2,),
+        title: Text(
+          "Add a new Term",
+          style: Theme.of(context).textTheme.headline2,
+        ),
         content: SizedBox(
           child: Form(
               child: Column(children: [
-                DropdownButton(
-                  hint: Text("Term", style: Theme.of(context).textTheme.headline3,),
-                  value: addedTerm,
-                  items: listOfTerms,
-                  onChanged: (newTerm) {
-                    setState(() {
-                      addedTerm = newTerm;
-                    });
-                  },
-                  isExpanded: true,
-                ),
-                DropdownButton(
-                  hint: Text("Year", style: Theme.of(context).textTheme.headline3,),
-                  onChanged: (newYear) {
-                    setState(() {
-                      termYear = newYear;
-                    });
-                  },
-                  value: termYear,
-                  isExpanded: true,
-                  items: listOfYears,
-                ),
-                RaisedButton(onPressed: ()async{
-                  await term.addTerm(addedTerm, termYear);
-                  Navigator.pop(context);
-                }, child: Text("Add",),)
-              ])),
+            DropdownButton(
+              hint: Text(
+                "Term",
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              value: addedTerm,
+              items: listOfTerms,
+              onChanged: (newTerm) {
+                setState(() {
+                  addedTerm = newTerm;
+                });
+              },
+              isExpanded: true,
+            ),
+            DropdownButton(
+              hint: Text(
+                "Year",
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              onChanged: (newYear) {
+                setState(() {
+                  termYear = newYear;
+                });
+              },
+              value: termYear,
+              isExpanded: true,
+              items: listOfYears,
+            ),
+            RaisedButton(
+              onPressed: () async {
+                await term.addTerm(addedTerm, termYear);
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Add",
+              ),
+            )
+          ])),
           width: 100,
           height: 175,
         ));
   }
 }
-
-
