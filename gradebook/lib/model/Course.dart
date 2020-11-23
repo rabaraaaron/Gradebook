@@ -1,3 +1,5 @@
+import 'package:gradebook/model/Category.dart';
+
 class Course {
 
   final String name;
@@ -17,3 +19,4 @@ class Course {
   }
 
 }
+
