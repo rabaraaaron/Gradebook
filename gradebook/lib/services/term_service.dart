@@ -41,9 +41,7 @@ class TermService {
   }
 
   List<Term> _termFromSnap(QuerySnapshot snapshot) {
-    // print(snapshot.docs.first.data());
     var v = snapshot.docs.map<Term>((doc) {
-      // print(doc.get('name'));
       return Term(
         name: doc.get('name'),
         year: doc.get('year') ?? "",
