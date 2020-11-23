@@ -7,16 +7,16 @@ import 'package:provider/provider.dart';
 import 'user_service.dart';
 
 class CourseService {
-
   CollectionReference courseRef;
 
-  CourseService(String termID){
+  CourseService(String termID) {
     courseRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('terms').doc(termID).collection('courses');
+        .collection('terms')
+        .doc(termID)
+        .collection('courses');
   }
-
 
   Future<void> addCourse(name, credits) async {
     bool duplicate;
@@ -25,43 +25,33 @@ class CourseService {
         .where('credits', isEqualTo: credits)
         .get()
         .then((value) {
-      duplicate = value.docs.isNotEmpty;});
+      duplicate = value.docs.isNotEmpty;
+    });
     print("DUPE: " + duplicate.toString());
 
-    if(!duplicate)
+    if (!duplicate)
       await courseRef
           .add({
-        'name': name,
-        'credits': credits,
-      })
+            'name': name,
+            'credits': credits,
+          })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
   }
 
   Stream<List<Course>> get courses {
-    return courseRef
-        .snapshots()
-        .map(_courseFromSnap);
+    return courseRef.snapshots().map(_courseFromSnap);
   }
 
   List<Course> _courseFromSnap(QuerySnapshot snapshot) {
     var v = snapshot.docs.map<Course>((doc) {
       return Course(
-          name: doc.get('name'),
-          credits: doc.get('credits') ?? "",
-      );
-    }).toList()
-    ;
+          name: doc.get('name'), credits: doc.get('credits') ?? "", id: doc.id);
+    }).toList();
     return v;
   }
 
-  Future<void> deleteCourse(name) async {
-    print(courseRef
-        .where('name', isEqualTo: name)
-        .get()
-        .then((value) {
-      String id = value.docs.first.id;
+  Future<void> deleteCourse(id) async {
       courseRef.doc(id).delete();
-    }));
   }
 }

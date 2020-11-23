@@ -6,9 +6,10 @@ class Course {
   final String credits;
   final String term;
   final int year;
+  final String id;
 
 
-  Course({this.name, this.categories, this.grade, this.term, this.year, this.credits});
+  Course({this.name, this.categories, this.grade, this.term, this.year, this.credits, this.id});
 
   @override
   String toString() {
