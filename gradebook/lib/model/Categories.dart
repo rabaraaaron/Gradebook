@@ -1,7 +1,7 @@
 class Categories{
-  bool dropLowestScore = false;
   String categoryName;
   List<String> categoryItems = new List<String>();
+  bool dropLowestScore = false;
 
   Categories(String categoryName){
     this.categoryName = categoryName;
