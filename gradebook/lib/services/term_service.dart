@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
@@ -41,12 +42,12 @@ class TermService {
   }
 
   List<Term> _termFromSnap(QuerySnapshot snapshot) {
-    // print(snapshot.docs.first.data());
     var v = snapshot.docs.map<Term>((doc) {
-      // print(doc.get('name'));
+      // print ("DOCUMENT!!!!!!:" + doc.id);
       return Term(
         name: doc.get('name'),
         year: doc.get('year') ?? "",
+        termID: doc.id ?? "",
         gpa:  4.0
       );
     }).toList()
@@ -64,4 +65,15 @@ class TermService {
       termsCollection.doc(id).delete();
     }));
   }
+
+  // Future<Term> get name(termID) async {
+  //    // var v = termsCollection.doc(termID).snapshots().map( (doc) {return Term(
+  //    //   name: doc.get('name'),
+  //    //   year: doc.get('year')
+  //    // );
+  //    // } );
+  //    var v = termsCollection.doc(termID).get()
+  //   return v;
+  // }
+
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/pages/TermClassesPage.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/services/user_service.dart';
@@ -143,7 +144,14 @@ class _TermsListState extends State<TermsList> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/Home");
+                          // Navigator.pushNamed(context, "/Home");
+                          print ("DOCUMENT!!!!!!:" + terms[index].termID);
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TermClassesPageWrap(
+                                      termID: terms[index].termID)));
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
