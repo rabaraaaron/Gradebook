@@ -1,4 +1,4 @@
-import 'package:gradebook/model/term.dart';
+import 'package:gradebook/model/Term.dart';
 
 class GradeBookUser {
 

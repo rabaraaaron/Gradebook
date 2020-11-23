@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gradebook/model/user.dart';
+import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/CategoriesPage.dart';
 import 'package:gradebook/pages/WelcomePage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';

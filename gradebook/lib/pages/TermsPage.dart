@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:gradebook/model/term.dart';
+import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/services/user_service.dart';
@@ -108,7 +108,31 @@ class _TermsListState extends State<TermsList> {
                   size: 35,
                 ),
                 onTap: () async {
-                  await TermService().deleteTerm("${terms[index].name}", terms[index].year);
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Delete Term",
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
+                          content: Text("Are you sure you want to delete this term?",),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  TermService().deleteTerm("${terms[index].name}", terms[index].year);
+                                  Navigator.pop(context);
+                                  },
+                                child: Text("Delete", textScaleFactor: 1.25,),
+                            ),
+                            FlatButton(
+                              onPressed: (){Navigator.pop(context);},
+                              child: Text("Close", textScaleFactor: 1.25,),
+                            ),
+                          ],
+                        );
+                      },
+                  );
                 },
               )
             ],
