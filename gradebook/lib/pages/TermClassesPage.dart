@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/Course.dart';
@@ -44,8 +46,8 @@ class TermClassesPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermClassesPage> {
-  // final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
 
+  //final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
   String termID;
@@ -60,14 +62,14 @@ class _TermsPageState extends State<TermClassesPage> {
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<List<Course>>(context);
-    Random rand = new Random();
+    //Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
       drawer: MenuDrawer(),
       appBar: AppBar(
         title: FutureBuilder(
           future: TermService().termsCollection.doc(termID).get(),
-          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
             Map<String, dynamic> data = snapshot.data.data();
             return Text("${data['name']} ${data['year']}",style: Theme.of(context).textTheme.headline1,);
           }
@@ -162,7 +164,13 @@ class _TermsPageState extends State<TermClassesPage> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/Categories');
+                            //Navigator.pushNamed(context, '/Categories');
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => CategoriesPageWrap(
+                          termID: termID, courseID: classes[index].id)));
+
                           },
                           child: new Padding(
                             padding: new EdgeInsets.all(20.0),

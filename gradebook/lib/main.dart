@@ -97,7 +97,7 @@ class _GradebookState extends State<Gradebook> {
             '/Sign_up': (context) => SignUpPage(),
             '/Terms': (context) => TermsPage(),
             '/Home': (context) => TermClassesPage(),
-            '/Categories': (context) => CategoriesPage(),
+            '/Categories': (context) => CategoriesPageWrap(),
             '/Welcome': (context) => WelcomePage(),
             '/resetPassword': (context) => ResetPassword(),
           },

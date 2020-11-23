@@ -64,7 +64,8 @@ class _resetPageState extends State<ResetPassword> {
           } else {
             setState(() { loading = false; });
           }
-        } else
+        }
+        else
           //loading = false;
           setState(() {});
       },

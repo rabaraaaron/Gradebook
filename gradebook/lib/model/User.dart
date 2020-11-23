@@ -1,3 +1,5 @@
+
+
 import 'package:gradebook/model/Term.dart';
 
 class GradeBookUser {
@@ -7,6 +9,7 @@ class GradeBookUser {
   final String photoUrl;
   String displayName;
   List<Term> terms;
+
 
   GradeBookUser({this.uid, this.email, this.photoUrl, this.displayName});
 
