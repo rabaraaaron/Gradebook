@@ -1,8 +1,9 @@
 class Category{
-  bool dropLowestScore = false;
+
   String categoryName;
-  int categoryWeight;
+  String categoryWeight;
   List<String> categoryItems = new List<String>();
+  bool dropLowestScore = false;
 
   Category({
     this.categoryName,

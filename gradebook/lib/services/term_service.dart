@@ -66,14 +66,6 @@ class TermService {
     }));
   }
 
-  // Future<Term> get name(termID) async {
-  //    // var v = termsCollection.doc(termID).snapshots().map( (doc) {return Term(
-  //    //   name: doc.get('name'),
-  //    //   year: doc.get('year')
-  //    // );
-  //    // } );
-  //    var v = termsCollection.doc(termID).get()
-  //   return v;
-  // }
-
 }
+
+

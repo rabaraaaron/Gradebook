@@ -19,7 +19,7 @@ class CategoryService {
         .doc(termID)
         .collection('courses')
         .doc(courseID)
-        .collection("category");
+        .collection("categories");
   }
 
 

@@ -33,11 +33,26 @@ class TermsList extends StatefulWidget {
 class _TermsListState extends State<TermsList> {
   final SlidableController slidableController = SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
+  List<Image> seasonIcons = [];
+
 
   @override
   Widget build(BuildContext context) {
     final terms = Provider.of<List<Term>>(context);
-    Random rand = new Random();
+    seasonIcons.clear();
+    double scale = 9.5;
+    for(int i = 0; i < terms.length; i++){
+      if(terms[i].name == "Fall"){
+        seasonIcons.add(Image.asset('assets/Fall_icon.png', scale: scale, color: Colors.white,));
+      } else if(terms[i].name == "Winter"){
+        seasonIcons.add(Image.asset('assets/Winter.png', scale: scale, color: Colors.white,));
+      } else if(terms[i].name == "Spring"){
+        seasonIcons.add(Image.asset('assets/Flower.png', scale: scale, color: Colors.white,));
+      } else{
+        seasonIcons.add(Image.asset('assets/Sun.png', scale: scale, color: Colors.white));
+      }
+    }
+
     return Scaffold(
       key: scaffoldKey,
       drawer: MenuDrawer(),
@@ -108,40 +123,10 @@ class _TermsListState extends State<TermsList> {
                 ),
                 onTap: () async {
                   showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          "Delete Term",
-                          style: Theme.of(context).textTheme.headline2,
-                        ),
-                        content: Text(
-                          "Are you sure you want to delete this term?",
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              TermService().deleteTerm(
-                                  "${terms[index].name}", terms[index].year);
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Delete",
-                              textScaleFactor: 1.25,
-                            ),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Close",
-                              textScaleFactor: 1.25,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DeleteConfirmation(terms, index);
+                      },
                   );
                 },
               )
@@ -154,13 +139,7 @@ class _TermsListState extends State<TermsList> {
                   children: [
                     Container(
                       padding: EdgeInsets.all(10.0),
-                      child: IconButton(
-                        icon: Icon(Icons.ac_unit),
-                        iconSize: 35.0,
-                        onPressed: () {
-                          print("Icons pressed");
-                        },
-                      ),
+                      child: seasonIcons[index],
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -294,4 +273,39 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
           height: 175,
         ));
   }
+}
+
+class DeleteConfirmation extends StatelessWidget{
+  List<Term> terms;
+  int index;
+
+  DeleteConfirmation(List<Term> list, int i){
+    terms = list;
+    index = i;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        "Delete Term",
+        style: Theme.of(context).textTheme.headline2,
+      ),
+      content: Text("Are you sure you want to delete this term?",),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            TermService().deleteTerm("${terms[index].name}", terms[index].year);
+            Navigator.pop(context);
+          },
+          child: Text("Delete", textScaleFactor: 1.25,),
+        ),
+        FlatButton(
+          onPressed: (){Navigator.pop(context);},
+          child: Text("Close", textScaleFactor: 1.25,),
+        ),
+      ],
+    );
+  }
+
 }
