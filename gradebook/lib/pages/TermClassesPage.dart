@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
+import 'package:provider/provider.dart';
 
 
 class TermClassesPage extends StatefulWidget {
@@ -11,13 +12,15 @@ class TermClassesPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermClassesPage> {
-  final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
+  StreamProvider<List<Course>>
+
+  // final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    Random rand = new Random();
+    //Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
       drawer: MenuDrawer(),
