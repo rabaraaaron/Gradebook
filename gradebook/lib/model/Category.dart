@@ -1,12 +1,13 @@
-class Categories{
+class Category{
   bool dropLowestScore = false;
   String categoryName;
   int categoryWeight;
   List<String> categoryItems = new List<String>();
 
-  Categories(String categoryName){
-    this.categoryName = categoryName;
-  }
+  Category({
+    this.categoryName,
+    this.categoryWeight,
+  });
 
   void add(String itemName){
     categoryItems.add(itemName);

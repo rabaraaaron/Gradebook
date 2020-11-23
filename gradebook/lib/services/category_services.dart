@@ -1,71 +1,71 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
 import 'user_service.dart';
+import 'package:gradebook/model/Category.dart';
 
 class CategoryService {
-  final CollectionReference termsCollection = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('terms')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('course')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('category');
+
+  CollectionReference categoryRef;
+
+  CategoryService(String termID, String courseID){
+    categoryRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('terms')
+        .doc(termID)
+        .collection('courses')
+        .doc(courseID)
+        .collection("category");
+  }
+
 
   Future<void> addCategory(name, weight) async {
     bool duplicate;
-    await termsCollection
+    await categoryRef
         .where('name', isEqualTo: name)
-        .where('year', isEqualTo: weight)
+        .where('weight', isEqualTo: weight)
         .get()
         .then((value) {
       duplicate = value.docs.isNotEmpty;});
     print("DUPE: " + duplicate.toString());
 
     if(!duplicate)
-      await termsCollection
+      await categoryRef
           .add({
         'name': name,
-        'year': year,
+        'weight': weight,
       })
-          .then((value) => print("Term Added"))
-          .catchError((error) => print("Failed to add term: $error"));
+          .then((value) => print("Category Added"))
+          .catchError((error) => print("Failed to add category: $error"));
   }
 
-  Stream<List<Term>> get terms {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('terms')
+  Stream<List<Category>> get categories {
+    return categoryRef
         .snapshots()
-        .map(_termFromSnap);
+        .map(_categoriesFromSnap);
   }
 
-  List<Term> _termFromSnap(QuerySnapshot snapshot) {
-    // print(snapshot.docs.first.data());
-    var v = snapshot.docs.map<Term>((doc) {
-      // print(doc.get('name'));
-      return Term(
-          name: doc.get('name'),
-          year: doc.get('year') ?? "",
-          gpa:  4.0
-      );
+  List<Category> _categoriesFromSnap(QuerySnapshot snapshot) {
+    var v = snapshot.docs.map<Category>((doc) {
+      return Category(
+        categoryName: doc.get('name') ?? "",
+          categoryWeight: doc.get('weight') ?? 0);
     }).toList()
     ;
     return v;
   }
 
-  Future<void> deleteTerm(name, year) async {
-    print(termsCollection
+  Future<void> deleteCourse(name) async {
+    print(categoryRef
         .where('name', isEqualTo: name)
-        .where('year', isEqualTo: year)
         .get()
         .then((value) {
       String id = value.docs.first.id;
-      termsCollection.doc(id).delete();
+      categoryRef.doc(id).delete();
     }));
   }
 }

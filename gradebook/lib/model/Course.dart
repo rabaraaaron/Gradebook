@@ -1,14 +1,19 @@
 class Course {
 
-  final String title;
-  final int credits;
+  final String name;
+  final List categories;
+  final double grade;
+  final String credits;
+  final String term;
+  final int year;
 
 
-  Course({this.title, this.credits});
+  Course({this.name, this.categories, this.grade, this.term, this.year, this.credits});
 
   @override
   String toString() {
-    return {title, credits}.toString();
+    return {name, year, categories, grade, term, credits}.toString();
   }
 
 }
+
