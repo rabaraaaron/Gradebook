@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:gradebook/model/user.dart';
+import 'package:gradebook/model/User.dart';
 import 'package:gradebook/services/user_service.dart';
 
 

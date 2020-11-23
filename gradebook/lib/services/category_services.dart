@@ -5,30 +5,34 @@ import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
 import 'user_service.dart';
 
-class TermService {
+class CategoryService {
   final CollectionReference termsCollection = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('terms');
+      .collection('terms')
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection('course')
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection('category');
 
-  Future<void> addTerm(name, year) async {
+  Future<void> addCategory(name, weight) async {
     bool duplicate;
     await termsCollection
         .where('name', isEqualTo: name)
-        .where('year', isEqualTo: year)
+        .where('year', isEqualTo: weight)
         .get()
         .then((value) {
       duplicate = value.docs.isNotEmpty;});
     print("DUPE: " + duplicate.toString());
 
     if(!duplicate)
-    await termsCollection
-        .add({
-          'name': name,
-          'year': year,
-        })
-        .then((value) => print("Term Added"))
-        .catchError((error) => print("Failed to add term: $error"));
+      await termsCollection
+          .add({
+        'name': name,
+        'year': year,
+      })
+          .then((value) => print("Term Added"))
+          .catchError((error) => print("Failed to add term: $error"));
   }
 
   Stream<List<Term>> get terms {
@@ -45,9 +49,9 @@ class TermService {
     var v = snapshot.docs.map<Term>((doc) {
       // print(doc.get('name'));
       return Term(
-        name: doc.get('name'),
-        year: doc.get('year') ?? "",
-        gpa:  4.0
+          name: doc.get('name'),
+          year: doc.get('year') ?? "",
+          gpa:  4.0
       );
     }).toList()
     ;

@@ -12,9 +12,8 @@ class TermClassesPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermClassesPage> {
-  StreamProvider<List<Course>>
 
-  // final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
+  final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
 
