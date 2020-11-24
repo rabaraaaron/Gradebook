@@ -150,8 +150,7 @@ class _TermsListState extends State<TermsList> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TermClassesPageWrap(
-                                      termID: terms[index].termID)));
+                                  builder: (context) => TermClassesPageWrap(term: terms[index])));
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),

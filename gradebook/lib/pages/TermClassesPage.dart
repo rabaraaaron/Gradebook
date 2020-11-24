@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Category.dart';
+import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
@@ -13,36 +14,36 @@ import 'package:gradebook/model/Course.dart';
 
 
 class TermClassesPageWrap extends StatefulWidget {
-  String termID;
-  TermClassesPageWrap({Key key, @required this.termID}) : super(key: key);
+  Term term;
+  TermClassesPageWrap({Key key, @required this.term}) : super(key: key);
 
   @override
-  _TermClassesPageWrapState createState() => _TermClassesPageWrapState(termID);
+  _TermClassesPageWrapState createState() => _TermClassesPageWrapState(term);
 }
 
 class _TermClassesPageWrapState extends State<TermClassesPageWrap> {
-  String termID;
+  Term term;
 
   @override
-  _TermClassesPageWrapState(String tID) {
-    this.termID = tID;
+  _TermClassesPageWrapState(Term tID) {
+    this.term = tID;
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Course>>.value(
-      value: CourseService(termID).courses,
-      child: TermClassesPage(termID: termID,),
+      value: CourseService(term.termID).courses,
+      child: TermClassesPage(term: term,),
     );
   }
 }
 
 class TermClassesPage extends StatefulWidget {
-  String termID;
-  TermClassesPage({Key key, @required this.termID}) : super(key: key);
+  Term term;
+  TermClassesPage({Key key, @required this.term}) : super(key: key);
 
   @override
-  _TermsPageState createState() => _TermsPageState(termID);
+  _TermsPageState createState() => _TermsPageState(term);
 }
 
 class _TermsPageState extends State<TermClassesPage> {
@@ -50,11 +51,11 @@ class _TermsPageState extends State<TermClassesPage> {
   //final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
-  String termID;
+  Term term;
 
   @override
-  _TermsPageState(String tID) {
-    this.termID = tID;
+  _TermsPageState(Term tID) {
+    this.term = tID;
   }
 
 
@@ -67,15 +68,16 @@ class _TermsPageState extends State<TermClassesPage> {
       key: scaffoldKey,
       drawer: MenuDrawer(),
       appBar: AppBar(
-        title: FutureBuilder(
-          future: TermService().termsCollection.doc(termID).get(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-            Map<String, dynamic> data = snapshot.data.data();
-            return Text("${data['name']} ${data['year']}",style: Theme.of(context).textTheme.headline1,);
-          }
+        title: Text("${term.name} ${term.year}", style: Theme.of(context).textTheme.headline1),
+        // FutureBuilder(
+        //   future: TermService().termsCollection.doc(termID).get(),
+        //     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+        //     Map<String, dynamic> data = snapshot.data.data();
+        //     return Text("${data['name']} ${data['year']}",style: Theme.of(context).textTheme.headline1,);
+        //   }
 
 
-        ),
+        //),
         centerTitle: true,
         leading: Builder(
           builder: (context) => Center(
@@ -99,7 +101,7 @@ class _TermsPageState extends State<TermClassesPage> {
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) =>
-                      newClassPopUp(context, classes, termID),
+                      newClassPopUp(context, classes, term.termID),
                 );
                 setState(() {});
               }),
@@ -147,7 +149,7 @@ class _TermsPageState extends State<TermClassesPage> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return DeleteConfirmation(termID, classes, index);
+                        return DeleteConfirmation(term.termID, classes, index);
                       },
                     );
                   },
@@ -174,7 +176,7 @@ class _TermsPageState extends State<TermClassesPage> {
                             context,
                             MaterialPageRoute(
                             builder: (context) => CategoriesPageWrap(
-                          termID: termID, courseID: classes[index].id)));
+                          term: term, course: classes[index])));
 
                           },
                           child: new Padding(
