@@ -244,7 +244,13 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
       listOfCategories.insert(
           0,
           DropdownMenuItem(
-            child: Text("${categoriesStrings[i]}"),
+            child: Center(
+
+              child: Text(
+                "${categoriesStrings[i]}",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
             value: categoriesStrings[i],
           ));
     }
