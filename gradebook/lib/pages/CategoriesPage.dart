@@ -3,47 +3,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Category.dart';
+import 'package:gradebook/model/Course.dart';
+import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesPageWrap extends StatefulWidget {
-  String termID;
-  String courseID;
+  Term term;
+  Course course;
 
-  CategoriesPageWrap({Key key, @required this.termID, this.courseID}) : super(key: key);
+  CategoriesPageWrap({Key key, @required this.term, this.course}) : super(key: key);
 
 
   @override
-  _CategoriesPageWrapState createState() => _CategoriesPageWrapState(termID, courseID);
+  _CategoriesPageWrapState createState() => _CategoriesPageWrapState(term, course);
 }
 
 class _CategoriesPageWrapState extends State<CategoriesPageWrap> {
-  String termID;
-  String courseID;
+  Term term;
+  Course course;
 
   @override
-  _CategoriesPageWrapState(String termID, String courseID) {
-    this.termID = termID;
-    this.courseID = courseID;
+  _CategoriesPageWrapState(Term term, Course course) {
+    this.term = term;
+    this.course = course;
   }
 
   @override
   Widget build(BuildContext) {
     return StreamProvider<List<Category>>.value(
-      value: CategoryService(termID, courseID).categories,
-      child: CategoriesPage(termID: termID, courseID: courseID),
+      value: CategoryService(term.termID, course.id).categories,
+      child: CategoriesPage(term: term, course: course),
     );
   }
 }
 class CategoriesPage extends StatefulWidget {
-  String termID;
-  String courseID;
-  CategoriesPage({Key key, @required this.termID, this.courseID}) : super(key: key);
+  Term term;
+  Course course;
+  CategoriesPage({Key key, @required this.term, this.course}) : super(key: key);
 
   @override
-  _CategoriesPageState createState() => _CategoriesPageState(termID, courseID);
+  _CategoriesPageState createState() => _CategoriesPageState(term, course);
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
@@ -59,13 +61,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
   final GlobalKey scaffoldKey = new GlobalKey();
   final SlidableController slidableController = new SlidableController();
   int weight;
-  String termID;
-  String courseID;
+  Term term;
+  Course course;
 
   @override
-  _CategoriesPageState(String termID, String courseID) {
-    this.courseID = courseID;
-    this.termID = termID;
+  _CategoriesPageState(Term term, Course course) {
+    this.course = course;
+    this.term = term;
   }
 
   @override
@@ -84,7 +86,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     final List categories = Provider.of<List<Category>>(context);
 
-    for (var l = 0; l < categories.length; l++) {
+    for (var index = 0; index < categories.length; index++) {
 
       expansionList.add(ExpansionTile(
         backgroundColor: Colors.grey[800],
@@ -92,7 +94,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           child: Row(
             children: [
               Expanded(
-                child: Text("${categories[l].categoryName}",
+                child: Text("${categories[index].categoryName}",
                   style: Theme
                       .of(context)
                       .textTheme
@@ -100,7 +102,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 ),
               ),
               //SizedBox(width: 20,),
-              Text("${categories[l].categoryWeight}%",
+              Text("${categories[index].categoryWeight}%",
                 style: Theme
                     .of(context)
                     .textTheme
@@ -132,19 +134,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
         key: scaffoldKey,
         drawer: MenuDrawer(),
         appBar: AppBar(
-          title:
-          FutureBuilder(
-              future: CourseService(termID)
-                  .courseRef
-                  .doc(courseID)
-                  .get(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-                Map<String, dynamic> data = snapshot.data.data();
-                return Text("${data['name']}",style: Theme.of(context).textTheme.headline1,);
-              }
-
-
-          ),
+          title: Text("${course.name}",style: Theme.of(context).textTheme.headline1,),
+          // FutureBuilder(
+          //     future: CourseService(term.termID)
+          //         .courseRef
+          //         .doc(course.id)
+          //         .get(),
+          //     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+          //       Map<String, dynamic> data = snapshot.data.data();
+          //       return Text("${data['name']}",style: Theme.of(context).textTheme.headline1,);
+          //     }
+          // ),
           centerTitle: true,
           leading:
           Builder(
@@ -164,7 +164,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   await showDialog(
                     context: context,
                     builder: (BuildContext context) =>
-                        NewCategoriesPopUp( categories, termID, courseID),
+                        NewCategoriesPopUp( categories, term, course),
                   );
                   setState(() {});
                 }
@@ -216,17 +216,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
 class NewCategoriesPopUp extends StatefulWidget {
   List<Category> c = [];
-  String termID;
-  String courseID;
+  Term term;
+  Course course;
 
 
-  NewCategoriesPopUp(List<Category> categories, String termID, String courseID){
+  NewCategoriesPopUp(List<Category> categories, Term term, Course course){
     this.c = categories;
-    this.courseID = courseID;
-    this.termID = termID;
+    this.course = course;
+    this.term = term;
   }
   @override
-  _NewCategoriesPopUpState createState() => _NewCategoriesPopUpState(c, termID, courseID);
+  _NewCategoriesPopUpState createState() => _NewCategoriesPopUpState(c, term, course);
 }
 
 class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
@@ -236,9 +236,9 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   CategoryService categoryService;
 
 
-  _NewCategoriesPopUpState(List<Category> categories, String termID, String courseID){
+  _NewCategoriesPopUpState(List<Category> categories, Term term, Course course){
     c = categories;
-    categoryService = new CategoryService(termID, courseID);
+    categoryService = new CategoryService(term.termID, course.id);
   }
   @override
   Widget build(BuildContext context) {
