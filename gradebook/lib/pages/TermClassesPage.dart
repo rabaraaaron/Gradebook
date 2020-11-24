@@ -144,8 +144,13 @@ class _TermsPageState extends State<TermClassesPage> {
                     size: 35,
                   ),
                   onTap: () async {
-                      return DeleteConfirmation(termID, classes, index);
-                    },
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DeleteConfirmation(termID, classes, index);
+                      },
+                    );
+                  },
                 )
               ],
               child: Container(
