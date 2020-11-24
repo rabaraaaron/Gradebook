@@ -50,13 +50,6 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage> {
 
-  List<String> categoriesStrings = [
-    "Assignments",
-    "Homework",
-    "Quizzes",
-    "Exams",
-    "Other"
-  ];
   Map categoriesData = new HashMap<String, List<String>>();
   final GlobalKey scaffoldKey = new GlobalKey();
   final SlidableController slidableController = new SlidableController();
@@ -77,7 +70,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       color: Colors.blue,
       child: Text(
         "Add Item",
-        style: Theme.of(context).textTheme.headline1,
+        style: Theme.of(context).textTheme.headline6,
       ),
     );
 
@@ -135,16 +128,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
         drawer: MenuDrawer(),
         appBar: AppBar(
           title: Text("${course.name}",style: Theme.of(context).textTheme.headline1,),
-          // FutureBuilder(
-          //     future: CourseService(term.termID)
-          //         .courseRef
-          //         .doc(course.id)
-          //         .get(),
-          //     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-          //       Map<String, dynamic> data = snapshot.data.data();
-          //       return Text("${data['name']}",style: Theme.of(context).textTheme.headline1,);
-          //     }
-          // ),
           centerTitle: true,
           leading:
           Builder(
@@ -232,6 +215,7 @@ class NewCategoriesPopUp extends StatefulWidget {
 class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   List<Category> c = [];
   bool checked = false;
+  var addedCategory;
 
   CategoryService categoryService;
 
@@ -242,8 +226,28 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   }
   @override
   Widget build(BuildContext context) {
-    TextEditingController categoryTitleController = new TextEditingController();
+    //TextEditingController categoryTitleController = new TextEditingController();
     TextEditingController categoryWeightController = new TextEditingController();
+    List<String> categoriesStrings = [
+      "Other",
+      "Project",
+      "Participation",
+      "Homework",
+      "Quizzes",
+      "Exams",
+      "Assignments",
+    ];
+
+    List<DropdownMenuItem> listOfCategories = [];
+
+    for (var i = 0; i < categoriesStrings.length; i++) {
+      listOfCategories.insert(
+          0,
+          DropdownMenuItem(
+            child: Text("${categoriesStrings[i]}"),
+            value: categoriesStrings[i],
+          ));
+    }
 
     return AlertDialog(
         title: Text("Add a new Category", style: Theme
@@ -253,13 +257,27 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
         content: SizedBox(
           child: Form(
               child: Column(children: [
-                TextFormField(
-                  controller: categoryTitleController,
-                  decoration: const InputDecoration(
-                    hintText: "ex Project",
-                    labelText: 'Category',
+                DropdownButtonFormField(
+                  hint: Text(
+                    "Select Category",
+                    style: Theme.of(context).textTheme.headline6,
                   ),
+                  value: addedCategory,
+                  items: listOfCategories,
+                  onChanged: (newCategory) {
+                    setState(() {
+                      addedCategory = newCategory;
+                    });
+                  },
+                  isExpanded: true,
                 ),
+                // TextFormField(
+                //   controller: categoryTitleController,
+                //   decoration: const InputDecoration(
+                //     hintText: "ex Project",
+                //     labelText: 'Category',
+                //   ),
+                // ),
                 TextFormField(
                   controller: categoryWeightController,
                   decoration: const InputDecoration(
@@ -287,7 +305,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                         onPressed: () async{
-                          await categoryService.addCategory(categoryTitleController.text, categoryWeightController.text);
+                          await categoryService.addCategory(addedCategory, categoryWeightController.text);
                           Navigator.pop(context);
                         },
                         child: Text("Add",
