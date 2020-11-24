@@ -217,7 +217,13 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
       listOfCategories.insert(
           0,
           DropdownMenuItem(
-            child: Text("${categoriesStrings[i]}"),
+            child: Center(
+
+              child: Text(
+                "${categoriesStrings[i]}",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
             value: categoriesStrings[i],
           ));
     }
@@ -336,23 +342,20 @@ class _AssessmentTileState extends State<AssessmentTile> {
           ],
         ),
         children: [
-          Row(
-            children: [
-              RaisedButton(
-                child: Text(
-                  "add class",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                onPressed: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (BuildContext context) =>
-                        newAssessmentPopUp(context, termID, courseID, cat.id),
-                  );
-                  // assServ.addAssessment(name, totalPoints, yourPoints)
-                },
-              ),
-            ],
+          Center(
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+              color: Colors.grey,
+              child: Text("Add Assessment", style: Theme.of(context).textTheme.headline6,),
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      newAssessmentPopUp(context, termID, courseID, cat.id),
+                );
+                // assServ.addAssessment(name, totalPoints, yourPoints)
+              },
+            ),
           ),
           AssessmentList(
             termID: termID,
@@ -375,13 +378,13 @@ class AssessmentList extends StatefulWidget {
 }
 
 class _AssessmentListState extends State<AssessmentList> {
-  
+
   String termID, courseID, categoryID;
   final SlidableController slidableController = new SlidableController();
   _AssessmentListState({this.termID, this.courseID, this.categoryID});
-  
-  
-  
+
+
+
   @override
   Widget build(BuildContext context) {
     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
