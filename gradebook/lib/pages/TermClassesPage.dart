@@ -143,7 +143,14 @@ class _TermsPageState extends State<TermClassesPage> {
                     color: Colors.white,
                     size: 35,
                   ),
-                  onTap: () async { CourseService(termID).deleteCourse(classes[index].id); },
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DeleteConfirmation(termID, classes, index);
+                      },
+                    );
+                  },
                 )
               ],
               child: Container(
@@ -268,4 +275,42 @@ Widget newClassPopUp(BuildContext context, List<Course> terms, String termID) {
         width: 100,
         height: 195,
       ));
+}
+
+
+class DeleteConfirmation extends StatelessWidget{
+  String termID;
+  List<Course> termCourses;
+  int index;
+
+  DeleteConfirmation(String id, List<Course> courses, int i){
+    termID = id;
+    termCourses = courses;
+    index = i;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        "Delete Course",
+        style: Theme.of(context).textTheme.headline2,
+      ),
+      content: Text("Are you sure you want to delete this Course?",),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            CourseService(termID).deleteCourse(termCourses[index].id);
+            Navigator.pop(context);
+          },
+          child: Text("Delete", textScaleFactor: 1.25,),
+        ),
+        FlatButton(
+          onPressed: (){Navigator.pop(context);},
+          child: Text("Close", textScaleFactor: 1.25,),
+        ),
+      ],
+    );
+  }
+
 }
