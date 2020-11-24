@@ -42,18 +42,17 @@ class _CategoriesPageWrapState extends State<CategoriesPageWrap> {
     );
   }
 }
+
 class CategoriesPage extends StatefulWidget {
   Term term;
   Course course;
-  CategoriesPage({Key key, @required this.term, this.course})
-      : super(key: key);
+  CategoriesPage({Key key, @required this.term, this.course}) : super(key: key);
 
   @override
   _CategoriesPageState createState() => _CategoriesPageState(term, course);
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
-
   List<String> categoriesStrings = [
     "Assignments",
     "Homework",
@@ -85,61 +84,55 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
     );
 
+    // List<ExpansionTile> expansionList = [];
 
-    List<ExpansionTile> expansionList = [];
-
+    //
     final List categories = Provider.of<List<Category>>(context);
-
-    for (var index = 0; index < categories.length; index++) {
-
-      expansionList.add(ExpansionTile(
-        backgroundColor: Colors.grey[800],
-        title: Container(
-          child: Row(
-            children: [
-              Expanded(
-                child: Text("${categories[index].categoryName}",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline2,
-                ),
-              ),
-              //SizedBox(width: 20,),
-              Text("${categories[index].categoryWeight}%",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline2,
-              ),
-            ],
-          ),
-        ),
-        children: [
-          StreamProvider.value(
-              value:
-                  AssessmentService(term.termID, course.id, categories[index].id).assessments,
-              child:
-              AssessmentList(termID: term.termID, courseID: course.id, categoryID: categories[index].id,))
-        ],
-      ));
-    }
+    //
+    // for (var index = 0; index < categories.length; index++) {
+    //
+    //   expansionList.add(ExpansionTile(
+    //     backgroundColor: Colors.grey[800],
+    //     title: Container(
+    //       child: Row(
+    //         children: [
+    //           Expanded(
+    //             child: Text("${categories[index].categoryName}",
+    //               style: Theme
+    //                   .of(context)
+    //                   .textTheme
+    //                   .headline2,
+    //             ),
+    //           ),
+    //           //SizedBox(width: 20,),
+    //           Text("${categories[index].categoryWeight}%",
+    //             style: Theme
+    //                 .of(context)
+    //                 .textTheme
+    //                 .headline2,
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //     children: [
+    //
+    //       // StreamProvider.value(
+    //       //     value:
+    //       //         AssessmentService(term.termID, course.id, categories[index].id).assessments,
+    //       //     child:
+    //       //     AssessmentList(termID: term.termID, courseID: course.id, categoryID: categories[index].id,))
+    //     ],
+    //   ));
+    // }
 
     return Scaffold(
         key: scaffoldKey,
         drawer: MenuDrawer(),
         appBar: AppBar(
-          title: Text("${course.name}",style: Theme.of(context).textTheme.headline1,),
-          // FutureBuilder(
-          //     future: CourseService(term.termID)
-          //         .courseRef
-          //         .doc(course.id)
-          //         .get(),
-          //     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-          //       Map<String, dynamic> data = snapshot.data.data();
-          //       return Text("${data['name']}",style: Theme.of(context).textTheme.headline1,);
-          //     }
-          // ),
+          title: Text(
+            "${course.name}",
+            style: Theme.of(context).textTheme.headline1,
+          ),
           centerTitle: true,
           leading: Builder(
             builder: (context) => Center(
@@ -175,7 +168,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             indent: 25.0,
             endIndent: 25.0,
           ),
-          itemCount: expansionList.length,
+          itemCount: categories.length,
           itemBuilder: (context, index) => Container(
             child: Slidable(
               controller: slidableController,
@@ -202,32 +195,33 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ),
                 )
               ],
-              child: StreamProvider.value(value: AssessmentService(term.termID, course.id , categories[index].id).assessments,
-                  child: AssessmentTile(term.termID, course.id, categories[index])),
-              // Text(
-              //   "${expansionList[index].}",
-              //   style: Theme.of(context).textTheme.headline2,
-              // ),
+              child:
+                  // expansionList[index]
+                  StreamProvider.value(
+                      value: AssessmentService(
+                              term.termID, course.id, categories[index].id)
+                          .assessments,
+                      child: AssessmentTile(
+                          term.termID, course.id, categories[index])),
             ),
           ),
         ));
   }
 }
 
-
 class NewCategoriesPopUp extends StatefulWidget {
   List<Category> c = [];
   Term term;
   Course course;
 
-
-  NewCategoriesPopUp(List<Category> categories, Term term, Course course){
+  NewCategoriesPopUp(List<Category> categories, Term term, Course course) {
     this.c = categories;
     this.course = course;
     this.term = term;
   }
   @override
-  _NewCategoriesPopUpState createState() => _NewCategoriesPopUpState(c, term, course);
+  _NewCategoriesPopUpState createState() =>
+      _NewCategoriesPopUpState(c, term, course);
 }
 
 class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
@@ -255,73 +249,83 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
         content: SizedBox(
           child: Form(
               child: Column(children: [
-                TextFormField(
-                  controller: categoryTitleController,
-                  decoration: const InputDecoration(
-                    hintText: "ex Project",
-                    labelText: 'Category',
-                  ),
+            TextFormField(
+              controller: categoryTitleController,
+              decoration: const InputDecoration(
+                hintText: "ex Project",
+                labelText: 'Category',
+              ),
+            ),
+            TextFormField(
+              controller: categoryWeightController,
+              decoration: const InputDecoration(
+                hintText: "ex 25",
+                labelText: 'Weight',
+              ),
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: checked,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      checked = updateChecked;
+                    });
+                  },
                 ),
-                TextFormField(
-                  controller: categoryWeightController,
-                  decoration: const InputDecoration(
-                    hintText: "ex 25",
-                    labelText: 'Weight',
-                  ),
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: checked,
-                      onChanged: (updateChecked){
-                        setState(() {
-                          checked = updateChecked;
-                        });
-                      },
-
-                    ),
-                    Text("Drop Lowest Score?"),
-                  ],
-                ),
-                Expanded(
-                  child: SizedBox(
-                    width: 300,
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-                        onPressed: () async{
-                          await categoryService.addCategory(categoryTitleController.text, categoryWeightController.text);
-                          Navigator.pop(context);
-                        },
-                        child: Text("Add",
-                            style: Theme.of(context).textTheme.headline6,)
-                    ),
-                  ),
-                )
-              ])
-          ),
+                Text("Drop Lowest Score?"),
+              ],
+            ),
+            Expanded(
+              child: SizedBox(
+                width: 300,
+                child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(13.0)),
+                    onPressed: () async {
+                      await categoryService.addCategory(
+                          categoryTitleController.text,
+                          categoryWeightController.text);
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Add",
+                      style: Theme.of(context).textTheme.headline6,
+                    )),
+              ),
+            )
+          ])),
           width: 100,
           height: 225,
         ));
   }
 }
 
-Widget AssessmentTile(termID, courseID, Category cat){
+Widget AssessmentTile(String termID, String courseID, Category cat) {
   return Container(
     child: ExpansionTile(
-    title: Row(children:[Text("${cat.categoryName}"),
-        ], ),
-    children: [
-      AssessmentList(termID: termID,courseID: courseID, categoryID: cat.id,)
-    ],
+      title: Row(
+        children: [
+          Text("${cat.categoryName}"),
+        ],
+      ),
+      children: [
+        // Text('a')
+        AssessmentList(
+          termID: termID,
+          courseID: courseID,
+          categoryID: cat.id,
+        )
+      ],
     ),
   );
 }
 
-
 class AssessmentList extends StatefulWidget {
   String termID, courseID, categoryID;
 
-  AssessmentList({Key key, this.termID,this.courseID,this.categoryID}) : super(key:key);
+  AssessmentList({Key key, this.termID, this.courseID, this.categoryID})
+      : super(key: key);
   @override
   _AssessmentListState createState() => _AssessmentListState();
 }
@@ -329,59 +333,63 @@ class AssessmentList extends StatefulWidget {
 class _AssessmentListState extends State<AssessmentList> {
   String termID, courseID, categoryID;
 
-  _AssessmentListState({this.termID,this.courseID,this.categoryID});
-
+  _AssessmentListState({this.termID, this.courseID, this.categoryID});
 
   @override
   Widget build(BuildContext context) {
+
     final assessments = Provider.of<List<Assessment>>(context);
+    // print ("HERERERERE!" + assessments[0].toString() );
 
     return Column(
       children: [
         newAssessment(termID, courseID, categoryID),
-        ListView.builder(
-          itemCount: assessments.length ?? 0,
-            itemBuilder: (context, index) => (Container(
-                    child: Row(
-                  children: [Expanded(child: Text("${assessments[index].name}"))],
-                )))),
+
+        Text("Test 2"),
+        Text("test 1")
+        // ListView.builder(
+        //     itemCount: assessments.length,
+        //     itemBuilder: (context, index) => (Row(
+        //           children: [
+        //             Text("${assessments[index].id}")
+        //           ],
+        //         ))),
       ],
     );
   }
-
-
 }
 
-Widget newAssessment(termID, courseID, categoryID){
-  AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
+Widget newAssessment(termID, courseID, categoryID) {
+  AssessmentService assServ =
+      new AssessmentService(termID, courseID, categoryID);
   final name = TextEditingController();
   final totalPoints = TextEditingController();
   final yourPoints = TextEditingController();
-
-  return Form(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        TextFormField(controller: name,
-          decoration: const InputDecoration(
-            hintText: "ex Quiz 1",
-            labelText: 'Name',
-          ),),
-        TextFormField(controller: totalPoints,
-          decoration: const InputDecoration(
-            labelText: 'Total Points',
-          ),),
-        TextFormField(controller: yourPoints,
-          decoration: const InputDecoration(
-            labelText: 'Points Earned',
-          ),),
-        RaisedButton(
-          onPressed: () async{
-            await assServ.addAssessment(name, totalPoints, yourPoints);
-            },
-          child: Icon(Icons.add),
-        )
-      ],
-    ),
-  );
+  return Text("Input");
+  // return Form(
+  //   child: Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: [
+  //       TextFormField(controller: name,
+  //         decoration: const InputDecoration(
+  //           hintText: "ex Quiz 1",
+  //           labelText: 'Name',
+  //         ),),
+  //       TextFormField(controller: totalPoints,
+  //         decoration: const InputDecoration(
+  //           labelText: 'Total Points',
+  //         ),),
+  //       TextFormField(controller: yourPoints,
+  //         decoration: const InputDecoration(
+  //           labelText: 'Points Earned',
+  //         ),),
+  //       RaisedButton(
+  //         onPressed: () async{
+  //           await assServ.addAssessment(name, totalPoints, yourPoints);
+  //           },
+  //         child: Icon(Icons.add),
+  //       )
+  //     ],
+  //   ),
+  // );
 }
