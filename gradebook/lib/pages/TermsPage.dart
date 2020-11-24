@@ -145,8 +145,6 @@ class _TermsListState extends State<TermsList> {
                       child: GestureDetector(
                         onTap: () {
                           // Navigator.pushNamed(context, "/Home");
-                          print ("DOCUMENT!!!!!!:" + terms[index].termID);
-
                           Navigator.push(
                               context,
                               MaterialPageRoute(
