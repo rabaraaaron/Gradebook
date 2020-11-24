@@ -22,17 +22,6 @@ class AssessmentService {
   }
 
   Future<void> addAssessment(name, totalPoints, yourPoints) async {
-    // bool duplicate;
-    // await courseRef
-    //     .where('name', isEqualTo: name)
-    //     .where('credits', isEqualTo: TotalPoints)
-    //     .get()
-    //     .then((value) {
-    //   duplicate = value.docs.isNotEmpty;
-    // });
-    // print("DUPE: " + duplicate.toString());
-    //
-    // if (!duplicate)
       await assessmentRef
           .add({
         'name': name,
@@ -61,6 +50,6 @@ class AssessmentService {
   }
 
   Future<void> deleteAssessment(id) async {
-    assessmentRef.doc(id).delete();
+    await assessmentRef.doc(id).delete();
   }
 }

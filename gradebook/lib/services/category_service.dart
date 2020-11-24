@@ -56,10 +56,7 @@ class CategoryService {
     return v;
   }
 
-  Future<void> deleteCourse(name) async {
-    print(categoryRef.where('name', isEqualTo: name).get().then((value) {
-      String id = value.docs.first.id;
-      categoryRef.doc(id).delete();
-    }));
+  Future<void> deleteCategory(id) async {
+    categoryRef.doc(id).delete();
   }
 }
