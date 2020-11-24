@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  tuple: ^1.0.3
   google_fonts:
   flutter_slidable:
   flutter:
@@ -40,6 +41,7 @@ dependencies:
 
 
 dev_dependencies:
+  test: ^1.15.7
   google_fonts:
   flutter_test:
     sdk: flutter
