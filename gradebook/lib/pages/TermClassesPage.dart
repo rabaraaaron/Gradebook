@@ -286,10 +286,10 @@ class DeleteConfirmation extends StatelessWidget{
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        "Delete Term",
+        "Delete Course",
         style: Theme.of(context).textTheme.headline2,
       ),
-      content: Text("Are you sure you want to delete this term?",),
+      content: Text("Are you sure you want to delete this Course?",),
       actions: <Widget>[
         FlatButton(
           onPressed: () {
