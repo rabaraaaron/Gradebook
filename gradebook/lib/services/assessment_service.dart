@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
@@ -8,18 +9,19 @@ import 'package:provider/provider.dart';
 import 'user_service.dart';
 
 class AssessmentService {
-  CollectionReference courseRef;
+  CollectionReference assessmentRef;
 
-  AssessmentService(String termID) {
-    courseRef = FirebaseFirestore.instance
+  AssessmentService(String termID, courseID, categoryID) {
+    assessmentRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('terms')
         .doc(termID)
-        .collection('courses');
+        .collection('courses').doc(courseID)
+        .collection("categories").doc(categoryID).collection('assessments');
   }
 
-  Future<void> addCourse(name, TotalPoints, YourPoints) async {
+  Future<void> addAssessment(name, totalPoints, yourPoints) async {
     // bool duplicate;
     // await courseRef
     //     .where('name', isEqualTo: name)
@@ -31,28 +33,29 @@ class AssessmentService {
     // print("DUPE: " + duplicate.toString());
     //
     // if (!duplicate)
-      await courseRef
+      await assessmentRef
           .add({
         'name': name,
-        'credits': TotalPoints,
+        'totalPoints': totalPoints,
+        'yourPoints' : yourPoints
       })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
   }
 
-  Stream<List<Assessment>> get courses {
-    return courseRef.snapshots().map(_assessmentFromSnap);
+  Stream<List<Assessment>> get assessments {
+    return assessmentRef.snapshots().map(_assessmentFromSnap);
   }
 
   List<Assessment> _assessmentFromSnap(QuerySnapshot snapshot) {
     var v = snapshot.docs.map<Assessment>((doc) {
       return Assessment(
-          name: doc.get('name'), totalPoints: doc.get('totalPoints') ?? "", id: doc.id);
+          name: doc.get('name'), totalPoints: doc.get('totalPoints') ?? "",yourPoints: doc.get('yourPoints') ?? "", id: doc.id);
     }).toList();
     return v;
   }
 
-  Future<void> deleteCourse(id) async {
-    courseRef.doc(id).delete();
+  Future<void> deleteAssessment(id) async {
+    assessmentRef.doc(id).delete();
   }
 }
