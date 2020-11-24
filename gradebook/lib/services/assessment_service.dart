@@ -50,9 +50,11 @@ class AssessmentService {
   List<Assessment> _assessmentFromSnap(QuerySnapshot snapshot) {
     var v = snapshot.docs.map<Assessment>((doc) {
       print ("HERERERERE!" + doc.data().toString());
+      var tp = double.parse(doc.get('totalPoints'));
+      var yp = double.parse(doc.get('yourPoints'));
       return Assessment(
-          name: doc.id,
-          // totalPoints: doc.get('totalPoints') ?? "",yourPoints: doc.get('yourPoints') ?? "", id: doc.id
+          name: doc.get('name'),
+          totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id
       );
     }).toList();
     return v;
