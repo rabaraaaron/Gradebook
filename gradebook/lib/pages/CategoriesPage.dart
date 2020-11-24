@@ -53,13 +53,7 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
-  List<String> categoriesStrings = [
-    "Assignments",
-    "Homework",
-    "Quizzes",
-    "Exams",
-    "Other"
-  ];
+
   Map categoriesData = new HashMap<String, List<String>>();
   final GlobalKey scaffoldKey = new GlobalKey();
   final SlidableController slidableController = new SlidableController();
@@ -80,7 +74,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       color: Colors.blue,
       child: Text(
         "Add Item",
-        style: Theme.of(context).textTheme.headline1,
+        style: Theme.of(context).textTheme.headline6,
       ),
     );
 
@@ -228,6 +222,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   List<Category> c = [];
   bool checked = false;
 
+
   CategoryService categoryService;
 
   _NewCategoriesPopUpState(
@@ -237,10 +232,29 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   }
   @override
   Widget build(BuildContext context) {
-    TextEditingController categoryTitleController = new TextEditingController();
-    TextEditingController categoryWeightController =
-        new TextEditingController();
+    //TextEditingController categoryTitleController = new TextEditingController();
+    TextEditingController categoryWeightController = new TextEditingController();
+    List<String> categoriesStrings = [
+      "Other",
+      "Project",
+      "Participation",
+      "Homework",
+      "Quizzes",
+      "Exams",
+      "Assignments",
+    ];
 
+    List<DropdownMenuItem> listOfCategories = [];
+
+    for (var i = 0; i < categoriesStrings.length; i++) {
+      listOfCategories.insert(
+          0,
+          DropdownMenuItem(
+            child: Text("${categoriesStrings[i]}"),
+            value: categoriesStrings[i],
+          ));
+    }
+    String addedCategory;
     return AlertDialog(
         title: Text(
           "Add a new Category",
@@ -249,52 +263,64 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
         content: SizedBox(
           child: Form(
               child: Column(children: [
-            TextFormField(
-              controller: categoryTitleController,
-              decoration: const InputDecoration(
-                hintText: "ex Project",
-                labelText: 'Category',
-              ),
-            ),
-            TextFormField(
-              controller: categoryWeightController,
-              decoration: const InputDecoration(
-                hintText: "ex 25",
-                labelText: 'Weight',
-              ),
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: checked,
-                  onChanged: (updateChecked) {
+                DropdownButtonFormField(
+                  hint: Text(
+                    "Select Category",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  value: addedCategory,
+                  items: listOfCategories,
+                  onChanged: (newCategory) {
                     setState(() {
-                      checked = updateChecked;
+                      addedCategory = newCategory;
                     });
                   },
+                  isExpanded: true,
                 ),
-                Text("Drop Lowest Score?"),
-              ],
-            ),
-            Expanded(
-              child: SizedBox(
-                width: 300,
-                child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13.0)),
-                    onPressed: () async {
-                      await categoryService.addCategory(
-                          categoryTitleController.text,
-                          categoryWeightController.text);
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Add",
-                      style: Theme.of(context).textTheme.headline6,
-                    )),
-              ),
-            )
-          ])),
+                // TextFormField(
+                //   controller: categoryTitleController,
+                //   decoration: const InputDecoration(
+                //     hintText: "ex Project",
+                //     labelText: 'Category',
+                //   ),
+                // ),
+                TextFormField(
+                  controller: categoryWeightController,
+                  decoration: const InputDecoration(
+                    hintText: "ex 25",
+                    labelText: 'Weight',
+                  ),
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: checked,
+                      onChanged: (updateChecked){
+                        setState(() {
+                          checked = updateChecked;
+                        });
+                      },
+
+                    ),
+                    Text("Drop Lowest Score?"),
+                  ],
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: 300,
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                        onPressed: () async{
+                          await categoryService.addCategory(addedCategory, categoryWeightController.text);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Add",
+                            style: Theme.of(context).textTheme.headline6,)
+                    ),
+                  ),
+                )
+              ])
+          ),
           width: 100,
           height: 225,
         ));
