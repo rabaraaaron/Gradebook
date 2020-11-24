@@ -1,8 +1,8 @@
 class Assessment {
 
   final String name;
-  final String totalPoints;
-  final String yourPoints;
+  final double totalPoints;
+  final double yourPoints;
   final String id;
 
 
