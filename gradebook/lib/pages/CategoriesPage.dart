@@ -75,17 +75,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
       color: Colors.blue,
       child: Text(
         "Add Item",
-        style: Theme
-            .of(context)
-            .textTheme
-            .headline1,
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
 
 
     List<ExpansionTile> expansionList = [];
-
-
 
     final List categories = Provider.of<List<Category>>(context);
 
@@ -93,11 +88,26 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
       expansionList.add(ExpansionTile(
         backgroundColor: Colors.grey[800],
-        title: Text("${categories[l].categoryName}",
-          style: Theme
-              .of(context)
-              .textTheme
-              .headline2,
+        title: Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: Text("${categories[l].categoryName}",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline2,
+                ),
+              ),
+              //SizedBox(width: 20,),
+              Text("${categories[l].categoryWeight}%",
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline2,
+              ),
+            ],
+          ),
         ),
         children: [
           Container(
@@ -271,12 +281,19 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     Text("Drop Lowest Score?"),
                   ],
                 ),
-                RaisedButton(
-                    onPressed: () async{
-                      await categoryService.addCategory(categoryTitleController.text, categoryWeightController.text);
-                      Navigator.pop(context);
-                    },
-                    child: Text("Add")
+                Expanded(
+                  child: SizedBox(
+                    width: 300,
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                        onPressed: () async{
+                          await categoryService.addCategory(categoryTitleController.text, categoryWeightController.text);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Add",
+                            style: Theme.of(context).textTheme.headline6,)
+                    ),
+                  ),
                 )
               ])
           ),

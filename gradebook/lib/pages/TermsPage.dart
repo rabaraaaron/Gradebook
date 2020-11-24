@@ -259,13 +259,19 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
               isExpanded: true,
               items: listOfYears,
             ),
-            RaisedButton(
-              onPressed: () async {
-                await term.addTerm(addedTerm, termYear);
-                Navigator.pop(context);
-              },
-              child: Text(
-                "Add",
+            SizedBox(height: 20,),
+            Expanded(
+              child: SizedBox(
+                height: 30,
+                width: 300,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                  onPressed: () async {
+                    await term.addTerm(addedTerm, termYear);
+                    Navigator.pop(context);
+                  },
+                    child: Text("Add",  style: Theme.of(context).textTheme.headline6,)
+                ),
               ),
             )
           ])),

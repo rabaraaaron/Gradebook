@@ -248,17 +248,24 @@ Widget newClassPopUp(BuildContext context, List<Course> terms, String termID) {
               labelText: 'Credit Hours',
             ),
           ),
-          RaisedButton(
-              onPressed: () async {
-                await courseServ.addCourse(classTitleController.text,creditHoursController.text);
-                if (int.parse(creditHoursController.text) is int) {
-                  print(creditHoursController.text);
-                }
-                Navigator.pop(context);
-              },
-              child: Text("Add"))
+          SizedBox(height: 20,),
+          Expanded(
+            child: SizedBox(
+              width: 300,
+              child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                  onPressed: () async {
+                    await courseServ.addCourse(classTitleController.text,creditHoursController.text);
+                    if (int.parse(creditHoursController.text) is int) {
+                      print(creditHoursController.text);
+                    }
+                    Navigator.pop(context);
+                  },
+                  child: Text("Add",  style: Theme.of(context).textTheme.headline6,))),
+            ),
+
         ])),
         width: 100,
-        height: 175,
+        height: 195,
       ));
 }
