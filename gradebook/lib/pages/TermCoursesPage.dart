@@ -156,60 +156,61 @@ class _TermsPageState extends State<TermClassesPage> {
                 )
               ],
               child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.computer,
-                          size: 50,
-                        ),
-                        padding: EdgeInsets.all(10.0),
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Icon(
+                        Icons.computer,
+                        size: 50,
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            //Navigator.pushNamed(context, '/Categories');
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                            builder: (context) => CategoriesPageWrap(
-                          term: term, course: classes[index])));
+                      padding: EdgeInsets.all(10.0),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          //Navigator.pushNamed(context, '/Categories');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CategoriesPageWrap(
+                                      term: term, course: classes[index])));
 
-                          },
-                          child: new Padding(
-                            padding: new EdgeInsets.all(20.0),
-                            child: Text(
-                              "${classes[index].name}",
-                              style: Theme.of(context).textTheme.headline2,
-                            ),
+                        },
+                        child: new Padding(
+                          padding: new EdgeInsets.all(20.0),
+                          child: Text(
+                            "${classes[index].name}",
+                            style: Theme.of(context).textTheme.headline2,
                           ),
                         ),
                       ),
-                      Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Text(
-                                "A",
-                                textScaleFactor: 2,
-                                style: Theme.of(context).textTheme.headline3,
-                              ),
+                    ),
+                    Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Text(
+                              "A",
+                              textScaleFactor: 2,
+                              style: Theme.of(context).textTheme.headline3,
                             ),
-                            Container(
-                              child: Text(
-                                "97%",
-                                textScaleFactor: 2,
-                                style: Theme.of(context).textTheme.headline3,
-                              ),
+                          ),
+                          Container(
+                            child: Text(
+                              "97%",
+                              textScaleFactor: 2,
+                              style: Theme.of(context).textTheme.headline3,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -218,65 +219,118 @@ class _TermsPageState extends State<TermClassesPage> {
   }
 }
 
-Widget newClassPopUp(BuildContext context, List<Course> terms, String termID) {
+
+class newClassPopUp extends StatefulWidget {
+  BuildContext context;
+  List<Course> terms;
+  String termID;
+
+  newClassPopUp(BuildContext c, List<Course> t, String tID){
+    context = c;
+    terms = t;
+    termID = tID;
+  }
+
+  @override
+  _newClassPopUpState createState() => _newClassPopUpState(context, terms, termID);
+}
+
+class _newClassPopUpState extends State<newClassPopUp> {
+
+  static String termID;
+
+  _newClassPopUpState(BuildContext c, List<Course> t, String tID){
+    termID = tID;
+  }
+
   CourseService courseServ = new CourseService(termID);
 
   final classTitleController = TextEditingController();
   final creditHoursController = TextEditingController();
+  final FocusScopeNode focusScopeNode = FocusScopeNode();
 
   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
   List<DropdownMenuItem> listOfTerms = [];
-  for (var l = 0; l < listOfTermsRaw.length; l++) {
-    listOfTerms.insert(
-        0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
-  }
-  List<DropdownMenuItem> listOfYears = [];
-  for (var i = 2015; i <= DateTime.now().year; i++) {
-    listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
+
+  void handleSubmitted(){
+    focusScopeNode.nextFocus();
   }
 
-  return AlertDialog(
-      title: Text(
-        "Add a new Class",
-        style: Theme.of(context).textTheme.headline2,
-      ),
-      content: SizedBox(
-        child: Form(
-            child: Column(children: [
-          TextFormField(
-            controller: classTitleController,
-            decoration: const InputDecoration(
-              hintText: "ex CS 101",
-              labelText: 'Class Title',
-            ),
-          ),
-          TextFormField(
-            controller: creditHoursController,
-            decoration: const InputDecoration(
-              hintText: "ex 4",
-              labelText: 'Credit Hours',
-            ),
-          ),
-          SizedBox(height: 20,),
-          Expanded(
-            child: SizedBox(
-              width: 300,
-              child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-                  onPressed: () async {
-                    await courseServ.addCourse(classTitleController.text,creditHoursController.text);
-                    if (int.parse(creditHoursController.text) is int) {
-                      print(creditHoursController.text);
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: Text("Add",  style: Theme.of(context).textTheme.headline6,))),
-            ),
+  bool checked = false;
 
-        ])),
-        width: 100,
-        height: 195,
-      ));
+  @override
+  Widget build(BuildContext context) {
+
+    for (var l = 0; l < listOfTermsRaw.length; l++) {
+      listOfTerms.insert(
+          0, DropdownMenuItem(child: Text("${listOfTermsRaw[l]}")));
+    }
+    List<DropdownMenuItem> listOfYears = [];
+    for (var i = 2015; i <= DateTime.now().year; i++) {
+      listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
+    }
+
+    return AlertDialog(
+        title: Text(
+          "Add a new Class",
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        content: SizedBox(
+          child: FocusScope(
+            node: focusScopeNode,
+            child: Form(
+                child: Column(children: [
+                  TextFormField(
+                    controller: classTitleController,
+                    decoration: const InputDecoration(
+                      hintText: "ex CS 101",
+                      labelText: 'Class Title',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                  ),
+                  TextFormField(
+                    controller: creditHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 4",
+                      labelText: 'Credit Hours',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: checked,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            checked = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Pass/Fail"),
+                    ],
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                        width: 300,
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                            onPressed: () async {
+                              await courseServ.addCourse(classTitleController.text,creditHoursController.text);
+                              if (int.parse(creditHoursController.text) is int) {
+                                print(creditHoursController.text);
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text("Add",  style: Theme.of(context).textTheme.headline6,))),
+                  ),
+
+                ])),
+          ),
+          width: 100,
+          height: 210,
+        ));
+  }
 }
 
 

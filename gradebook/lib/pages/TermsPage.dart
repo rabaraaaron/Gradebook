@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/pages/TermClassesPage.dart';
+import 'package:gradebook/pages/TermCoursesPage.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/services/user_service.dart';
@@ -123,10 +123,10 @@ class _TermsListState extends State<TermsList> {
                 ),
                 onTap: () async {
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DeleteConfirmation(terms, index);
-                      },
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DeleteConfirmation(terms, index);
+                    },
                   );
                 },
               )
@@ -190,6 +190,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
   var thisTerms;
   var termYear;
   var addedTerm;
+  var checked = true;
 
   _NewTermsPopUpState(context, terms) {
     thisContext = context;
@@ -228,52 +229,65 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
         content: SizedBox(
           child: Form(
               child: Column(children: [
-            DropdownButton(
-              hint: Text(
-                "Term",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              value: addedTerm,
-              items: listOfTerms,
-              onChanged: (newTerm) {
-                setState(() {
-                  addedTerm = newTerm;
-                });
-              },
-              isExpanded: true,
-            ),
-            DropdownButton(
-              hint: Text(
-                "Year",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              onChanged: (newYear) {
-                setState(() {
-                  termYear = newYear;
-                });
-              },
-              value: termYear,
-              isExpanded: true,
-              items: listOfYears,
-            ),
-            SizedBox(height: 20,),
-            Expanded(
-              child: SizedBox(
-                height: 30,
-                width: 300,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-                  onPressed: () async {
-                    await term.addTerm(addedTerm, termYear);
-                    Navigator.pop(context);
+                DropdownButton(
+                  hint: Text(
+                    "Term",
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  value: addedTerm,
+                  items: listOfTerms,
+                  onChanged: (newTerm) {
+                    setState(() {
+                      addedTerm = newTerm;
+                    });
                   },
-                    child: Text("Add",  style: Theme.of(context).textTheme.headline6,)
+                  isExpanded: true,
                 ),
-              ),
-            )
-          ])),
+                DropdownButton(
+                  hint: Text(
+                    "Year",
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  onChanged: (newYear) {
+                    setState(() {
+                      termYear = newYear;
+                    });
+                  },
+                  value: termYear,
+                  isExpanded: true,
+                  items: listOfYears,
+                ),
+                SizedBox(height: 20,),
+                Expanded(
+                  child: SizedBox(
+                    height: 30,
+                    width: 300,
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+                        onPressed: () async {
+                          await term.addTerm(addedTerm, termYear);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Add",  style: Theme.of(context).textTheme.headline6,)
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Switch(
+                      value: checked,
+                      onChanged: (updateChecked) {
+                        setState(() {
+                          checked = updateChecked;
+                        });
+                      },
+                    ),
+                    Text("Will you edit courses?"),
+                  ]
+                ),
+              ])),
           width: 100,
-          height: 175,
+          height: 210,
         ));
   }
 }

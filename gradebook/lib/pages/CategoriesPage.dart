@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
@@ -197,12 +198,15 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
     c = categories;
     categoryService = new CategoryService(term.termID, course.id);
   }
+
+  TextEditingController categoryWeightController =
+  new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController categoryWeightController =
-        new TextEditingController();
+
     List<String> categoriesStrings = [
       "Other",
+      "Extra Credit",
       "Project",
       "Participation",
       "Homework",
@@ -252,6 +256,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
             ),
             TextFormField(
               controller: categoryWeightController,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 hintText: "ex 25",
                 labelText: 'Weight',
@@ -259,7 +264,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
             ),
             Row(
               children: [
-                Checkbox(
+                Switch(
                   value: checked,
                   onChanged: (updateChecked) {
                     setState(() {
@@ -267,7 +272,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     });
                   },
                 ),
-                Text("Drop Lowest Score?"),
+                Text("Drop Lowest Score"),
               ],
             ),
             Expanded(
@@ -322,8 +327,17 @@ class _AssessmentTileState extends State<AssessmentTile> {
   Widget build(BuildContext context) {
     AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
     final name = TextEditingController();
-    final totalPoints = TextEditingController();
-    final yourPoints = TextEditingController();
+    // final assessments = Provider.of<List<Assessment>>(context);
+    double totalPoints = 0;
+    double yourPoints = 0;
+    // if(assessments?.isEmpty != null) {
+    //   for (int i = 0; i < assessments.length; i++) {
+    //     totalPoints += assessments[i].totalPoints;
+    //     yourPoints += assessments[i].yourPoints;
+    //   }
+    // }
+    //TODO: Figure out how to print yourPoints/totalPoints without causing bugs
+
     return Container(
       child: ExpansionTile(
         title: Row(
@@ -337,11 +351,17 @@ class _AssessmentTileState extends State<AssessmentTile> {
             //SizedBox(width: 20,),
             Text(
               "${cat.categoryWeight}%",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline2,
             ),
           ],
         ),
         children: [
+          Center(
+            child: Text(
+              "$yourPoints" + "/" + "$totalPoints",
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
           Center(
             child: RaisedButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
@@ -392,8 +412,8 @@ class _AssessmentListState extends State<AssessmentList> {
     List<Widget> entries = [];
     if (assessments != null)
       assessments.forEach((element) {
-        entries.add(Slidable(
-
+        entries.add(
+            Slidable(
               controller: slidableController,
               actionPane: SlidableDrawerActionPane(),
               actionExtentRatio: .2,
@@ -402,7 +422,7 @@ class _AssessmentListState extends State<AssessmentList> {
                   color: Colors.transparent,
                   closeOnTap: true,
                   iconWidget: Icon(
-                    Icons.more_vert,
+                    Icons.add_alert,
                     color: Colors.white,
                     size: 35,
                   ),
@@ -424,21 +444,82 @@ class _AssessmentListState extends State<AssessmentList> {
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(width: 30,),
+              SizedBox(width: 10,),
               Expanded(
-                  child: Text(
-                element.name,
-                style: Theme.of(context).textTheme.headline6,
-              )),
-              Text(
-                "${element.yourPoints} / ${element.totalPoints}",
-                style: Theme.of(context).textTheme.headline6,
-              )
+                flex: 8,
+                  child: TextFormField(
+                    initialValue: element.name,
+                    style: Theme.of(context).textTheme.headline5,
+                    inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    onFieldSubmitted: (itemName) {
+                      //TODO: Push changed name to database
+                      print(itemName);
+                    },
+                  )
+              ),
+              Expanded(
+                flex: 4,
+                child: Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: "${element.yourPoints}",
+                          inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                          style: Theme.of(context).textTheme.headline5,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          onFieldSubmitted: (yourScore){
+                            if(double.tryParse(yourScore) != null){
+                              print("Good change");
+                              //TODO: Push change to database
+                            }
+                            setState(() {
+                              //This is so that incorrect inputs that are not
+                              //pushed to the server will revert to the previous
+                              //version
+                            });
+                            print(yourScore);
+                          },
+                        ),
+                      ),
+                      Text("/", style: Theme.of(context).textTheme.headline5,),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: "${element.totalPoints}",
+                          inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                          style: Theme.of(context).textTheme.headline5,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          onFieldSubmitted: (totalPoints){
+                            if(double.tryParse(totalPoints) != null){
+                              print("Good change");
+                              //TODO: Push change to database
+                            }
+                            setState(() {
+                              //This is so that incorrect inputs that are not
+                              //pushed to the server will revert to the previous
+                              //version
+                            });
+                          },
+                      ),
+                      )
+                    ]
+                  ),
+                ),
+              ),
+
             ],
           ),
         ));
       });
-
     return Column(children: entries);
   }
 }
@@ -458,6 +539,11 @@ Widget newAssessmentPopUp(
     listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
   }
 
+  FocusScopeNode focusScopeNode = FocusScopeNode();
+  void handleSubmitted(){
+    focusScopeNode.nextFocus();
+  }
+
   return AlertDialog(
       title: Text(
         "Add a new item",
@@ -465,49 +551,66 @@ Widget newAssessmentPopUp(
       ),
       content: SizedBox(
         child: Form(
-            child: Column(children: [
+            child: FocusScope(
+              node: focusScopeNode,
+              child: Column(children: [
           TextFormField(
             controller: name,
-            decoration: const InputDecoration(
-              hintText: "ex Quiz 1",
-              labelText: 'Assessment Title',
-            ),
+            inputFormatters: [LengthLimitingTextInputFormatter(20)],
+            onEditingComplete: handleSubmitted,
+              decoration: const InputDecoration(
+                hintText: "ex Quiz 1",
+                labelText: 'Assessment Title',
+              ),
           ),
           TextFormField(
             controller: totalPoints,
-            decoration: const InputDecoration(
-              hintText: "ex 100",
-              labelText: 'Total Points',
-            ),
+            inputFormatters: [LengthLimitingTextInputFormatter(4)],
+            onEditingComplete: handleSubmitted,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: "ex 100",
+                labelText: 'Total Points',
+              ),
           ),
           TextFormField(
             controller: yourPoints,
-            decoration: const InputDecoration(
-              hintText: "ex 89.8",
-              labelText: 'Points Earned',
-            ),
+            inputFormatters: [LengthLimitingTextInputFormatter(4)],
+            onEditingComplete: handleSubmitted,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: "ex 89.8",
+                labelText: 'Points Earned',
+              ),
           ),
           SizedBox(
-            height: 20,
+              height: 20,
           ),
           Expanded(
-            child: SizedBox(
-                width: 300,
-                child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13.0)),
-                    onPressed: () async {
-                      await assServ.addAssessment(
-                          name.text, totalPoints.text, yourPoints.text);
+              child: SizedBox(
+                  width: 300,
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13.0)),
+                      onPressed: () async {
+                        if(name.text != "" && totalPoints.text != "" &&
+                        yourPoints.text != ""){
+                          await assServ.addAssessment(
+                              name.text, totalPoints.text, yourPoints.text);
 
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Add",
-                      style: Theme.of(context).textTheme.headline6,
-                    ))),
+                          Navigator.pop(context);
+                        } else{
+                          //TODO: alert the user of invalid input
+                        }
+
+                      },
+                      child: Text(
+                        "Add",
+                        style: Theme.of(context).textTheme.headline6,
+                      ))),
           ),
-        ])),
+        ]),
+            )),
         width: 150,
         height: 250,
       ));

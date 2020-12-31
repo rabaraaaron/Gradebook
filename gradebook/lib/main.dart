@@ -9,7 +9,7 @@ import 'package:gradebook/pages/LoginPage.dart';
 import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradebook/pages/TermsPage.dart';
-import 'package:gradebook/pages/TermClassesPage.dart';
+import 'package:gradebook/pages/TermCoursesPage.dart';
 import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';

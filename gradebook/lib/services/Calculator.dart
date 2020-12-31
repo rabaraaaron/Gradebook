@@ -1,14 +1,28 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
-import 'package:tuple/tuple.dart';
 
 
+class Calculator extends StatelessWidget{
 
-class Calculator{
+  String termID = "";
+  String courseID = "";
+  String category = "";
+
+  Calculator(String term, courseID, category){
+    termID = term;
+    this.courseID = courseID;
+    this.category = category;
+  }
 
 
+  @override
+  Widget build(BuildContext context){
+    return null;
+  }
 
   // double calculateCategoryPercentage(List<Assignment> listOfAssignments){
   //
