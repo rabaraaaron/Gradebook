@@ -11,6 +11,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:gradebook/pages/TermsPage.dart';
 import 'package:gradebook/pages/TermCoursesPage.dart';
 import 'package:gradebook/pages/resetPasswrd.dart';
+import 'package:gradebook/utils/AppTextTheme.dart';
+import 'package:gradebook/utils/AppTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
 
@@ -62,35 +64,7 @@ class _GradebookState extends State<Gradebook> {
       return StreamProvider<GradeBookUser>.value(
         value: AuthService().gradebookuser,
         child: MaterialApp(
-          theme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: Colors.grey[700],
-            backgroundColor: Colors.brown[300],
-            accentColor: Colors.red,
-            fontFamily: GoogleFonts.quicksand().toStringShort(),
-            textTheme: TextTheme(
-              headline1: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-              headline2: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-              headline3: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w100),
-              headline4: TextStyle(
-                  fontSize: 40.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w100),
-              headline5: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w200),
-            ),
-          ),
+          theme: AppTheme.getThemeData(),
           home: Wrapper(),
           routes: {
             '/Login': (context) => LoginPage(),
