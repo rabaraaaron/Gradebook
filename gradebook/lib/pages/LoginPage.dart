@@ -23,39 +23,53 @@ class _LoginPageState extends State<LoginPage> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  final FocusScopeNode focusScopeNode = FocusScopeNode();
+
+
+  void handleSubmitted(){
+    focusScopeNode.nextFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final FocusScope focusScope = FocusScope(
+      node: focusScopeNode,
+      child: Column(
+        children: [
+          TextFormField(
+            obscureText: false,
+            style: Theme.of(context).textTheme.headline5,
+            validator: (val) => ValidatorService().validateEmail(val),
+            decoration: InputDecoration(
+                hintText: "Email",
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+            onChanged: (val) {
+              setState(() => email = val);
+            },
+            onEditingComplete: handleSubmitted,
+          ),
+          SizedBox(height: 25.0),
+          TextFormField(
+            obscureText: true,
+            style: Theme.of(context).textTheme.headline5,
+            validator: (val) => ValidatorService().validatePassword(val),
+            decoration: InputDecoration(
+                hintText: "Password",
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+            onChanged: (val) {
+              setState(() => password = val);
+            },
+          )
+        ],
+      ),
+    );
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    var emailField = TextFormField(
-
-      obscureText: false,
-      style: Theme.of(context).textTheme.headline4,
-      validator: (val) => ValidatorService().validateEmail(val),
-      decoration: InputDecoration(
-          hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-      onChanged: (val) {
-        setState(() => email = val);
-      },
-    );
-    var passwordField = TextFormField(
-      obscureText: true,
-      style: Theme.of(context).textTheme.headline4,
-      validator: (val) => ValidatorService().validatePassword(val),
-      decoration: InputDecoration(
-          hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-      onChanged: (val) {
-        setState(() => password = val);
-      },
-    );
 
     final loginButton = RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       child: SizedBox(
         width: 305.0,
-        height: 55.0,
+        height: 40.0,
 
         child: Center(
           child: Text(
@@ -89,9 +103,11 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.all(18.0),
     );
 
-    bool _checked = true;
     final forgotPasswordButton = FlatButton(
-      child: Text("Forgot password?"),
+      child: Text(
+        "Forgot password?",
+        style: Theme.of(context).textTheme.headline3,
+      ),
       onPressed: (){
         Navigator.pushNamed(context, '/resetPassword');
       },
@@ -109,9 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          emailField,
-                          SizedBox(height: 25.0),
-                          passwordField,
+                          focusScope,
                           //checkbox,
                           forgotPasswordButton,
                           SizedBox(height: 45.0),

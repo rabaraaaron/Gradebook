@@ -73,6 +73,12 @@ class AppTextTheme{
           fontSize: 20.0,
           color: AppTheme.bodyText,
           fontWeight: FontWeight.w300),
+      headline6: TextStyle(
+          fontSize: 25.0,
+        color: AppTheme.bodyText,
+        fontWeight: FontWeight.w300
+      ),
+
 
     );
   }
