@@ -1,6 +1,7 @@
 import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
+import 'package:gradebook/utils/AppTheme.dart';
 import '../text_input_decoration.dart';
 import 'loading.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     var emailField = TextFormField(
 
       obscureText: false,
-      style: Theme.of(context).textTheme.headline2,
+      style: Theme.of(context).textTheme.headline4,
       validator: (val) => ValidatorService().validateEmail(val),
       decoration: InputDecoration(
           hintText: "Email",
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     );
     var passwordField = TextFormField(
       obscureText: true,
-      style: Theme.of(context).textTheme.headline2,
+      style: Theme.of(context).textTheme.headline4,
       validator: (val) => ValidatorService().validatePassword(val),
       decoration: InputDecoration(
           hintText: "Password",
@@ -58,8 +59,8 @@ class _LoginPageState extends State<LoginPage> {
 
         child: Center(
           child: Text(
-            'login',
-            style: Theme.of(context).textTheme.headline4,
+            'Enter',
+            style: Theme.of(context).textTheme.headline2,
           ),
         ),
       ),

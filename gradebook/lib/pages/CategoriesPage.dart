@@ -9,6 +9,7 @@ import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/validator_service.dart';
+import 'package:gradebook/utils/AppTheme.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 
@@ -79,6 +80,65 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
 
     final List categories = Provider.of<List<Category>>(context);
+    Widget listView;
+
+    if(Provider.of<List<Category>>(context) != null){
+      listView = ListView.separated(
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.white,
+            indent: 25.0,
+            endIndent: 25.0,
+          ),
+          itemCount: categories.length,
+          itemBuilder: (context, index) {
+            return Container(
+              child: Slidable(
+                controller: slidableController,
+                actionPane: SlidableDrawerActionPane(),
+                actionExtentRatio: .2,
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    color: Colors.transparent,
+                    closeOnTap: true,
+                    iconWidget: Icon(
+                      Icons.more_vert,
+                      color: AppTheme.bodyIconColor,
+                      size: 35,
+                    ),
+                    onTap: () => null,
+                  ),
+                  IconSlideAction(
+                    color: Colors.transparent,
+                    closeOnTap: true,
+                    iconWidget: Icon(
+                      Icons.delete,
+                      color: AppTheme.bodyIconColor,
+                      size: 35,
+                    ),
+                    onTap: ()async {
+                      await catServ.deleteCategory(categories[index].id);
+                    },
+                  )
+                ],
+                child:
+                // expansionList[index]
+                StreamProvider.value(
+                    value: AssessmentService(
+                        term.termID, course.id, categories[index].id)
+                        .assessments,
+                    child: AssessmentTile(
+                      termID: term.termID,
+                      courseID: course.id,
+                      cat: categories[index],
+                    )),
+              ),
+            );
+          }
+      );
+    } else{
+      listView = Container();
+    }
+
 
     return Scaffold(
         key: scaffoldKey,
@@ -117,57 +177,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 })
           ],
         ),
-        body: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-                  color: Colors.white,
-                  indent: 25.0,
-                  endIndent: 25.0,
-                ),
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return Container(
-                child: Slidable(
-                  controller: slidableController,
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: .2,
-                  secondaryActions: <Widget>[
-                    IconSlideAction(
-                      color: Colors.transparent,
-                      closeOnTap: true,
-                      iconWidget: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                        size: 35,
-                      ),
-                      onTap: () => null,
-                    ),
-                    IconSlideAction(
-                      color: Colors.transparent,
-                      closeOnTap: true,
-                      iconWidget: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                        size: 35,
-                      ),
-                      onTap: ()async {
-                        await catServ.deleteCategory(categories[index].id);
-                      },
-                    )
-                  ],
-                  child:
-                      // expansionList[index]
-                      StreamProvider.value(
-                          value: AssessmentService(
-                                  term.termID, course.id, categories[index].id)
-                              .assessments,
-                          child: AssessmentTile(
-                            termID: term.termID,
-                            courseID: course.id,
-                            cat: categories[index],
-                          )),
-                ),
-              );
-            }));
+        body: listView,
+    );
   }
 }
 
@@ -233,69 +244,80 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
     }
 
     return AlertDialog(
-        title: Text(
-          "Add a new Category",
-          style: Theme.of(context).textTheme.headline2,
-        ),
         content: SizedBox(
           child: Form(
               child: Column(children: [
-            DropdownButtonFormField(
-              hint: Text(
-                "Select Category",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              value: addedCategory,
-              items: listOfCategories,
-              onChanged: (val) {
-                setState(() {
-                  addedCategory = val;
-                });
-              },
-              isExpanded: true,
-            ),
-            TextFormField(
-              controller: categoryWeightController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: "ex 25",
-                labelText: 'Weight',
-              ),
-            ),
-            Row(
-              children: [
-                Switch(
-                  value: checked,
-                  onChanged: (updateChecked) {
+                Text(
+                  "Add new Category",
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: AppTheme.bodyText,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                Divider(color: AppTheme.bodyText,),
+                DropdownButtonFormField(
+                  style: Theme.of(context).textTheme.headline3,
+                  hint: Text(
+                    "Select Category",
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  value: addedCategory,
+                  items: listOfCategories,
+                  onChanged: (val) {
                     setState(() {
-                      checked = updateChecked;
+                      addedCategory = val;
                     });
                   },
+                  isExpanded: true,
                 ),
-                Text("Drop Lowest Score"),
-              ],
-            ),
-            Expanded(
-              child: SizedBox(
-                width: 300,
-                child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13.0)),
-                    onPressed: () async {
-                      print(addedCategory);
-                      await categoryService.addCategory(
-                          addedCategory, categoryWeightController.text);
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Add",
-                      style: Theme.of(context).textTheme.headline6,
-                    )),
-              ),
-            )
+                TextFormField(
+                  controller: categoryWeightController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: "ex 25",
+                    labelText: 'Weight',
+                  ),
+                ),
+                Row(
+                  children: [
+                    Switch(
+                      value: checked,
+                      onChanged: (updateChecked) {
+                        setState(() {
+                          checked = updateChecked;
+                        });
+                      },
+                    ),
+                    Text(
+                      "Drop Lowest Score?",
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: 300,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13.0)),
+                      onPressed: () async {
+                        print(addedCategory);
+                        await categoryService.addCategory(
+                            addedCategory, categoryWeightController.text);
+                          Navigator.pop(context);
+                          },
+                      child: Text(
+                          "Add",
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      color: AppTheme.appBar,
+                    ),
+                  ),
+                )
           ])),
           width: 100,
-          height: 225,
+          height: 245,
         ));
   }
 }
@@ -336,7 +358,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
     //     yourPoints += assessments[i].yourPoints;
     //   }
     // }
-    //TODO: Figure out how to print yourPoints/totalPoints without causing bugs
+    //TODO: Add total points and your points fields for categories in firestore
 
     return Container(
       child: ExpansionTile(
@@ -345,13 +367,13 @@ class _AssessmentTileState extends State<AssessmentTile> {
             Expanded(
               child: Text(
                 "${cat.categoryName}",
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.headline4,
               ),
             ),
             //SizedBox(width: 20,),
             Text(
               "${cat.categoryWeight}%",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
@@ -359,14 +381,14 @@ class _AssessmentTileState extends State<AssessmentTile> {
           Center(
             child: Text(
               "$yourPoints" + "/" + "$totalPoints",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ),
           Center(
             child: RaisedButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-              color: Colors.grey,
-              child: Text("Add Assessment", style: Theme.of(context).textTheme.headline6,),
+              color: AppTheme.appBar,
+              child: Text("Add Assessment", style: Theme.of(context).textTheme.headline2,),
               onPressed: () async {
                 await showDialog(
                   context: context,
@@ -410,7 +432,7 @@ class _AssessmentListState extends State<AssessmentList> {
     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
     final assessments = Provider.of<List<Assessment>>(context);
     List<Widget> entries = [];
-    if (assessments != null)
+    if (Provider.of<List<Assessment>>(context) != null) {
       assessments.forEach((element) {
         entries.add(
             Slidable(
@@ -423,7 +445,7 @@ class _AssessmentListState extends State<AssessmentList> {
                   closeOnTap: true,
                   iconWidget: Icon(
                     Icons.add_alert,
-                    color: Colors.white,
+                    color: AppTheme.bodyIconColor,
                     size: 35,
                   ),
                   onTap: () => null,
@@ -433,93 +455,110 @@ class _AssessmentListState extends State<AssessmentList> {
                   closeOnTap: true,
                   iconWidget: Icon(
                     Icons.delete,
-                    color: Colors.white,
+                    color: AppTheme.bodyIconColor,
                     size: 35,
                   ),
-                  onTap: ()async {
+                  onTap: () async {
                     await assServ.deleteAssessment(element.id);
                   },
                 )
               ],
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: 10,),
-              Expanded(
-                flex: 8,
-                  child: TextFormField(
-                    initialValue: element.name,
-                    style: Theme.of(context).textTheme.headline5,
-                    inputFormatters: [LengthLimitingTextInputFormatter(20)],
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                    onFieldSubmitted: (itemName) {
-                      //TODO: Push changed name to database
-                      print(itemName);
-                    },
-                  )
-              ),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          initialValue: "${element.yourPoints}",
-                          inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                          style: Theme.of(context).textTheme.headline5,
-                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          onFieldSubmitted: (yourScore){
-                            if(double.tryParse(yourScore) != null){
-                              print("Good change");
-                              //TODO: Push change to database
-                            }
-                            setState(() {
-                              //This is so that incorrect inputs that are not
-                              //pushed to the server will revert to the previous
-                              //version
-                            });
-                            print(yourScore);
-                          },
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: 10,),
+                  Expanded(
+                      flex: 8,
+                      child: TextFormField(
+                        initialValue: element.name,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5,
+                        inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
                         ),
-                      ),
-                      Text("/", style: Theme.of(context).textTheme.headline5,),
-                      Expanded(
-                        child: TextFormField(
-                          initialValue: "${element.totalPoints}",
-                          inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                          style: Theme.of(context).textTheme.headline5,
-                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          onFieldSubmitted: (totalPoints){
-                            if(double.tryParse(totalPoints) != null){
-                              print("Good change");
-                              //TODO: Push change to database
-                            }
-                            setState(() {
-                              //This is so that incorrect inputs that are not
-                              //pushed to the server will revert to the previous
-                              //version
-                            });
-                          },
-                      ),
+                        onFieldSubmitted: (itemName) {
+                          //TODO: Push changed name to database
+                          print(itemName);
+                        },
                       )
-                    ]
                   ),
-                ),
-              ),
+                  Expanded(
+                    flex: 4,
+                    child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: "${element.yourPoints}",
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(4)
+                              ],
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline5,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: true, decimal: true),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              onFieldSubmitted: (yourScore) {
+                                if (double.tryParse(yourScore) != null) {
+                                  print("Good change");
+                                  //TODO: Push change to database
+                                }
+                                setState(() {
+                                  //This is so that incorrect inputs that are not
+                                  //pushed to the server will revert to the previous
+                                  //version
+                                });
+                                print(yourScore);
+                              },
+                            ),
+                          ),
+                          Text("/", style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline5,),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: "${element.totalPoints}",
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(4)
+                              ],
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline5,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: true, decimal: true),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              onFieldSubmitted: (totalPoints) {
+                                if (double.tryParse(totalPoints) != null) {
+                                  print("Good change");
+                                  //TODO: Push change to database
+                                }
+                                setState(() {
+                                  //This is so that incorrect inputs that are not
+                                  //pushed to the server will revert to the previous
+                                  //version
+                                });
+                              },
+                            ),
+                          )
+                        ]
+                    ),
+                  ),
 
-            ],
-          ),
-        ));
+                ],
+              ),
+            ));
       });
+    }
     return Column(children: entries);
   }
 }
@@ -547,71 +586,74 @@ Widget newAssessmentPopUp(
   return AlertDialog(
       title: Text(
         "Add a new item",
-        style: Theme.of(context).textTheme.headline2,
+        style: Theme.of(context).textTheme.headline4,
       ),
       content: SizedBox(
-        child: Form(
-            child: FocusScope(
-              node: focusScopeNode,
-              child: Column(children: [
-          TextFormField(
+        child: FocusScope(
+          node: focusScopeNode,
+          child: Column(children: [
+            Divider(color: AppTheme.bodyText,),
+            TextFormField(
             controller: name,
             inputFormatters: [LengthLimitingTextInputFormatter(20)],
             onEditingComplete: handleSubmitted,
-              decoration: const InputDecoration(
-                hintText: "ex Quiz 1",
-                labelText: 'Assessment Title',
-              ),
+            decoration: const InputDecoration(
+              hintText: "ex Quiz 1",
+              labelText: 'Assessment Title',
+            ),
           ),
-          TextFormField(
-            controller: totalPoints,
-            inputFormatters: [LengthLimitingTextInputFormatter(4)],
-            onEditingComplete: handleSubmitted,
+            TextFormField(
+              controller: totalPoints,
+              inputFormatters: [LengthLimitingTextInputFormatter(4)],
+              onEditingComplete: handleSubmitted,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 hintText: "ex 100",
                 labelText: 'Total Points',
               ),
-          ),
-          TextFormField(
-            controller: yourPoints,
-            inputFormatters: [LengthLimitingTextInputFormatter(4)],
-            onEditingComplete: handleSubmitted,
+            ),
+            TextFormField(
+              controller: yourPoints,
+              inputFormatters: [LengthLimitingTextInputFormatter(4)],
+              onEditingComplete: handleSubmitted,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 hintText: "ex 89.8",
                 labelText: 'Points Earned',
               ),
-          ),
-          SizedBox(
-              height: 20,
-          ),
-          Expanded(
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Expanded(
               child: SizedBox(
                   width: 300,
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13.0)),
+                          borderRadius: BorderRadius.circular(13.0),
+                      ),
                       onPressed: () async {
                         if(name.text != "" && totalPoints.text != "" &&
-                        yourPoints.text != ""){
+                            yourPoints.text != ""){
                           await assServ.addAssessment(
                               name.text, totalPoints.text, yourPoints.text);
-
                           Navigator.pop(context);
                         } else{
                           //TODO: alert the user of invalid input
                         }
-
-                      },
+                        },
                       child: Text(
                         "Add",
-                        style: Theme.of(context).textTheme.headline6,
-                      ))),
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                    color: AppTheme.appBar,
+                  )
+              ),
           ),
         ]),
-            )),
+        ),
         width: 150,
         height: 250,
-      ));
+      )
+  );
 }

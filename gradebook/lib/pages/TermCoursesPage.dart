@@ -7,6 +7,7 @@ import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'package:gradebook/utils/AppTheme.dart';
 import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +64,129 @@ class _TermsPageState extends State<TermClassesPage> {
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<List<Course>>(context);
+    Widget listView;
+
+    if(Provider.of<List<Course>>(context) != null) {
+      listView = ListView.separated(
+        separatorBuilder: (context, index) =>
+            Divider(
+              color: AppTheme.bodyText,
+              indent: 25.0,
+              endIndent: 25.0,
+            ),
+        itemCount: classes.length,
+        itemBuilder: (context, index) =>
+            Padding(
+              padding: EdgeInsets.all(0.0),
+              child: Slidable(
+                controller: slidableController,
+                actionPane: SlidableDrawerActionPane(),
+                actionExtentRatio: .2,
+                secondaryActions: [
+                  IconSlideAction(
+                    color: Colors.transparent,
+                    closeOnTap: true,
+                    iconWidget: Icon(
+                      Icons.more_vert,
+                      color: AppTheme.bodyIconColor,
+                      size: 35,
+                    ),
+                    onTap: () => null,
+                  ),
+                  IconSlideAction(
+                    color: Colors.transparent,
+                    closeOnTap: true,
+                    iconWidget: Icon(
+                      Icons.delete,
+                      color: AppTheme.bodyIconColor,
+                      size: 35,
+                    ),
+                    onTap: () async {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return DeleteConfirmation(
+                              term.termID, classes, index);
+                        },
+                      );
+                    },
+                  )
+                ],
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Icon(
+                          Icons.computer,
+                          size: 50,
+                        ),
+                        padding: EdgeInsets.all(10.0),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CategoriesPageWrap(
+                                            term: term,
+                                            course: classes[index])));
+                          },
+                          child: new Padding(
+                            padding: new EdgeInsets.all(20.0),
+                            child: Text(
+                              "${classes[index].name}",
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline4,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Text(
+                                "A",
+                                textScaleFactor: 2,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline3,
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                "97%",
+                                textScaleFactor: 2,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+      );
+    } else{
+      listView = Container();
+    }
+
     //Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
@@ -113,107 +237,7 @@ class _TermsPageState extends State<TermClassesPage> {
             Navigator.pop(context);
           }
         },
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-            color: Colors.white,
-            indent: 25.0,
-            endIndent: 25.0,
-          ),
-          itemCount: classes.length,
-          itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.all(0.0),
-            child: Slidable(
-              controller: slidableController,
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: .2,
-              secondaryActions: [
-                IconSlideAction(
-                  color: Colors.transparent,
-                  closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-                  onTap: () => null,
-                ),
-                IconSlideAction(
-                  color: Colors.transparent,
-                  closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-                  onTap: () async {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DeleteConfirmation(term.termID, classes, index);
-                      },
-                    );
-                  },
-                )
-              ],
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Icon(
-                        Icons.computer,
-                        size: 50,
-                      ),
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          //Navigator.pushNamed(context, '/Categories');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CategoriesPageWrap(
-                                      term: term, course: classes[index])));
-
-                        },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text(
-                            "${classes[index].name}",
-                            style: Theme.of(context).textTheme.headline2,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            child: Text(
-                              "A",
-                              textScaleFactor: 2,
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              "97%",
-                              textScaleFactor: 2,
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        child: listView
       ),
     );
   }
@@ -273,13 +297,14 @@ class _newClassPopUpState extends State<newClassPopUp> {
     return AlertDialog(
         title: Text(
           "Add a new Class",
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme.headline4,
         ),
         content: SizedBox(
           child: FocusScope(
             node: focusScopeNode,
             child: Form(
                 child: Column(children: [
+                  Divider(color: Colors.black),
                   TextFormField(
                     controller: classTitleController,
                     decoration: const InputDecoration(
@@ -307,13 +332,17 @@ class _newClassPopUpState extends State<newClassPopUp> {
                           });
                         },
                       ),
-                      Text("Pass/Fail"),
+                      Text(
+                          "Pass/Fail",
+                        style: Theme.of(context).textTheme.headline3
+                      ),
                     ],
                   ),
                   Expanded(
                     child: SizedBox(
                         width: 300,
                         child: RaisedButton(
+                          color: AppTheme.appBar,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                             onPressed: () async {
                               await courseServ.addCourse(classTitleController.text,creditHoursController.text);
@@ -322,13 +351,14 @@ class _newClassPopUpState extends State<newClassPopUp> {
                               }
                               Navigator.pop(context);
                             },
-                            child: Text("Add",  style: Theme.of(context).textTheme.headline6,))),
+                            child: Text("Add",  style: Theme.of(context).textTheme.headline2,)
+                        )
+                    ),
                   ),
-
                 ])),
           ),
           width: 100,
-          height: 210,
+          height: 225,
         ));
   }
 }
@@ -350,20 +380,34 @@ class DeleteConfirmation extends StatelessWidget{
     return AlertDialog(
       title: Text(
         "Delete Course",
-        style: Theme.of(context).textTheme.headline2,
+        style: Theme.of(context).textTheme.headline4,
       ),
-      content: Text("Are you sure you want to delete this Course?",),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+          children: [
+            Divider(color: AppTheme.bodyText,),
+            Text(
+              "Are you sure you want to delete ${termCourses[index].name}?",
+              style: Theme.of(context).textTheme.headline3,
+            )
+          ]
+      ),
       actions: <Widget>[
         FlatButton(
+          color: Colors.red,
           onPressed: () {
             CourseService(termID).deleteCourse(termCourses[index].id);
             Navigator.pop(context);
           },
-          child: Text("Delete", textScaleFactor: 1.25,),
-        ),
-        FlatButton(
-          onPressed: (){Navigator.pop(context);},
-          child: Text("Close", textScaleFactor: 1.25,),
+          child: Text(
+            "Delete",
+            textScaleFactor: 1.25,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
         ),
       ],
     );

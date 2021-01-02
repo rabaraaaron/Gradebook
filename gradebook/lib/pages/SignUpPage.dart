@@ -28,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     final nameField = TextFormField(
       obscureText: false,
-      style: Theme.of(context).textTheme.headline3,
+      style: Theme.of(context).textTheme.headline4,
       decoration: InputDecoration(
           hintText: "Name",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
@@ -40,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     final emailField = TextFormField(
       obscureText: false,
-      style: Theme.of(context).textTheme.headline3,
+      style: Theme.of(context).textTheme.headline4,
       decoration: InputDecoration(
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
     final passwordField = TextFormField(
       obscureText: true,
-      style: Theme.of(context).textTheme.headline3,
+      style: Theme.of(context).textTheme.headline4,
       decoration: InputDecoration(
           hintText: "Password",
           border:
@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
     final renterPasswordField = TextField(
       obscureText: true,
-      style: Theme.of(context).textTheme.headline3,
+      style: Theme.of(context).textTheme.headline4,
       decoration: InputDecoration(
           hintText: "Enter password again",
           border:
@@ -73,8 +73,8 @@ class _SignUpPageState extends State<SignUpPage> {
     final registerBtn =
     RaisedButton(
       child: Center(
-        child: Text('Register',
-          style: Theme.of(context).textTheme.headline4,),
+        child: Text('Confirm',
+          style: Theme.of(context).textTheme.headline2,),
       ),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
@@ -136,7 +136,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign up"),
+        title: Text(
+            "Sign up",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         centerTitle: true,
       ),
       body: _register(context)
