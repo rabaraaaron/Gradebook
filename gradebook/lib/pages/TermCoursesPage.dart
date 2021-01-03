@@ -295,15 +295,15 @@ class _newClassPopUpState extends State<newClassPopUp> {
     }
 
     return AlertDialog(
-        title: Text(
-          "Add a new Class",
-          style: Theme.of(context).textTheme.headline4,
-        ),
         content: SizedBox(
           child: FocusScope(
             node: focusScopeNode,
             child: Form(
                 child: Column(children: [
+                  Text(
+                    "Add new Class",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
                   Divider(color: Colors.black),
                   TextFormField(
                     controller: classTitleController,
@@ -350,6 +350,9 @@ class _newClassPopUpState extends State<newClassPopUp> {
                                 print(creditHoursController.text);
                               }
                               Navigator.pop(context);
+                              setState(() {
+
+                              });
                             },
                             child: Text("Add",  style: Theme.of(context).textTheme.headline2,)
                         )
@@ -358,7 +361,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                 ])),
           ),
           width: 100,
-          height: 225,
+          height: 260,
         ));
   }
 }
@@ -378,13 +381,13 @@ class DeleteConfirmation extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        "Delete Course",
-        style: Theme.of(context).textTheme.headline4,
-      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
           children: [
+            Text(
+              "Delete Course",
+              style: Theme.of(context).textTheme.headline4,
+            ),
             Divider(color: AppTheme.bodyText,),
             Text(
               "Are you sure you want to delete ${termCourses[index].name}?",

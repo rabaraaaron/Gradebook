@@ -10,7 +10,7 @@ class MenuDrawer extends StatelessWidget {
           DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline4,)),
           ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline4,),),
           ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline4,),),
-          ListTile(title: Text("Help", style: Theme.of(context).textTheme.headline4,)),
+          ListTile(title: Text("Support", style: Theme.of(context).textTheme.headline4,)),
           ListTile(
             title: Text("Log Out", style: Theme.of(context).textTheme.headline4,),
             onTap: () async {

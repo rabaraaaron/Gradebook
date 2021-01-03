@@ -116,7 +116,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       size: 35,
                     ),
                     onTap: ()async {
-                      await catServ.deleteCategory(categories[index].id);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return DeleteConfirmation(
+                              catServ, categories, index);
+                        },
+                      );
                     },
                   )
                 ],
@@ -236,7 +242,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
 
               child: Text(
                 "${categoriesStrings[i]}",
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             value: categoriesStrings[i],
@@ -584,14 +590,14 @@ Widget newAssessmentPopUp(
   }
 
   return AlertDialog(
-      title: Text(
-        "Add a new item",
-        style: Theme.of(context).textTheme.headline4,
-      ),
       content: SizedBox(
         child: FocusScope(
           node: focusScopeNode,
           child: Column(children: [
+            Text(
+              "Add new Item",
+              style: Theme.of(context).textTheme.headline4,
+            ),
             Divider(color: AppTheme.bodyText,),
             TextFormField(
             controller: name,
@@ -653,7 +659,58 @@ Widget newAssessmentPopUp(
         ]),
         ),
         width: 150,
-        height: 250,
+        height: 285,
       )
   );
+}
+
+class DeleteConfirmation extends StatelessWidget{
+  CategoryService catServ;
+  List<Category> categories;
+  int index;
+
+  DeleteConfirmation(CategoryService catService, List<Category> cat, int i){
+    catServ = catService;
+    categories = cat;
+    index = i;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Delete Category",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            Divider(color: AppTheme.bodyText,),
+            Text(
+              "Are you sure you want to delete ${categories[index].categoryName}?",
+              style: Theme.of(context).textTheme.headline3,
+            )
+          ]
+      ),
+      actions: <Widget>[
+        FlatButton(
+          color: Colors.red,
+          onPressed: () {
+            catServ.deleteCategory(categories[index].id);
+            Navigator.pop(context);
+          },
+          child: Text(
+            "Delete",
+            textScaleFactor: 1.25,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 }

@@ -234,14 +234,14 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
     }
 
     return AlertDialog(
-        title: Text(
-          "Add a new Term",
-          style: Theme.of(context).textTheme.headline4,
-        ),
         content: SizedBox(
           child: Form(
               child: Column(
                   children: [
+                    Text(
+                      "Add new Term",
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                     Divider(color: AppTheme.bodyText),
                     DropdownButton(
                       hint: Text(
@@ -271,7 +271,6 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                       isExpanded: true,
                       items: listOfYears,
                     ),
-                    SizedBox(height: 20,),
                     Row(
                         children: [
                           Switch(
@@ -284,7 +283,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                               },
                           ),
                           Text(
-                            "Will you edit courses?",
+                            "Will you be adding \ncourses to this term?",
                             style: Theme.of(context).textTheme.headline3,
                           ),
                         ]
@@ -308,7 +307,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
               )
           ),
           width: 100,
-          height: 225,
+          height: 240,
         )
     );
   }
@@ -326,13 +325,13 @@ class DeleteConfirmation extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        "Delete Term",
-        style: Theme.of(context).textTheme.headline4,
-      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Text(
+            "Delete Term",
+            style: Theme.of(context).textTheme.headline4,
+          ),
           Divider(color: AppTheme.bodyText,),
           Text(
             "Are you sure you want to delete ${terms[index].name} ${terms[index].year} ?",
@@ -342,7 +341,6 @@ class DeleteConfirmation extends StatelessWidget{
       ),
       actions: <Widget>[
         FlatButton(
-
           color: Colors.red,
           onPressed: () {
             TermService().deleteTerm("${terms[index].name}", terms[index].year);

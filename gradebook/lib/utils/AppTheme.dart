@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme{
-  static Color appBar = Colors.green;
+  static Color appBar = Colors.blue[900];
   static Color appBarText = Colors.white;
-  static Color accent = Colors.lightGreen;
+  static Color accent = Colors.lightBlueAccent;
   static Color bodyText = Colors.black;
   static bool lightMode = true;
   static Color appBarIconColor = Colors.white;
