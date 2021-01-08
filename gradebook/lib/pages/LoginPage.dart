@@ -1,7 +1,7 @@
 import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
-import 'package:gradebook/utils/AppTheme.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import '../text_input_decoration.dart';
 import 'loading.dart';
 import 'package:flutter/material.dart';

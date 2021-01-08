@@ -7,8 +7,14 @@ class MenuDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          DrawerHeader(child: Text("Menu", style: Theme.of(context).textTheme.headline4,)),
-          ListTile(title: Text("Settings", style: Theme.of(context).textTheme.headline4,),),
+          DrawerHeader(
+              child: Text("Menu", style: Theme.of(context).textTheme.headline4,)),
+          ListTile(
+            title: Text("Settings", style: Theme.of(context).textTheme.headline4,),
+            onTap: (){
+              Navigator.pushNamed(context, '/Settings');
+            }
+          ),
           ListTile(title: Text("Membership", style: Theme.of(context).textTheme.headline4,),),
           ListTile(title: Text("Support", style: Theme.of(context).textTheme.headline4,)),
           ListTile(

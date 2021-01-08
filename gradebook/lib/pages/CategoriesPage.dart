@@ -9,7 +9,7 @@ import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/validator_service.dart';
-import 'package:gradebook/utils/AppTheme.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 
@@ -102,7 +102,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     closeOnTap: true,
                     iconWidget: Icon(
                       Icons.more_vert,
-                      color: AppTheme.bodyIconColor,
+                      color: Theme.of(context).dividerColor,
                       size: 35,
                     ),
                     onTap: () => null,
@@ -112,7 +112,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     closeOnTap: true,
                     iconWidget: Icon(
                       Icons.delete,
-                      color: AppTheme.bodyIconColor,
+                      color: Theme.of(context).dividerColor,
                       size: 35,
                     ),
                     onTap: ()async {
@@ -257,11 +257,11 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                   "Add new Category",
                   style: TextStyle(
                     fontSize: 25,
-                    color: AppTheme.bodyText,
+                    color: Theme.of(context).dividerColor,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                Divider(color: AppTheme.bodyText,),
+                Divider(color: Theme.of(context).dividerColor,),
                 DropdownButtonFormField(
                   style: Theme.of(context).textTheme.headline3,
                   hint: Text(
@@ -289,6 +289,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                   children: [
                     Switch(
                       value: checked,
+                      activeColor: Theme.of(context).accentColor,
                       onChanged: (updateChecked) {
                         setState(() {
                           checked = updateChecked;
@@ -317,7 +318,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                           "Add",
                           style: Theme.of(context).textTheme.headline2,
                         ),
-                      color: AppTheme.appBar,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 )
@@ -355,16 +356,15 @@ class _AssessmentTileState extends State<AssessmentTile> {
   Widget build(BuildContext context) {
     AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
     final name = TextEditingController();
-    // final assessments = Provider.of<List<Assessment>>(context);
+    final assessments = Provider.of<List<Assessment>>(context);
     double totalPoints = 0;
     double yourPoints = 0;
-    // if(assessments?.isEmpty != null) {
-    //   for (int i = 0; i < assessments.length; i++) {
-    //     totalPoints += assessments[i].totalPoints;
-    //     yourPoints += assessments[i].yourPoints;
-    //   }
-    // }
-    //TODO: Add total points and your points fields for categories in firestore
+    if(Provider.of<List<Assessment>>(context) != null) {
+      for (int i = 0; i < assessments.length; i++) {
+        totalPoints += assessments[i].totalPoints;
+        yourPoints += assessments[i].yourPoints;
+      }
+    }
 
     return Container(
       child: ExpansionTile(
@@ -393,7 +393,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
           Center(
             child: RaisedButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-              color: AppTheme.appBar,
+              color: Theme.of(context).primaryColor,
               child: Text("Add Assessment", style: Theme.of(context).textTheme.headline2,),
               onPressed: () async {
                 await showDialog(
@@ -401,7 +401,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
                   builder: (BuildContext context) =>
                       newAssessmentPopUp(context, termID, courseID, cat.id),
                 );
-                // assServ.addAssessment(name, totalPoints, yourPoints)
+                setState(() { });
               },
             ),
           ),
@@ -451,7 +451,7 @@ class _AssessmentListState extends State<AssessmentList> {
                   closeOnTap: true,
                   iconWidget: Icon(
                     Icons.add_alert,
-                    color: AppTheme.bodyIconColor,
+                    color: Theme.of(context).dividerColor,
                     size: 35,
                   ),
                   onTap: () => null,
@@ -461,7 +461,7 @@ class _AssessmentListState extends State<AssessmentList> {
                   closeOnTap: true,
                   iconWidget: Icon(
                     Icons.delete,
-                    color: AppTheme.bodyIconColor,
+                    color: Theme.of(context).dividerColor,
                     size: 35,
                   ),
                   onTap: () async {
@@ -477,10 +477,7 @@ class _AssessmentListState extends State<AssessmentList> {
                       flex: 8,
                       child: TextFormField(
                         initialValue: element.name,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline5,
+                        style: Theme.of(context).textTheme.headline5,
                         inputFormatters: [LengthLimitingTextInputFormatter(20)],
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -501,15 +498,9 @@ class _AssessmentListState extends State<AssessmentList> {
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(4)
                               ],
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline5,
+                              style: Theme.of(context).textTheme.headline5,
                               keyboardType: TextInputType.numberWithOptions(
                                   signed: true, decimal: true),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
                               onFieldSubmitted: (yourScore) {
                                 if (double.tryParse(yourScore) != null) {
                                   print("Good change");
@@ -524,25 +515,14 @@ class _AssessmentListState extends State<AssessmentList> {
                               },
                             ),
                           ),
-                          Text("/", style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline5,),
+                          Text("/ ", style: Theme.of(context).textTheme.headline5,),
                           Expanded(
                             child: TextFormField(
                               initialValue: "${element.totalPoints}",
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(4)
-                              ],
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline5,
+                              inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                              style: Theme.of(context).textTheme.headline5,
                               keyboardType: TextInputType.numberWithOptions(
                                   signed: true, decimal: true),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
                               onFieldSubmitted: (totalPoints) {
                                 if (double.tryParse(totalPoints) != null) {
                                   print("Good change");
@@ -598,7 +578,7 @@ Widget newAssessmentPopUp(
               "Add new Item",
               style: Theme.of(context).textTheme.headline4,
             ),
-            Divider(color: AppTheme.bodyText,),
+            Divider(color: Theme.of(context).dividerColor,),
             TextFormField(
             controller: name,
             inputFormatters: [LengthLimitingTextInputFormatter(20)],
@@ -644,15 +624,19 @@ Widget newAssessmentPopUp(
                           await assServ.addAssessment(
                               name.text, totalPoints.text, yourPoints.text);
                           Navigator.pop(context);
-                        } else{
+                        } else if(name.text == ""){
                           //TODO: alert the user of invalid input
+                        } else{
+                          await assServ.addAssessment(
+                              name.text, "0", "0");
+                          Navigator.pop(context);
                         }
                         },
                       child: Text(
                         "Add",
                         style: Theme.of(context).textTheme.headline2,
                       ),
-                    color: AppTheme.appBar,
+                    color: Theme.of(context).primaryColor,
                   )
               ),
           ),
@@ -685,31 +669,34 @@ class DeleteConfirmation extends StatelessWidget{
               "Delete Category",
               style: Theme.of(context).textTheme.headline4,
             ),
-            Divider(color: AppTheme.bodyText,),
+            Divider(color: Theme.of(context).dividerColor,),
             Text(
-              "Are you sure you want to delete ${categories[index].categoryName}?",
+              "Are you sure you want to delete the ${categories[index].categoryName} category?",
               style: Theme.of(context).textTheme.headline3,
-            )
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            FlatButton(
+              color: Colors.red,
+              height: 40,
+              onPressed: () {
+                catServ.deleteCategory(categories[index].id);
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Delete",
+                textScaleFactor: 1.25,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
           ]
       ),
-      actions: <Widget>[
-        FlatButton(
-          color: Colors.red,
-          onPressed: () {
-            catServ.deleteCategory(categories[index].id);
-            Navigator.pop(context);
-          },
-          child: Text(
-            "Delete",
-            textScaleFactor: 1.25,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ),
-      ],
+
     );
   }
 

@@ -7,7 +7,7 @@ import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/term_service.dart';
-import 'package:gradebook/utils/AppTheme.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +70,7 @@ class _TermsPageState extends State<TermClassesPage> {
       listView = ListView.separated(
         separatorBuilder: (context, index) =>
             Divider(
-              color: AppTheme.bodyText,
+              color: Theme.of(context).dividerColor,
               indent: 25.0,
               endIndent: 25.0,
             ),
@@ -88,7 +88,7 @@ class _TermsPageState extends State<TermClassesPage> {
                     closeOnTap: true,
                     iconWidget: Icon(
                       Icons.more_vert,
-                      color: AppTheme.bodyIconColor,
+                      color: Theme.of(context).dividerColor,
                       size: 35,
                     ),
                     onTap: () => null,
@@ -98,7 +98,7 @@ class _TermsPageState extends State<TermClassesPage> {
                     closeOnTap: true,
                     iconWidget: Icon(
                       Icons.delete,
-                      color: AppTheme.bodyIconColor,
+                      color: Theme.of(context).dividerColor,
                       size: 35,
                     ),
                     onTap: () async {
@@ -304,7 +304,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                     "Add new Class",
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                  Divider(color: Colors.black),
+                  Divider(color: Theme.of(context).dividerColor),
                   TextFormField(
                     controller: classTitleController,
                     decoration: const InputDecoration(
@@ -326,6 +326,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                     children: [
                       Switch(
                         value: checked,
+                        activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
                           setState(() {
                             checked = updateChecked;
@@ -342,7 +343,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                     child: SizedBox(
                         width: 300,
                         child: RaisedButton(
-                          color: AppTheme.appBar,
+                          color: Theme.of(context).primaryColor,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                             onPressed: () async {
                               await courseServ.addCourse(classTitleController.text,creditHoursController.text);
@@ -388,31 +389,31 @@ class DeleteConfirmation extends StatelessWidget{
               "Delete Course",
               style: Theme.of(context).textTheme.headline4,
             ),
-            Divider(color: AppTheme.bodyText,),
+            Divider(color: Theme.of(context).dividerColor,),
             Text(
-              "Are you sure you want to delete ${termCourses[index].name}?",
+              "Are you sure you want to delete the ${termCourses[index].name} class?",
               style: Theme.of(context).textTheme.headline3,
-            )
+            ),
+            SizedBox( height: 20),
+            FlatButton(
+              color: Colors.red,
+              height: 40,
+              onPressed: () {
+                CourseService(termID).deleteCourse(termCourses[index].id);
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Delete",
+                textScaleFactor: 1.25,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
           ]
       ),
-      actions: <Widget>[
-        FlatButton(
-          color: Colors.red,
-          onPressed: () {
-            CourseService(termID).deleteCourse(termCourses[index].id);
-            Navigator.pop(context);
-          },
-          child: Text(
-            "Delete",
-            textScaleFactor: 1.25,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

@@ -7,7 +7,7 @@ import 'package:gradebook/pages/TermCoursesPage.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/services/user_service.dart';
-import 'package:gradebook/utils/AppTheme.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _TermsListState extends State<TermsList> {
       terms = Provider.of<List<Term>>(context);
       listView = ListView.separated(
         separatorBuilder: (context, index) => Divider(
-          color: AppTheme.bodyIconColor,
+          color: Theme.of(context).dividerColor,
           indent: 25.0,
           endIndent: 25.0,
         ),
@@ -62,7 +62,7 @@ class _TermsListState extends State<TermsList> {
                 closeOnTap: true,
                 iconWidget: Icon(
                   Icons.more_vert,
-                  color: AppTheme.bodyIconColor,
+                  color: Theme.of(context).dividerColor,
                   size: 35,
                 ),
                 onTap: () => null,
@@ -72,7 +72,7 @@ class _TermsListState extends State<TermsList> {
                 closeOnTap: true,
                 iconWidget: Icon(
                   Icons.delete,
-                  color: AppTheme.bodyIconColor,
+                  color: Theme.of(context).dividerColor,
                   size: 35,
                 ),
                 onTap: () async {
@@ -133,13 +133,13 @@ class _TermsListState extends State<TermsList> {
     double scale = 9.5;
     for(int i = 0; i < terms.length; i++){
       if(terms[i].name == "Fall"){
-        seasonIcons.add(Image.asset('assets/Fall_icon.png', scale: scale, color: AppTheme.bodyIconColor,));
+        seasonIcons.add(Image.asset('assets/Fall_icon.png', scale: scale, color: Theme.of(context).dividerColor,));
       } else if(terms[i].name == "Winter"){
-        seasonIcons.add(Image.asset('assets/Winter.png', scale: scale, color: AppTheme.bodyIconColor,));
+        seasonIcons.add(Image.asset('assets/Winter.png', scale: scale, color: Theme.of(context).dividerColor,));
       } else if(terms[i].name == "Spring"){
-        seasonIcons.add(Image.asset('assets/Flower.png', scale: scale, color: AppTheme.bodyIconColor,));
+        seasonIcons.add(Image.asset('assets/Flower.png', scale: scale, color: Theme.of(context).dividerColor,));
       } else{
-        seasonIcons.add(Image.asset('assets/Sun.png', scale: scale, color: AppTheme.bodyIconColor));
+        seasonIcons.add(Image.asset('assets/Sun.png', scale: scale, color: Theme.of(context).dividerColor));
       }
     }
 
@@ -242,7 +242,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                       "Add new Term",
                       style: Theme.of(context).textTheme.headline4,
                     ),
-                    Divider(color: AppTheme.bodyText),
+                    Divider(color: Theme.of(context).dividerColor),
                     DropdownButton(
                       hint: Text(
                         "Term",
@@ -274,7 +274,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                     Row(
                         children: [
                           Switch(
-                            activeColor: AppTheme.accent,
+                            activeColor: Theme.of(context).accentColor,
                             value: checked,
                             onChanged: (updateChecked) {
                               setState(() {
@@ -283,9 +283,10 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                               },
                           ),
                           Text(
-                            "Will you be adding \ncourses to this term?",
+                            "Will you add courses \nto this term?",
                             style: Theme.of(context).textTheme.headline3,
                           ),
+                          SizedBox(height: 20,),
                         ]
                     ),
                     Expanded(
@@ -293,7 +294,7 @@ class _NewTermsPopUpState extends State<NewTermsPopUp> {
                         height: 30,
                         width: 300,
                         child: RaisedButton(
-                            color: AppTheme.appBar,
+                            color: Theme.of(context).primaryColor,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                             onPressed: () async {
                               await term.addTerm(addedTerm, termYear);
@@ -332,9 +333,9 @@ class DeleteConfirmation extends StatelessWidget{
             "Delete Term",
             style: Theme.of(context).textTheme.headline4,
           ),
-          Divider(color: AppTheme.bodyText,),
+          Divider(color: Theme.of(context).dividerColor,),
           Text(
-            "Are you sure you want to delete ${terms[index].name} ${terms[index].year} ?",
+            "Are you sure you want to delete the ${terms[index].name} ${terms[index].year} term?",
             style: Theme.of(context).textTheme.headline3,
           ),
         ]
@@ -342,6 +343,7 @@ class DeleteConfirmation extends StatelessWidget{
       actions: <Widget>[
         FlatButton(
           color: Colors.red,
+          height: 40,
           onPressed: () {
             TermService().deleteTerm("${terms[index].name}", terms[index].year);
             Navigator.pop(context);
