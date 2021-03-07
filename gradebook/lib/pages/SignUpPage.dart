@@ -16,65 +16,82 @@ class _SignUpPageState extends State<SignUpPage> {
   String name = '';
   String error = '';
 
-
-
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
+  final FocusScopeNode focusScopeNode = FocusScopeNode();
+
+
+  void handleSubmitted(){
+    focusScopeNode.nextFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    final nameField = TextFormField(
-      obscureText: false,
-      style: Theme.of(context).textTheme.headline3,
-      decoration: InputDecoration(
-          hintText: "Name",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-      validator: (val) =>
-          ValidatorService().validateName(val),
-      onChanged: (val) =>
-          setState(() => name = val),
+    final FocusScope focusScope = FocusScope(
+      node: focusScopeNode,
+      child: Column(
+        children: [
+          TextFormField(
+            obscureText: false,
+            style: Theme.of(context).textTheme.headline5,
+            decoration: InputDecoration(
+                hintText: "Name",
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+            validator: (val) =>
+                ValidatorService().validateName(val),
+            onChanged: (val) =>
+                setState(() => name = val),
+            onEditingComplete: handleSubmitted,
+          ),
+          SizedBox(height: 25.0),
+          TextFormField(
+            obscureText: false,
+            style: Theme.of(context).textTheme.headline5,
+            decoration: InputDecoration(
+                hintText: "Email",
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+            validator: (val) =>
+                ValidatorService().validateEmail(val),
+            onChanged: (val) =>
+                setState(() => email = val),
+            onEditingComplete: handleSubmitted,
+          ),
+          SizedBox(height: 25.0),
+          TextFormField(
+            obscureText: true,
+            style: Theme.of(context).textTheme.headline5,
+            decoration: InputDecoration(
+                hintText: "Password",
+                border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+            validator: (val) =>
+                ValidatorService().validatePassword(val),
+            onChanged: (val) =>
+                setState(() => password = val),
+            onEditingComplete: handleSubmitted,
+          ),
+          SizedBox(height: 25.0),
+          TextField(
+            obscureText: true,
+            style: Theme.of(context).textTheme.headline5,
+            decoration: InputDecoration(
+                hintText: "Re-enter Password",
+                border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+          ),
+          SizedBox(height: 25.0),
+        ],
+      ),
     );
 
-    final emailField = TextFormField(
-      obscureText: false,
-      style: Theme.of(context).textTheme.headline3,
-      decoration: InputDecoration(
-          hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-      validator: (val) =>
-          ValidatorService().validateEmail(val),
-      onChanged: (val) =>
-          setState(() => email = val),
-    );
-    final passwordField = TextFormField(
-      obscureText: true,
-      style: Theme.of(context).textTheme.headline3,
-      decoration: InputDecoration(
-          hintText: "Password",
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-      validator: (val) =>
-          ValidatorService().validatePassword(val),
-      onChanged: (val) =>
-          setState(() => password = val),
-
-    );
-    final renterPasswordField = TextField(
-      obscureText: true,
-      style: Theme.of(context).textTheme.headline3,
-      decoration: InputDecoration(
-          hintText: "Enter password again",
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-    );
     final registerBtn =
     RaisedButton(
       child: Center(
-        child: Text('Register',
-          style: Theme.of(context).textTheme.headline4,),
+        child: Text('Confirm',
+          style: Theme.of(context).textTheme.headline2,),
       ),
       color: Theme.of(context).primaryColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
@@ -115,14 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    nameField,
-                    SizedBox(height: 25.0),
-                    emailField,
-                    SizedBox(height: 25.0),
-                    passwordField,
-                    SizedBox(height: 25.0,),
-                    renterPasswordField,
-                    SizedBox(height: 25.0,),
+                    focusScope,
                     registerBtn,
 
                   ],
@@ -136,7 +146,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign up"),
+        title: Text(
+            "Sign up",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         centerTitle: true,
       ),
       body: _register(context)

@@ -21,9 +21,10 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  tuple: ^1.0.3
   google_fonts:
   flutter_slidable:
+  theme_provider:
+  shared_preferences:
   flutter:
     sdk: flutter
 

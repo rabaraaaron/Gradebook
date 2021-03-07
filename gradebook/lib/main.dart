@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/CategoriesPage.dart';
+import 'package:gradebook/pages/SettingsPage.dart';
 import 'package:gradebook/pages/WelcomePage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';
 import 'package:gradebook/pages/loading.dart';
@@ -9,10 +9,13 @@ import 'package:gradebook/pages/LoginPage.dart';
 import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradebook/pages/TermsPage.dart';
-import 'package:gradebook/pages/TermClassesPage.dart';
+import 'package:gradebook/pages/TermCoursesPage.dart';
 import 'package:gradebook/pages/resetPasswrd.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
+import 'package:theme_provider/theme_provider.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +57,7 @@ class _GradebookState extends State<Gradebook> {
   void initState() {
     initializeFlutterFire();
     super.initState();
+
   }
 
   @override
@@ -61,49 +65,51 @@ class _GradebookState extends State<Gradebook> {
     if(_initialized)
       return StreamProvider<GradeBookUser>.value(
         value: AuthService().gradebookuser,
-        child: MaterialApp(
-          theme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: Colors.grey[700],
-            backgroundColor: Colors.brown[300],
-            accentColor: Colors.red,
-            fontFamily: GoogleFonts.quicksand().toStringShort(),
-            textTheme: TextTheme(
-              headline1: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-              headline2: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-              headline3: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w100),
-              headline4: TextStyle(
-                  fontSize: 40.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w100),
-              headline5: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w200),
-            ),
-          ),
-          home: Wrapper(),
-          routes: {
-            '/Login': (context) => LoginPage(),
-            '/Sign_up': (context) => SignUpPage(),
-            '/Terms': (context) => TermsPage(),
-            '/Home': (context) => TermClassesPage(),
-            '/Categories': (context) => CategoriesPageWrap(),
-            '/Welcome': (context) => WelcomePage(),
-            '/resetPassword': (context) => ResetPassword(),
-          },
+        child: ChangeNotifierProvider<MyAppTheme>(
+          create: (_) => MyAppTheme(),
+            child: new MaterialAppWithTheme()
         ),
       );
     else
       return Loading();
   }
+}
+
+class MaterialAppWithTheme extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    final theme = Provider.of<MyAppTheme>(context);
+    List<AppTheme> themes = theme.getThemes();
+
+    return ThemeProvider(
+      saveThemesOnChange: true,
+      loadThemeOnInit: true,
+      defaultThemeId: 'my_default',
+      themes:
+        List.generate(themes.length, (index) {
+          return themes[index];
+        }),
+
+      child: ThemeConsumer(
+        child: Builder(
+          builder: (themeContext) => MaterialApp(
+            theme: ThemeProvider.themeOf(themeContext).data,
+            home: Wrapper(),
+            routes: {
+              '/Login': (context) => LoginPage(),
+              '/Sign_up': (context) => SignUpPage(),
+              '/Terms': (context) => TermsPage(),
+              '/Home': (context) => TermClassesPage(),
+              '/Categories': (context) => CategoriesPageWrap(),
+              '/Welcome': (context) => WelcomePage(),
+              '/resetPassword': (context) => ResetPassword(),
+              '/Settings': (context) => SettingsPage(),
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
 }

@@ -8,7 +8,7 @@ import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
 
 
-class Testing3 {
+class GradeCalc {
   double _sumOfWeights = 4;
   List<Assessment> assessmentList;
   List<Category> categoryList;
