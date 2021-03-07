@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
+import 'assessment_service.dart';
 import 'user_service.dart';
 
 class CourseService {
@@ -54,4 +57,14 @@ class CourseService {
   Future<void> deleteCourse(id) async {
       courseRef.doc(id).delete();
   }
+  // String getGrade(courseID, termID){
+  //   AssessmentService assessmentServ = new AssessmentService(termID, courseID, categoryID)
+  //   print(courseRef.doc(courseID));
+  //   return "asdfdsf";
+  // }
+  //
+  // double getPercentage(courseID){
+  //
+  //   return null;
+  // }
 }

@@ -18,7 +18,9 @@ class AssessmentService {
         .collection('terms')
         .doc(termID)
         .collection('courses').doc(courseID)
-        .collection("categories").doc(categoryID).collection('assessments');
+        .collection("categories")
+        .doc(categoryID)
+        .collection('assessments');
   }
 
   Future<void> addAssessment(name, totalPoints, yourPoints) async {
@@ -38,9 +40,11 @@ class AssessmentService {
 
   List<Assessment> _assessmentFromSnap(QuerySnapshot snapshot) {
     var v = snapshot.docs.map<Assessment>((doc) {
-      print ("HERERERERE!" + doc.data().toString());
+
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
+      var perc = yp/tp;
+      //print ("HERERERERE!" + doc.data().toString() + " perc = " + perc.toString());
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id

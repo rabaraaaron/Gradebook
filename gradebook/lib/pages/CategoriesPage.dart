@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
@@ -422,6 +423,7 @@ class _AssessmentListState extends State<AssessmentList> {
                 )
               ],
           child: Row(
+            
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(width: 30,),
@@ -433,7 +435,8 @@ class _AssessmentListState extends State<AssessmentList> {
               Text(
                 "${element.yourPoints} / ${element.totalPoints}",
                 style: Theme.of(context).textTheme.headline6,
-              )
+              ),
+              SizedBox(width: 30,),
             ],
           ),
         ));

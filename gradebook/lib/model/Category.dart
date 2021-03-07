@@ -5,6 +5,8 @@ class Category{
   List<String> categoryItems = new List<String>();
   bool dropLowestScore = false;
   String id;
+  double totalPoints =0;
+  double totalEarnedPoints = 0;
 
   Category({
     this.categoryName,
@@ -22,5 +24,11 @@ class Category{
 
   void changeDropLowest(bool currentDropLowest){
     dropLowestScore = !currentDropLowest;
+  }
+  void addToTotalPoints(double points){
+    totalPoints += points;
+  }
+  void resetTotolPoints(){
+    totalPoints = 0;
   }
 }

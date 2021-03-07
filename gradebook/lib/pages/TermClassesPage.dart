@@ -1,18 +1,15 @@
-import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
-import 'package:gradebook/services/term_service.dart';
+import 'package:gradebook/utils/testing3.dart';
 import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/Course.dart';
 
 
+// ignore: must_be_immutable
 class TermClassesPageWrap extends StatefulWidget {
   Term term;
   TermClassesPageWrap({Key key, @required this.term}) : super(key: key);
@@ -31,6 +28,9 @@ class _TermClassesPageWrapState extends State<TermClassesPageWrap> {
 
   @override
   Widget build(BuildContext context) {
+
+    String grade = "loading grade";
+
     return StreamProvider<List<Course>>.value(
       value: CourseService(term.termID).courses,
       child: TermClassesPage(term: term,),
@@ -63,6 +63,12 @@ class _TermsPageState extends State<TermClassesPage> {
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<List<Course>>(context);
+
+
+    CourseService courseService = new CourseService(term.termID.toString());
+    //Course_grade courseGrade = new Course_grade();
+
+
     //Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
@@ -199,12 +205,43 @@ class _TermsPageState extends State<TermClassesPage> {
                               ),
                             ),
                             Container(
-                              child: Text(
-                                "97%",
-                                textScaleFactor: 2,
-                                style: Theme.of(context).textTheme.headline3,
-                              ),
-                            ),
+                             // child: GradeCal(classes[index].id, term.termID),
+
+                               child: StreamBuilder(
+                                   stream: Testing3().getGrade(classes[index], term),
+
+                                    //initialData: "Loading text..",
+                                    builder: (context, snapshot) {
+                                      //print("------- :::: "+snapshot.data.toString());
+                                      if(!snapshot.hasData) {
+                                        //print(" +++++++++++++++++++ no data");
+                                        return Text("loading..");
+                                      }
+                                      // snapshot.data.listen((value) {
+                                      //   print('Value from controller: $value');
+                                      // });
+
+                                      //Testing testing = snapshot.data;
+                                      //print(" +++++++++++++++++++ data : " +  testing.categoryTP.toString());
+                                      return Text('${snapshot.data.toString()}');
+                                      //return Text("${text.data}");
+                                    }),
+
+                              )
+
+                            //==========================================
+                            // Container(
+                            //   child: Text(
+                            //     //"97%",
+                            //     //classes[index].id, term.termID
+                            //     courseGrade.getGrade(classes[index].id, term.termID),
+                            //     //courseService.getGrade(classes[index].id, term.termID),
+                            //     //CourseService(termID).deleteCourse(termCourses[index].id),
+                            //     textScaleFactor: 2,
+                            //     style: Theme.of(context).textTheme.headline3,
+                            //   ),
+                            // ),
+                            //==========================================
                           ],
                         ),
                       ),
