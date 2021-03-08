@@ -98,23 +98,34 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 actionExtentRatio: .2,
                 secondaryActions: <Widget>[
                   IconSlideAction(
-                    color: Colors.transparent,
+
+                    color: Colors.black45,
+                    caption: 'Edit',
                     closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.more_vert,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
+                    icon: Icons.more_horiz,
+
+                    // color: Colors.transparent,
+                    // closeOnTap: true,
+                    // iconWidget: Icon(
+                    //   Icons.more_vert,
+                    //   color: Theme.of(context).dividerColor,
+                    //   size: 35,
+                    // ),
                     onTap: () => null,
                   ),
                   IconSlideAction(
-                    color: Colors.transparent,
+                    color: Colors.red,
                     closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
+                    caption: 'Delete',
+                    icon: Icons.delete,
+
+                    // color: Colors.transparent,
+                    // closeOnTap: true,
+                    // iconWidget: Icon(
+                    //   Icons.delete,
+                    //   color: Theme.of(context).dividerColor,
+                    //   size: 35,
+                    // ),
                     onTap: ()async {
                       showDialog(
                         context: context,
@@ -447,23 +458,35 @@ class _AssessmentListState extends State<AssessmentList> {
               actionExtentRatio: .2,
               secondaryActions: <Widget>[
                 IconSlideAction(
-                  color: Colors.transparent,
+
+                  color: Colors.blue,
+                  caption: 'Add reminder',
                   closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.add_alert,
-                    color: Theme.of(context).dividerColor,
-                    size: 35,
-                  ),
+                  icon: Icons.add_alert,
+
+                  // color: Colors.transparent,
+                  // closeOnTap: true,
+                  // iconWidget: Icon(
+                  //   Icons.add_alert,
+                  //   color: Theme.of(context).dividerColor,
+                  //   size: 35,
+                  // ),
                   onTap: () => null,
                 ),
                 IconSlideAction(
-                  color: Colors.transparent,
+
+                  color: Colors.red,
                   closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).dividerColor,
-                    size: 35,
-                  ),
+                  caption: 'Delete',
+                  icon: Icons.delete,
+
+                  // color: Colors.transparent,
+                  // closeOnTap: true,
+                  // iconWidget: Icon(
+                  //   Icons.delete,
+                  //   color: Theme.of(context).dividerColor,
+                  //   size: 35,
+                  // ),
                   onTap: () async {
                     await assServ.deleteAssessment(element.id);
                   },

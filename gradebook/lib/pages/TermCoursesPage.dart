@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -79,132 +80,151 @@ class _TermsPageState extends State<TermClassesPage> {
         itemBuilder: (context, index) =>
             Padding(
               padding: EdgeInsets.all(0.0),
-              child: Slidable(
-                controller: slidableController,
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: .2,
-                secondaryActions: [
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.more_vert,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
-                    onTap: () => null,
-                  ),
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
-                    onTap: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DeleteConfirmation(
-                              term.termID, classes, index);
-                        },
-                      );
-                    },
-                  )
-                ],
-                child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.computer,
-                          size: 50,
+              child: StreamBuilder(
+                stream: GradeCalc().getGrade(classes[index], term),
+                initialData: 0.0,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text("Loading..");
+                  } else {
+                    return Slidable(
+                      controller: slidableController,
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: .2,
+                      secondaryActions: [
+                        IconSlideAction(
+                          color: Colors.black45,
+                          caption: 'Edit',
+                          closeOnTap: true,
+                          icon: Icons.more_horiz,
+                          // iconWidget: Icon(
+                          //   Icons.more_horiz,
+                          //   color: Theme.of(context).dividerColor,
+                          //   size: 35,
+                          // ),
+                          onTap: () => null,
                         ),
-                        padding: EdgeInsets.all(10.0),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoriesPageWrap(
-                                            term: term,
-                                            course: classes[index])));
+                        IconSlideAction(
+                          color: Colors.red,
+                          closeOnTap: true,
+                          caption: 'Delete',
+                          icon: Icons.delete,
+                          // iconWidget: Icon(
+                          //   Icons.delete,
+                          //   color: Theme.of(context).dividerColor,
+                          //   size: 35,
+                          // ),
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return DeleteConfirmation(
+                                    term.termID, classes, index);
+                              },
+                            );
                           },
-                          child: new Padding(
-                            padding: new EdgeInsets.all(20.0),
-                            child: Text(
-                              "${classes[index].name}",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline4,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Column(
+                        )
+                      ],
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text(
-                                "A",
-                                textScaleFactor: 2,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3,
+                              child: Icon(
+                                Icons.computer,
+                                size: 50,
+                              ),
+                              padding: EdgeInsets.all(10.0),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoriesPageWrap(
+                                                  term: term,
+                                                  course: classes[index])));
+                                },
+                                child: new Padding(
+                                  padding: new EdgeInsets.all(20.0),
+                                  child: Text(
+                                    "${classes[index].name}",
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline4,
+                                  ),
+                                ),
                               ),
                             ),
-
-
-                            //todo: calc is not working yet. this is currently retruning the sum of total earned points for each class.
                             Container(
-                              child: StreamBuilder(
-                                stream: GradeCalc().getGrade(classes[index], term),
-                                initialData: 0.0,
-                                builder: (context, snapshot) {
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      "A",
+                                      textScaleFactor: 2,
+                                      style: Theme
+                                          .of(context)
+                                          .textTheme
+                                          .headline3,
+                                    ),
+                                  ),
 
-                                  if(!snapshot.hasData){
-                                    return Text("Loading..");
-                                  } else {
-                                    return Text('${snapshot.data}',
-                                        textScaleFactor: 1.3,
-                                        style: Theme
-                                              .of(context)
-                                              .textTheme
-                                              .headline3,);
-                                  }
-                                },
-                              )
 
-                              // =========================
-                              // Text(
-                              //   "92%",
-                              //   textScaleFactor: 2,
-                              //   style: Theme
-                              //       .of(context)
-                              //       .textTheme
-                              //       .headline3,
-                              // ),
-                              // =========================
+                                  //todo: calc is not working yet. this is currently retruning the sum of total earned points for each class.
+                                  Container(
+                                    child: Text('${snapshot.data}'),
+                                    // child: SizedBox(
+                                    //   width: 60,
+                                    //   child: StreamBuilder(
+                                    //     stream: GradeCalc().getGrade(classes[index], term),
+                                    //     //initialData: 0.0,
+                                    //     builder: (context, snapshot) {
+                                    //
+                                    //
+                                    //       if(!snapshot.hasData){
+                                    //         return Text("Loading..");
+                                    //       } else {
+                                    //
+                                    //         return Text('${snapshot.data}',
+                                    //             textScaleFactor: 1.3,
+                                    //             style: Theme
+                                    //                   .of(context)
+                                    //                   .textTheme
+                                    //                   .headline3,);
+                                    //       }
+                                    //     },
+                                    //   ),
+                                    // )
+
+                                    // =========================
+                                    // Text(
+                                    //   "92%",
+                                    //   textScaleFactor: 2,
+                                    //   style: Theme
+                                    //       .of(context)
+                                    //       .textTheme
+                                    //       .headline3,
+                                    // ),
+                                    // =========================
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    );
+                  }
+                }),
             ),
       );
     } else{

@@ -22,17 +22,14 @@ class GradeCalc {
   }
 
   Stream<String> getGrade (Course course, Term term) {
-    print("======1");
+    //print("======1");
     double catTP = 0;
-    String string = "test";
 
     HashMap<String, String> map = new HashMap();
 
-    //map.update("test", () => new S);
+    var controller = StreamController<String>();
 
-    StreamController<String> controller = StreamController<String>();
-
-    Stream<String> stream = controller.stream;
+    Stream<String> stream = controller.stream.asBroadcastStream();
 
     controller.add(categoryTP.toString());
 
@@ -40,7 +37,7 @@ class GradeCalc {
     final myStream = categoryService.categories;
 
     myStream.listen( (data) async {
-      print("======2");
+      //print("======2");
 
       if (data.isNotEmpty){
         //print("====== not empty : " + data.toString());
@@ -49,7 +46,7 @@ class GradeCalc {
 
           final assessmentServ = await Future.value(AssessmentService(
               term.termID, course.id, category.id));
-          print("======3");
+          //print("======3");
           final assessmentStream = await Future.value(assessmentServ.assessments);
           assessmentStream.listen((assessmentsData) async{
             Assessment assessment;
@@ -60,6 +57,7 @@ class GradeCalc {
                 category.totalEarnedPoints += await Future.value(assessment.yourPoints);
                 catTP += await Future.value(assessment.totalPoints);
                 controller.add(catTP.toString());
+                //controller.sink.close();
 
               }
             }
@@ -68,8 +66,9 @@ class GradeCalc {
 
       }
     });
+    //controller.sink.close();
 
-    print("catTP ----->> " + categoryTP.toString());
+    //print("catTP ----->> " + categoryTP.toString());
 
     return stream;
 
