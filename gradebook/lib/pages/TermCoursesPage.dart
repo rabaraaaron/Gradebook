@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
@@ -80,13 +83,60 @@ class _TermsPageState extends State<TermClassesPage> {
         itemBuilder: (context, index) =>
             Padding(
               padding: EdgeInsets.all(0.0),
+              //todo: this is just a marker ============================================================ start
               child: StreamBuilder(
-                stream: GradeCalc().getGrade(classes[index], term),
-                initialData: 0.0,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                //=================================
+                stream: CategoryService(term.termID, classes[index].id).categories,
+                  builder: (context, categoriesSnapshot) {
+                    if (!categoriesSnapshot.hasData) {
+
+                //=================================
+
+
+                //stream: GradeCalc().getGrade(classes[index], term),
+                //initialData: "test",
+                // builder: (context, snapshot) {
+                //   if (!snapshot.hasData) {
                     return Text("Loading..");
                   } else {
+                      var controller = StreamController<double>();
+
+                      double num = 0.59841;
+                      double roundedNum = (( num *100).roundToDouble())/100;
+                      print(roundedNum);
+
+                      Stream stream = controller.stream;
+
+                      classes[index].categories = categoriesSnapshot.data;
+                      //print(classes[index].categories);
+                      double earnedWeight = 0.0;
+                      //=================================
+                      for(var category in   classes[index].categories){
+                        //classes[index].sumOfCategoriesWeights += double.parse(category.categoryWeight);
+
+                        Stream<List<Assessment>> assessmentList = AssessmentService( term.termID, classes[index].id, category.id).assessments;
+
+                        assessmentList.listen((list) {
+                          //print(list);
+                          for(var assessment in list) {
+                          category.totalEarnedPoints += assessment.yourPoints.toDouble();
+                          category.totalPoints += assessment.totalPoints.toDouble();
+                          }
+                          if(category.totalEarnedPoints > 0) {
+                          //print("inside");
+                          earnedWeight += ((double.parse(category.categoryWeight) * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble()))/ classes[index].sumOfCategoriesWeights) * 100;
+                          controller.add(earnedWeight);
+                          }
+                        });
+
+
+                      }
+
+                      //=================================
+
+
+                      //todo: this is just a marker ============================================================ end
+                    //print(snapshot);
                     return Slidable(
                       controller: slidableController,
                       actionPane: SlidableDrawerActionPane(),
@@ -179,9 +229,20 @@ class _TermsPageState extends State<TermClassesPage> {
                                   ),
 
 
-                                  //todo: calc is not working yet. this is currently retruning the sum of total earned points for each class.
+                                  //todo: grade percentage is still needs some work. For some reason, number changes when you restart hot restart the app on the termsClassesPage.
                                   Container(
-                                    child: Text('${snapshot.data}'),
+                                    child: StreamBuilder(
+                                      stream: stream,
+                                      initialData: 0.0,
+                                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                        if(snapshot.hasData) {
+                                          return Text('${(snapshot.data * 100).roundToDouble()/100}');
+                                        }
+                                        return Text("Loading..");
+                                    },),
+                                    //Text('${snapshot.data["percentage"].toString()}'),
+
+
                                     // child: SizedBox(
                                     //   width: 60,
                                     //   child: StreamBuilder(
