@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/services/Calculator.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
@@ -60,13 +61,15 @@ class _TermsPageState extends State<TermClassesPage> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<List<Course>>(context);
     Widget listView;
 
+
+
     if(Provider.of<List<Course>>(context) != null) {
+
       listView = ListView.separated(
         separatorBuilder: (context, index) =>
             Divider(
@@ -74,9 +77,13 @@ class _TermsPageState extends State<TermClassesPage> {
               indent: 25.0,
               endIndent: 25.0,
             ),
+
         itemCount: classes.length,
-        itemBuilder: (context, index) =>
-            Padding(
+        itemBuilder: (context, index) {
+
+          // var percent = Calculator().calc(classes[index], term);
+
+            return Padding(
               padding: EdgeInsets.all(0.0),
               child: Slidable(
                 controller: slidableController,
@@ -166,7 +173,7 @@ class _TermsPageState extends State<TermClassesPage> {
                             ),
                             Container(
                               child: Text(
-                                "97%",
+                                " ${Calculator().calc(classes[index], term)}",
                                 textScaleFactor: 2,
                                 style: Theme
                                     .of(context)
@@ -181,7 +188,7 @@ class _TermsPageState extends State<TermClassesPage> {
                   ),
                 ),
               ),
-            ),
+            );},
       );
     } else{
       listView = Container();
@@ -328,7 +335,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                         value: checked,
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
-                          setState(() {
+                          setState(() {d
                             checked = updateChecked;
                           });
                         },
