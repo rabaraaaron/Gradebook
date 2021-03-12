@@ -101,11 +101,7 @@ class _TermsPageState extends State<TermClassesPage> {
                   } else {
                       var controller = StreamController<double>();
 
-                      double num = 0.59841;
-                      double roundedNum = (( num *100).roundToDouble())/100;
-                      print(roundedNum);
-
-                      Stream stream = controller.stream;
+                      Stream stream = controller.stream.asBroadcastStream();
 
                       classes[index].categories = categoriesSnapshot.data;
                       //print(classes[index].categories);
@@ -143,27 +139,19 @@ class _TermsPageState extends State<TermClassesPage> {
                       actionExtentRatio: .2,
                       secondaryActions: [
                         IconSlideAction(
-                          color: Colors.black45,
-                          caption: 'Edit',
-                          closeOnTap: true,
-                          icon: Icons.more_horiz,
-                          // iconWidget: Icon(
-                          //   Icons.more_horiz,
-                          //   color: Theme.of(context).dividerColor,
-                          //   size: 35,
-                          // ),
+                          iconWidget: Icon(
+                            Icons.more_horiz,
+                            color: Theme.of(context).dividerColor,
+                            size: 35,
+                          ),
                           onTap: () => null,
                         ),
                         IconSlideAction(
-                          color: Colors.red,
-                          closeOnTap: true,
-                          caption: 'Delete',
-                          icon: Icons.delete,
-                          // iconWidget: Icon(
-                          //   Icons.delete,
-                          //   color: Theme.of(context).dividerColor,
-                          //   size: 35,
-                          // ),
+                          iconWidget: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).dividerColor,
+                            size: 35,
+                          ),
                           onTap: () async {
                             showDialog(
                               context: context,
