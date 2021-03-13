@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/services/course_service.dart';
 import 'package:provider/provider.dart';
 
 import 'Assessment.dart';
@@ -146,6 +147,12 @@ class _SubGradeState extends State<SubGrade> {
       }
 
       results = (results * 100).roundToDouble() / 100;
+
+
+      course.gradePercent = results;
+      print(course.gradePercent);
+
+      CourseService(termID,).updateGradePercent(course.id, results);
 
       //todo: The grade is being updated in course object but I couldn't find a way to dispaly it in the GUI.
       course.updateGradeLetter(results);

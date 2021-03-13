@@ -15,6 +15,7 @@ class Course with ChangeNotifier {
   final int year;
   final String id;
   double _sumOfCategoriesWeights = 0.0;
+  double gradePercent;
 
 
 
@@ -27,7 +28,7 @@ class Course with ChangeNotifier {
 
   }
 
-  Course({this.name, this.categories, this.term, this.year, this.credits, this.id});
+  Course({this.name, this.categories, this.term, this.year, this.credits, this.id, this.gradePercent});
 
   @override
   String toString() {
@@ -69,7 +70,7 @@ class Course with ChangeNotifier {
       notifyListeners();
       return;
     } else {
-      _gradeLetter = "A";
+      _gradeLetter = "F";
       notifyListeners();
       return;
     }
