@@ -1,14 +1,18 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/services/Calculator.dart';
+import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
+import 'package:gradebook/utils/gradeCalc.dart';
 import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
@@ -61,15 +65,13 @@ class _TermsPageState extends State<TermClassesPage> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     final classes = Provider.of<List<Course>>(context);
     Widget listView;
 
-
-
     if(Provider.of<List<Course>>(context) != null) {
-
       listView = ListView.separated(
         separatorBuilder: (context, index) =>
             Divider(
@@ -77,118 +79,214 @@ class _TermsPageState extends State<TermClassesPage> {
               indent: 25.0,
               endIndent: 25.0,
             ),
-
         itemCount: classes.length,
-        itemBuilder: (context, index) {
-
-          // var percent = Calculator().calc(classes[index], term);
-
-            return Padding(
+        itemBuilder: (context, index) =>
+            Padding(
               padding: EdgeInsets.all(0.0),
-              child: Slidable(
-                controller: slidableController,
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: .2,
-                secondaryActions: [
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.more_vert,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
-                    onTap: () => null,
-                  ),
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
-                    onTap: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DeleteConfirmation(
-                              term.termID, classes, index);
-                        },
-                      );
-                    },
-                  )
-                ],
-                child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.computer,
-                          size: 50,
+              //todo: this is just a marker ============================================================ start
+              child: StreamBuilder(
+                //=================================
+                stream: CategoryService(term.termID, classes[index].id).categories,
+                  builder: (context, categoriesSnapshot) {
+                    if (!categoriesSnapshot.hasData) {
+
+                //=================================
+
+
+                //stream: GradeCalc().getGrade(classes[index], term),
+                //initialData: "test",
+                // builder: (context, snapshot) {
+                //   if (!snapshot.hasData) {
+                    return Text("Loading..");
+                  } else {
+                      var controller = StreamController<double>();
+
+                      double num = 0.59841;
+                      double roundedNum = (( num *100).roundToDouble())/100;
+                      print(roundedNum);
+
+                      Stream stream = controller.stream;
+
+                      classes[index].categories = categoriesSnapshot.data;
+                      //print(classes[index].categories);
+                      double earnedWeight = 0.0;
+                      //=================================
+                      for(var category in   classes[index].categories){
+                        //classes[index].sumOfCategoriesWeights += double.parse(category.categoryWeight);
+
+                        Stream<List<Assessment>> assessmentList = AssessmentService( term.termID, classes[index].id, category.id).assessments;
+
+                        assessmentList.listen((list) {
+                          //print(list);
+                          for(var assessment in list) {
+                          category.totalEarnedPoints += assessment.yourPoints.toDouble();
+                          category.totalPoints += assessment.totalPoints.toDouble();
+                          }
+                          if(category.totalEarnedPoints > 0) {
+                          //print("inside");
+                          earnedWeight += ((double.parse(category.categoryWeight) * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble()))/ classes[index].sumOfCategoriesWeights) * 100;
+                          controller.add(earnedWeight);
+                          }
+                        });
+
+
+                      }
+
+                      //=================================
+
+
+                      //todo: this is just a marker ============================================================ end
+                    //print(snapshot);
+                    return Slidable(
+                      controller: slidableController,
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: .2,
+                      secondaryActions: [
+                        IconSlideAction(
+                          color: Colors.black45,
+                          caption: 'Edit',
+                          closeOnTap: true,
+                          icon: Icons.more_horiz,
+                          // iconWidget: Icon(
+                          //   Icons.more_horiz,
+                          //   color: Theme.of(context).dividerColor,
+                          //   size: 35,
+                          // ),
+                          onTap: () => null,
                         ),
-                        padding: EdgeInsets.all(10.0),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoriesPageWrap(
-                                            term: term,
-                                            course: classes[index])));
+                        IconSlideAction(
+                          color: Colors.red,
+                          closeOnTap: true,
+                          caption: 'Delete',
+                          icon: Icons.delete,
+                          // iconWidget: Icon(
+                          //   Icons.delete,
+                          //   color: Theme.of(context).dividerColor,
+                          //   size: 35,
+                          // ),
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return DeleteConfirmation(
+                                    term.termID, classes, index);
+                              },
+                            );
                           },
-                          child: new Padding(
-                            padding: new EdgeInsets.all(20.0),
-                            child: Text(
-                              "${classes[index].name}",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline4,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Column(
+                        )
+                      ],
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text(
-                                "A",
-                                textScaleFactor: 2,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3,
+                              child: Icon(
+                                Icons.computer,
+                                size: 50,
+                              ),
+                              padding: EdgeInsets.all(10.0),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoriesPageWrap(
+                                                  term: term,
+                                                  course: classes[index])));
+                                },
+                                child: new Padding(
+                                  padding: new EdgeInsets.all(20.0),
+                                  child: Text(
+                                    "${classes[index].name}",
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline4,
+                                  ),
+                                ),
                               ),
                             ),
                             Container(
-                              child: Text(
-                                " ${Calculator().calc(classes[index], term)}",
-                                textScaleFactor: 2,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      "A",
+                                      textScaleFactor: 2,
+                                      style: Theme
+                                          .of(context)
+                                          .textTheme
+                                          .headline3,
+                                    ),
+                                  ),
+
+
+                                  //todo: grade percentage is still needs some work. For some reason, number changes when you restart hot restart the app on the termsClassesPage.
+                                  Container(
+                                    child: StreamBuilder(
+                                      stream: stream,
+                                      initialData: 0.0,
+                                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                        if(snapshot.hasData) {
+                                          return Text('${(snapshot.data * 100).roundToDouble()/100}');
+                                        }
+                                        return Text("Loading..");
+                                    },),
+                                    //Text('${snapshot.data["percentage"].toString()}'),
+
+
+                                    // child: SizedBox(
+                                    //   width: 60,
+                                    //   child: StreamBuilder(
+                                    //     stream: GradeCalc().getGrade(classes[index], term),
+                                    //     //initialData: 0.0,
+                                    //     builder: (context, snapshot) {
+                                    //
+                                    //
+                                    //       if(!snapshot.hasData){
+                                    //         return Text("Loading..");
+                                    //       } else {
+                                    //
+                                    //         return Text('${snapshot.data}',
+                                    //             textScaleFactor: 1.3,
+                                    //             style: Theme
+                                    //                   .of(context)
+                                    //                   .textTheme
+                                    //                   .headline3,);
+                                    //       }
+                                    //     },
+                                    //   ),
+                                    // )
+
+                                    // =========================
+                                    // Text(
+                                    //   "92%",
+                                    //   textScaleFactor: 2,
+                                    //   style: Theme
+                                    //       .of(context)
+                                    //       .textTheme
+                                    //       .headline3,
+                                    // ),
+                                    // =========================
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            );},
+                    );
+                  }
+                }),
+            ),
       );
     } else{
       listView = Container();
@@ -335,7 +433,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                         value: checked,
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
-                          setState(() {d
+                          setState(() {
                             checked = updateChecked;
                           });
                         },

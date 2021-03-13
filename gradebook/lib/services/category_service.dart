@@ -9,6 +9,8 @@ import 'package:gradebook/model/Category.dart';
 
 class CategoryService {
   CollectionReference categoryRef;
+  List<Category> listOfCategories;
+
 
   CategoryService(String termID, String courseID) {
     categoryRef = FirebaseFirestore.instance
@@ -53,10 +55,29 @@ class CategoryService {
           categoryWeight: doc.get('weight') ?? 0,
           id: doc.id);
     }).toList();
+    listOfCategories = v;
     return v;
   }
 
   Future<void> deleteCategory(id) async {
     categoryRef.doc(id).delete();
   }
+
+  List<Category> getCategoryData(){
+    this.categories;
+    return listOfCategories;
+  }
+
+  //   return categoryRef.categories((data) {
+  //     print(data);
+  //     for(Category cat in data){
+  //       print(cat);
+  //     }
+  //   },
+  //     onError: (err){
+  //       print('Error!!: ' + err.toString());
+  //     },
+  //     cancelOnError: false,);
+  // }
+
 }
