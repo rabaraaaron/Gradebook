@@ -52,7 +52,7 @@ class CategoryService {
     var v = snapshot.docs.map<Category>((doc) {
       return Category(
           categoryName: doc.get('name') ?? "",
-          categoryWeight: doc.get('weight') ?? 0,
+          categoryWeight: double.tryParse(doc.get('weight')) ?? 0.0,
           id: doc.id);
     }).toList();
     listOfCategories = v;

@@ -1,46 +1,41 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
-import 'package:gradebook/model/Category.dart';
+import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/assessment_service.dart';
-import 'package:gradebook/services/auth_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
-import 'package:gradebook/services/term_service.dart';
-import 'package:gradebook/utils/MyAppTheme.dart';
-import 'package:gradebook/utils/gradeCalc.dart';
 import 'CategoriesPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/Course.dart';
 
 
-class TermClassesPageWrap extends StatefulWidget {
+class TermClassesPageWrap extends StatelessWidget {
   Term term;
   TermClassesPageWrap({Key key, @required this.term}) : super(key: key);
 
-  @override
-  _TermClassesPageWrapState createState() => _TermClassesPageWrapState(term);
-}
+//   @override
+//   _TermClassesPageWrapState createState() => _TermClassesPageWrapState(term);
+// }
 
-class _TermClassesPageWrapState extends State<TermClassesPageWrap> {
-  Term term;
+// class _TermClassesPageWrapState extends State<TermClassesPageWrap> {
+//   Term term;
+//
+//   @override
+//   _TermClassesPageWrapState(Term tID) {
+//     this.term = tID;
+//   }
 
-  @override
-  _TermClassesPageWrapState(Term tID) {
-    this.term = tID;
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Course>>.value(
+    return  StreamProvider<List<Course>>.value(
       value: CourseService(term.termID).courses,
-      child: TermClassesPage(term: term,),
-    );
+      child: TermClassesPage(term: term),);
   }
 }
 
@@ -68,8 +63,11 @@ class _TermsPageState extends State<TermClassesPage> {
 
   @override
   Widget build(BuildContext context) {
+    //final course = Provider.of<Course>(context);
+
     final classes = Provider.of<List<Course>>(context);
     Widget listView;
+    //Widget test = ChangeNotifierProvider(create: (context) => Course(),);
 
     if(Provider.of<List<Course>>(context) != null) {
       listView = ListView.separated(
@@ -83,57 +81,7 @@ class _TermsPageState extends State<TermClassesPage> {
         itemBuilder: (context, index) =>
             Padding(
               padding: EdgeInsets.all(0.0),
-              //todo: this is just a marker ============================================================ start
-              child: StreamBuilder(
-                //=================================
-                stream: CategoryService(term.termID, classes[index].id).categories,
-                  builder: (context, categoriesSnapshot) {
-                    if (!categoriesSnapshot.hasData) {
-
-                //=================================
-
-
-                //stream: GradeCalc().getGrade(classes[index], term),
-                //initialData: "test",
-                // builder: (context, snapshot) {
-                //   if (!snapshot.hasData) {
-                    return Text("Loading..");
-                  } else {
-                      var controller = StreamController<double>();
-
-                      Stream stream = controller.stream.asBroadcastStream();
-
-                      classes[index].categories = categoriesSnapshot.data;
-                      //print(classes[index].categories);
-                      double earnedWeight = 0.0;
-                      //=================================
-                      for(var category in   classes[index].categories){
-                        //classes[index].sumOfCategoriesWeights += double.parse(category.categoryWeight);
-
-                        Stream<List<Assessment>> assessmentList = AssessmentService( term.termID, classes[index].id, category.id).assessments;
-
-                        assessmentList.listen((list) {
-                          //print(list);
-                          for(var assessment in list) {
-                          category.totalEarnedPoints += assessment.yourPoints.toDouble();
-                          category.totalPoints += assessment.totalPoints.toDouble();
-                          }
-                          if(category.totalEarnedPoints > 0) {
-                          //print("inside");
-                          earnedWeight += ((double.parse(category.categoryWeight) * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble()))/ classes[index].sumOfCategoriesWeights) * 100;
-                          controller.add(earnedWeight);
-                          }
-                        });
-
-
-                      }
-
-                      //=================================
-
-
-                      //todo: this is just a marker ============================================================ end
-                    //print(snapshot);
-                    return Slidable(
+              child: Slidable(
                       controller: slidableController,
                       actionPane: SlidableDrawerActionPane(),
                       actionExtentRatio: .2,
@@ -206,64 +154,22 @@ class _TermsPageState extends State<TermClassesPage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    child: Text(
-                                      "A",
-                                      textScaleFactor: 2,
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .headline3,
+                                    //todo: need to make the grade letter changes dynamically changes depending the grade percentage coming from Grade()
+
+                                    child: SizedBox(
+                                      width: 50,
+                                        height: 50,
+                                        child: Text("A",
+                                          textScaleFactor: 2,
+                                          style: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .headline3,
+                                        ),
                                     ),
                                   ),
-
-
-                                  //todo: grade percentage is still needs some work. For some reason, number changes when you restart hot restart the app on the termsClassesPage.
                                   Container(
-                                    child: StreamBuilder(
-                                      stream: stream,
-                                      initialData: 0.0,
-                                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                                        if(snapshot.hasData) {
-                                          return Text('${(snapshot.data * 100).roundToDouble()/100}');
-                                        }
-                                        return Text("Loading..");
-                                    },),
-                                    //Text('${snapshot.data["percentage"].toString()}'),
-
-
-                                    // child: SizedBox(
-                                    //   width: 60,
-                                    //   child: StreamBuilder(
-                                    //     stream: GradeCalc().getGrade(classes[index], term),
-                                    //     //initialData: 0.0,
-                                    //     builder: (context, snapshot) {
-                                    //
-                                    //
-                                    //       if(!snapshot.hasData){
-                                    //         return Text("Loading..");
-                                    //       } else {
-                                    //
-                                    //         return Text('${snapshot.data}',
-                                    //             textScaleFactor: 1.3,
-                                    //             style: Theme
-                                    //                   .of(context)
-                                    //                   .textTheme
-                                    //                   .headline3,);
-                                    //       }
-                                    //     },
-                                    //   ),
-                                    // )
-
-                                    // =========================
-                                    // Text(
-                                    //   "92%",
-                                    //   textScaleFactor: 2,
-                                    //   style: Theme
-                                    //       .of(context)
-                                    //       .textTheme
-                                    //       .headline3,
-                                    // ),
-                                    // =========================
+                                    child: Grade(classes[index], term.termID),
                                   ),
                                 ],
                               ),
@@ -271,9 +177,7 @@ class _TermsPageState extends State<TermClassesPage> {
                           ],
                         ),
                       ),
-                    );
-                  }
-                }),
+                    ),
             ),
       );
     } else{

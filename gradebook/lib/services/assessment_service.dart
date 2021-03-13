@@ -10,8 +10,10 @@ import 'user_service.dart';
 
 class AssessmentService {
   CollectionReference assessmentRef;
+  String catID;
 
   AssessmentService(String termID, courseID, categoryID) {
+    this.catID = categoryID;
     assessmentRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -47,7 +49,7 @@ class AssessmentService {
       //print ("HERERERERE!" + doc.data().toString() + " perc = " + perc.toString());
       return Assessment(
           name: doc.get('name'),
-          totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id
+          totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id, parentID: catID
       );
     }).toList();
     return v;
