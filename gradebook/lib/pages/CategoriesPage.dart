@@ -92,51 +92,50 @@ class _CategoriesPageState extends State<CategoriesPage> {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             return Container(
-              child: Slidable(
-                controller: slidableController,
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: .2,
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.more_vert,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
+              child: StreamProvider.value(
+                value: AssessmentService(
+                      term.termID, course.id, categories[index].id)
+                      .assessments,
+                child: Slidable(
+                  controller: slidableController,
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: .2,
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      color: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.more_vert,
+                        color: Theme.of(context).dividerColor,
+                        size: 35,
+                      ),
+                      onTap: () => null,
                     ),
-                    onTap: () => null,
-                  ),
-                  IconSlideAction(
-                    color: Colors.transparent,
-                    closeOnTap: true,
-                    iconWidget: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).dividerColor,
-                      size: 35,
-                    ),
-                    onTap: ()async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DeleteConfirmation(
-                              catServ, categories, index);
-                        },
-                      );
-                    },
-                  )
-                ],
-                child:
-                // expansionList[index]
-                StreamProvider.value(
-                    value: AssessmentService(
-                        term.termID, course.id, categories[index].id)
-                        .assessments,
-                    child: AssessmentTile(
+                    IconSlideAction(
+                      color: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).dividerColor,
+                        size: 35,
+                      ),
+                      onTap: ()async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DeleteConfirmation(
+                                catServ, categories, index);
+                          },
+                        );
+                      },
+                    )
+                  ],
+                  child: AssessmentTile(
                       termID: term.termID,
                       courseID: course.id,
                       cat: categories[index],
-                    )),
+                    ),
+                ),
               ),
             );
           }
