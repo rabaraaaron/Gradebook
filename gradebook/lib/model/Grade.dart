@@ -161,7 +161,14 @@ class _SubGradeState extends State<SubGrade> {
       CourseService(termID,).updateGradePercent(course.id, results);
       course.updateGradeLetter(results);
 
-      return Text(results.toString());
+      return Text(
+        results.toString(),
+        style: TextStyle(
+          color: Theme.of(context).dividerColor,
+          fontSize: 19.0,
+          fontWeight: FontWeight.w300,
+        ),
+      );
   }
 }
 
