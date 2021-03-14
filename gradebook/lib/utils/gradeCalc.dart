@@ -26,7 +26,7 @@ class GradeCalc {
   }
 
   Stream<Map> getGrade (Course course, Term term)  {
-    print("======1");
+   // print("======1");
 
     var controller = StreamController<Map>();
 
@@ -72,7 +72,7 @@ class GradeCalc {
               //print("======5");
               if(category.totalEarnedPoints > 0) {
                 //print("inside");
-                earnedWeight += double.parse(category.categoryWeight) * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble());
+                earnedWeight += category.categoryWeight * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble());
                 //print(earnedWeight);
                 map["percentage"] = earnedWeight;
               }
@@ -104,7 +104,7 @@ class GradeCalc {
         });
 
         if(category.totalEarnedPoints > 0) {
-          earnedWeight += double.parse(category.categoryWeight) * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble());
+          earnedWeight += category.categoryWeight * (category.totalEarnedPoints.toDouble()/category.totalPoints.toDouble());
         }
 
         //map["sumOfPoints"] += assessment.totalPoints.toDouble();
@@ -125,7 +125,7 @@ class GradeCalc {
     await for (var categoryList in myStream) {
       //print("======  : " + categoryList.toString());
        for (var category in categoryList) {
-        weight = double.parse(await Future.value(category.categoryWeight));
+        weight = await Future.value(category.categoryWeight);
         //print("------------------>>>>" + weight.toString());
 
         final assessmentServ = await Future.value(AssessmentService( term.termID, course.id, category.id));
@@ -158,7 +158,7 @@ class GradeCalc {
         var num1 = 9.3, mu3 = 23.2;
         var num2 = num1/mu3;
         if(category.totalEarnedPoints > 0) {
-          earnedWeight += double.parse(category.categoryWeight) * (map["EarnedPointSum"] / map["sumOfPoints"]);
+          earnedWeight += category.categoryWeight * (map["EarnedPointSum"] / map["sumOfPoints"]);
         }
         //print("------------------>>>> test lllll" + test.toString());
         //print("------------------>>>> num " + num2.toString());

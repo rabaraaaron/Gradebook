@@ -1,8 +1,10 @@
+import 'package:gradebook/model/Assessment.dart';
+
 class Category{
 
   String categoryName;
-  String categoryWeight;
-  List<String> categoryItems = new List<String>();
+  double categoryWeight = 0.0;
+  List<Assessment> categoryItems;
   bool dropLowestScore = false;
   String id;
   double totalPoints =0;
@@ -14,9 +16,9 @@ class Category{
     this.id
   });
 
-  void add(String itemName){
-    categoryItems.add(itemName);
-  }
+  // void add(String itemName){
+  //   categoryItems.add(itemName);
+  // }
 
   void delete(String itemName){
     categoryItems.remove(itemName);
@@ -31,4 +33,10 @@ class Category{
   void resetTotolPoints(){
     totalPoints = 0;
   }
+
+  @override
+  String toString() {
+    return {categoryName, categoryItems}.toString();
+  }
+
 }

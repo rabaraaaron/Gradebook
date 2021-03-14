@@ -4,9 +4,10 @@ class Assessment {
   final double totalPoints;
   final double yourPoints;
   final String id;
+  final String parentID;
 
 
-  Assessment({this.name, this.totalPoints, this.yourPoints, this.id});
+  Assessment({this.name, this.totalPoints, this.yourPoints, this.id, this.parentID});
 
   @override
   String toString() {

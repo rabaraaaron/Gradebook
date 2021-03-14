@@ -89,62 +89,50 @@ class _CategoriesPageState extends State<CategoriesPage> {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             return Container(
-              child: Slidable(
-                controller: slidableController,
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: .2,
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-
-                    color: Colors.black45,
-                    caption: 'Edit',
-                    closeOnTap: true,
-                    icon: Icons.more_horiz,
-
-                    // color: Colors.transparent,
-                    // closeOnTap: true,
-                    // iconWidget: Icon(
-                    //   Icons.more_vert,
-                    //   color: Theme.of(context).dividerColor,
-                    //   size: 35,
-                    // ),
-                    onTap: () => null,
-                  ),
-                  IconSlideAction(
-                    color: Colors.red,
-                    closeOnTap: true,
-                    caption: 'Delete',
-                    icon: Icons.delete,
-
-                    // color: Colors.transparent,
-                    // closeOnTap: true,
-                    // iconWidget: Icon(
-                    //   Icons.delete,
-                    //   color: Theme.of(context).dividerColor,
-                    //   size: 35,
-                    // ),
-                    onTap: ()async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DeleteConfirmation(
-                              catServ, categories, index);
-                        },
-                      );
-                    },
-                  )
-                ],
-                child:
-                // expansionList[index]
-                StreamProvider.value(
-                    value: AssessmentService(
-                        term.termID, course.id, categories[index].id)
-                        .assessments,
-                    child: AssessmentTile(
+              child: StreamProvider.value(
+                value: AssessmentService(
+                      term.termID, course.id, categories[index].id)
+                      .assessments,
+                child: Slidable(
+                  controller: slidableController,
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: .2,
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      color: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.more_vert,
+                        color: Theme.of(context).dividerColor,
+                        size: 35,
+                      ),
+                      onTap: () => null,
+                    ),
+                    IconSlideAction(
+                      color: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).dividerColor,
+                        size: 35,
+                      ),
+                      onTap: ()async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DeleteConfirmation(
+                                catServ, categories, index);
+                          },
+                        );
+                      },
+                    )
+                  ],
+                  child: AssessmentTile(
                       termID: term.termID,
                       courseID: course.id,
                       cat: categories[index],
-                    )),
+                    ),
+                ),
               ),
             );
           }
@@ -455,18 +443,23 @@ class _AssessmentListState extends State<AssessmentList> {
               actionExtentRatio: .2,
               secondaryActions: <Widget>[
                 IconSlideAction(
-                  color: Colors.blue,
-                  caption: 'Add reminder',
+                  color: Colors.transparent,
                   closeOnTap: true,
-                  icon: Icons.add_alert,
-                  //TODO: Create UI for scheduling the reminder
+                  iconWidget: Icon(
+                    Icons.add_alert,
+                    color: Theme.of(context).dividerColor,
+                    size: 35,
+                  ),
                   onTap: () => scheduleNotification(),
                 ),
                 IconSlideAction(
-                  color: Colors.red,
+                  color: Colors.transparent,
                   closeOnTap: true,
-                  caption: 'Delete',
-                  icon: Icons.delete,
+                  iconWidget: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).dividerColor,
+                    size: 35,
+                  ),
                   onTap: () async {
                     await assServ.deleteAssessment(element.id);
                   },
@@ -553,7 +546,6 @@ class _AssessmentListState extends State<AssessmentList> {
   Future scheduleNotification() async {
 
     tz.initializeTimeZones();
-
 
     var scheduleNotificationDateTime =
         tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));

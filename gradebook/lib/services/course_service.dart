@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/Course.dart';
+import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
@@ -37,9 +38,15 @@ class CourseService {
           .add({
             'name': name,
             'credits': credits,
+            'gradePercent' : 0.0,
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
+  }
+
+  Future<void> updateGradePercent(courseID, gradePercent) async{
+    await courseRef.doc(courseID).update({'gradePercent':gradePercent});
+
   }
 
   Stream<List<Course>> get courses {
@@ -49,7 +56,7 @@ class CourseService {
   List<Course> _courseFromSnap(QuerySnapshot snapshot) {
     var v = snapshot.docs.map<Course>((doc) {
       return Course(
-          name: doc.get('name'), credits: doc.get('credits') ?? "", id: doc.id);
+          name: doc.get('name'), credits: doc.get('credits') ?? "", id: doc.id, gradePercent: doc.get('gradePercent'));
     }).toList();
     return v;
   }
