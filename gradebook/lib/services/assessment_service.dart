@@ -11,9 +11,13 @@ import 'user_service.dart';
 class AssessmentService {
   CollectionReference assessmentRef;
   String catID;
+  String courseID;
+  String termID;
 
   AssessmentService(String termID, courseID, categoryID) {
     this.catID = categoryID;
+    this.termID = termID;
+
     assessmentRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -49,7 +53,7 @@ class AssessmentService {
       //print ("HERERERERE!" + doc.data().toString() + " perc = " + perc.toString());
       return Assessment(
           name: doc.get('name'),
-          totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id, parentID: catID
+          totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id, catID: catID, courseID: courseID, termID: termID
       );
     }).toList();
     return v;
@@ -57,5 +61,10 @@ class AssessmentService {
 
   Future<void> deleteAssessment(id) async {
     await assessmentRef.doc(id).delete();
+  }
+  Future<void> updateAssessmentName(id, name) async {
+    // print(id);
+    // print(name);
+    await assessmentRef.doc(id).update({'name': name});
   }
 }

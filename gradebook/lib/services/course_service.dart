@@ -54,11 +54,30 @@ class CourseService {
   }
 
   List<Course> _courseFromSnap(QuerySnapshot snapshot) {
-    var v = snapshot.docs.map<Course>((doc) {
-      return Course(
-          name: doc.get('name'), credits: doc.get('credits') ?? "", id: doc.id, gradePercent: doc.get('gradePercent'));
-    }).toList();
-    return v;
+
+
+    try{
+     var v = snapshot.docs.map<Course>((doc) {
+
+      return Course(name: doc.get('name'),
+                    credits: doc.get('credits') ?? "",
+                    id: doc.id,
+                    gradePercent: doc.get('gradePercent') ?? 0.0);
+                    }).toList();
+     return v;
+
+    } catch (err){
+      print(err.toString());
+
+      var v2 = snapshot.docs.map<Course>((doc) {
+      return Course( name: doc.get('name'),
+                    credits: doc.get('credits') ?? "",
+                    id: doc.id,
+                    gradePercent: 0.0);
+                    }).toList();
+      return v2;
+    }
+
   }
 
   Future<void> deleteCourse(id) async {

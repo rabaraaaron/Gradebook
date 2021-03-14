@@ -117,30 +117,36 @@ class _SubGradeState extends State<SubGrade> {
       double results = 0.0;
       double sumOfWeights = 0.0;
 
-      if (catList.isNotEmpty) {
+      if (catList.isNotEmpty && aList != null) {
         for (Category category in catList) {
           category.categoryItems = new List<Assessment>();
 
           sumOfWeights += category.categoryWeight;
 
           for (Assessment a in aList) {
-            if (a.parentID == category.id) {
+            if (a.catID == category.id) {
               category.categoryItems.add(a);
             }
           }
         }
-
         for (Category category in catList) {
-          for (Assessment assessment in category.categoryItems) {
-            category.totalEarnedPoints += assessment.yourPoints.toDouble();
-            category.totalPoints += assessment.totalPoints.toDouble();
+          if(category.dropLowestScore){
+            category.dropLowest();
+          }
+          if(category.categoryItems.isNotEmpty) {
+            for (Assessment assessment in category.categoryItems) {
+              if(!assessment.dropped) {
+                category.totalEarnedPoints += assessment.yourPoints;
+                category.totalPoints += assessment.totalPoints;
+              } else{
+                print(assessment.toString() + " is DROPPED");
+              }
+            }
           }
           if (category.totalEarnedPoints > 0) {
-            //print("inside");
             results += ((category.categoryWeight *
-                (category.totalEarnedPoints.toDouble() /
-                    category.totalPoints.toDouble())) / sumOfWeights) * 100;
-            //controller.add(earnedWeight);
+                (category.totalEarnedPoints /
+                    category.totalPoints)) / sumOfWeights) * 100;
 
           }
         }
@@ -153,19 +159,9 @@ class _SubGradeState extends State<SubGrade> {
       print(course.gradePercent);
 
       CourseService(termID,).updateGradePercent(course.id, results);
-
-      //todo: The grade is being updated in course object but I couldn't find a way to dispaly it in the GUI.
       course.updateGradeLetter(results);
-
-      //I was testing if we can send to widgets from this class to so we can get the grade parcentage and grade letter.
-      // ListView listView = ListView(
-      //   children: [
-      //     Text("W"),
-      //     Text(results.toString()),
-      //   ],
-      // );
-
 
       return Text(results.toString());
   }
 }
+

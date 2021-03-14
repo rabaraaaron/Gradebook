@@ -7,18 +7,16 @@ class Category{
   List<Assessment> categoryItems;
   bool dropLowestScore = false;
   String id;
-  double totalPoints =0;
-  double totalEarnedPoints = 0;
+  double totalPoints = 0.0;
+  double totalEarnedPoints = 0.0;
 
   Category({
     this.categoryName,
     this.categoryWeight,
-    this.id
+    this.id,
+    this.dropLowestScore
   });
 
-  // void add(String itemName){
-  //   categoryItems.add(itemName);
-  // }
 
   void delete(String itemName){
     categoryItems.remove(itemName);
@@ -32,6 +30,15 @@ class Category{
   }
   void resetTotolPoints(){
     totalPoints = 0;
+  }
+  void dropLowest() {
+    //print(categoryItems);
+    for(Assessment a in categoryItems){
+      a.dropped = false;
+    }
+    categoryItems.sort((a, b) => (a.yourPoints/a.totalPoints).compareTo(b.yourPoints/b.totalPoints));
+    categoryItems.first.dropped = true;
+
   }
 
   @override

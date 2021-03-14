@@ -23,7 +23,7 @@ class CategoryService {
         .collection("categories");
   }
 
-  Future<void> addCategory(name, weight) async {
+  Future<void> addCategory(name, weight, dropLowest) async {
     bool duplicate;
     await categoryRef
         .where('name', isEqualTo: name)
@@ -39,6 +39,7 @@ class CategoryService {
           .add({
             'name': name,
             'weight': weight,
+            'dropLowest': dropLowest
           })
           .then((value) => print("Category Added"))
           .catchError((error) => print("Failed to add category: $error"));
@@ -49,19 +50,38 @@ class CategoryService {
   }
 
   List<Category> _categoriesFromSnap(QuerySnapshot snapshot) {
-    var v = snapshot.docs.map<Category>((doc) {
-      return Category(
-          categoryName: doc.get('name') ?? "",
-          categoryWeight: double.tryParse(doc.get('weight')) ?? 0.0,
-          id: doc.id);
-    }).toList();
-    listOfCategories = v;
-    return v;
+    try {
+      var v = snapshot.docs.map<Category>((doc) {
+        return Category(
+            categoryName: doc.get('name') ?? "",
+            categoryWeight: double.tryParse(doc.get('weight')) ?? 0.0,
+            id: doc.id,
+            dropLowestScore: doc.get('dropLowest') ?? false);
+      }).toList();
+      listOfCategories = v;
+      return v;
+    } catch(err){
+      print("Error with getting 'DropLowest' field value: " + err.toString() );
+      var v = snapshot.docs.map<Category>((doc) {
+        return Category(
+            categoryName: doc.get('name') ?? "",
+            categoryWeight: double.tryParse(doc.get('weight')) ?? 0.0,
+            id: doc.id,
+            dropLowestScore: false);
+      }).toList();
+      listOfCategories = v;
+      return v;
+    }
   }
 
   Future<void> deleteCategory(id) async {
     categoryRef.doc(id).delete();
   }
+  Future<void> setDropLowest(catID, value) async{
+    await categoryRef.doc(catID).update({'dropLowest':value});
+
+  }
+
 
   List<Category> getCategoryData(){
     this.categories;

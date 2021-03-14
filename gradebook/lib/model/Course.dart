@@ -51,27 +51,27 @@ class Course with ChangeNotifier {
     if(grade > 90){
       print("this print is from course.dart line 52 : updating grade to A");
       _gradeLetter = "A";
-      notifyListeners();
+      //notifyListeners();
       return;
     }
     if(grade > 80){
       print("this print is from course.dart line 58 :updating grade to B");
       _gradeLetter = "B";
-      notifyListeners();
+      //notifyListeners();
       return;
     }
     if(grade > 70){
       _gradeLetter = "C";
-      notifyListeners();
+      //notifyListeners();
       return;
     }
     if(grade > 60){
       _gradeLetter = "D";
-      notifyListeners();
+      //notifyListeners();
       return;
     } else {
       _gradeLetter = "F";
-      notifyListeners();
+      //notifyListeners();
       return;
     }
 

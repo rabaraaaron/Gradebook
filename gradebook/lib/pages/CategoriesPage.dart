@@ -201,7 +201,7 @@ class NewCategoriesPopUp extends StatefulWidget {
 
 class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   List<Category> c = [];
-  bool checked = false;
+  bool dropLowest_isChecked = false;
   String addedCategory;
 
   CategoryService categoryService;
@@ -284,11 +284,11 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 Row(
                   children: [
                     Switch(
-                      value: checked,
+                      value: dropLowest_isChecked,
                       activeColor: Theme.of(context).accentColor,
                       onChanged: (updateChecked) {
                         setState(() {
-                          checked = updateChecked;
+                          dropLowest_isChecked = updateChecked;
                         });
                       },
                     ),
@@ -307,7 +307,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                       onPressed: () async {
                         print(addedCategory);
                         await categoryService.addCategory(
-                            addedCategory, categoryWeightController.text);
+                            addedCategory, categoryWeightController.text, dropLowest_isChecked);
                           Navigator.pop(context);
                           },
                       child: Text(
