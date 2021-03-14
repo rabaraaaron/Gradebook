@@ -426,10 +426,10 @@ class AssessmentList extends StatefulWidget {
       : super(key: key);
   @override
   _AssessmentListState createState() => _AssessmentListState(
-    tID: this.termID,
-    cID: this.courseID,
-    c: this.categoryID,
-    courseN: this.courseName,
+    termID: this.termID,
+    courseID: this.courseID,
+    categoryID: this.categoryID,
+    courseName: this.courseName,
   );
 }
 
@@ -441,7 +441,7 @@ class _AssessmentListState extends State<AssessmentList> {
 
 
   final SlidableController slidableController = new SlidableController();
-  _AssessmentListState({String tID, String cID, String c, String courseN});
+  _AssessmentListState({this.termID, this.categoryID, this.courseID, this.courseName});
 
 
 
@@ -477,6 +477,7 @@ class _AssessmentListState extends State<AssessmentList> {
                     size: 35,
                   ),
                   onTap: () async {
+                    //print("deleting assessment");
                     await assServ.deleteAssessment(element.id);
                   },
                 )

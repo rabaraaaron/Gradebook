@@ -1,12 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
-import 'package:gradebook/model/Course.dart';
-import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/model/User.dart';
-import 'package:provider/provider.dart';
-import 'user_service.dart';
 
 class AssessmentService {
   CollectionReference assessmentRef;
@@ -16,6 +10,7 @@ class AssessmentService {
 
   AssessmentService(String termID, courseID, categoryID) {
     this.catID = categoryID;
+    this.courseID = courseID;
     this.termID = termID;
 
     assessmentRef = FirebaseFirestore.instance
@@ -60,7 +55,9 @@ class AssessmentService {
   }
 
   Future<void> deleteAssessment(id) async {
-    await assessmentRef.doc(id).delete();
+
+    await assessmentRef.doc(id).delete().then((value) => print("Deleted assessment "))
+        .catchError((error) => print("Failed to delete assessment: $error"));
   }
   Future<void> updateAssessmentName(id, name) async {
     // print(id);
