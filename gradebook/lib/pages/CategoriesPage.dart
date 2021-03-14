@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gradebook/main.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
@@ -12,6 +14,8 @@ import 'package:gradebook/services/validator_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class CategoriesPageWrap extends StatefulWidget {
   Term term;
@@ -70,14 +74,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     CategoryService catServ = new CategoryService(term.termID, course.id);
-    RaisedButton addButton = RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-      color: Colors.blue,
-      child: Text(
-        "Add Item",
-        style: Theme.of(context).textTheme.headline6,
-      ),
-    );
+
 
     final List categories = Provider.of<List<Category>>(context);
     Widget listView;
@@ -85,7 +82,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     if(Provider.of<List<Category>>(context) != null){
       listView = ListView.separated(
           separatorBuilder: (context, index) => Divider(
-            color: Colors.white,
+            color: Theme.of(context).dividerColor,
             indent: 25.0,
             endIndent: 25.0,
           ),
@@ -458,35 +455,18 @@ class _AssessmentListState extends State<AssessmentList> {
               actionExtentRatio: .2,
               secondaryActions: <Widget>[
                 IconSlideAction(
-
                   color: Colors.blue,
                   caption: 'Add reminder',
                   closeOnTap: true,
                   icon: Icons.add_alert,
-
-                  // color: Colors.transparent,
-                  // closeOnTap: true,
-                  // iconWidget: Icon(
-                  //   Icons.add_alert,
-                  //   color: Theme.of(context).dividerColor,
-                  //   size: 35,
-                  // ),
-                  onTap: () => null,
+                  //TODO: Create UI for scheduling the reminder
+                  onTap: () => scheduleNotification(),
                 ),
                 IconSlideAction(
-
                   color: Colors.red,
                   closeOnTap: true,
                   caption: 'Delete',
                   icon: Icons.delete,
-
-                  // color: Colors.transparent,
-                  // closeOnTap: true,
-                  // iconWidget: Icon(
-                  //   Icons.delete,
-                  //   color: Theme.of(context).dividerColor,
-                  //   size: 35,
-                  // ),
                   onTap: () async {
                     await assServ.deleteAssessment(element.id);
                   },
@@ -562,7 +542,6 @@ class _AssessmentListState extends State<AssessmentList> {
                         ]
                     ),
                   ),
-
                 ],
               ),
             ));
@@ -570,6 +549,43 @@ class _AssessmentListState extends State<AssessmentList> {
     }
     return Column(children: entries);
   }
+
+  Future scheduleNotification() async {
+
+    tz.initializeTimeZones();
+
+
+    var scheduleNotificationDateTime =
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+
+    var androidDetails = AndroidNotificationDetails(
+      'channelID',
+      'Local Notifications',
+      'Scheduled alarm notification',
+      icon: 'icon',
+      largeIcon: DrawableResourceAndroidBitmap('icon'),
+      importance: Importance.high
+    );
+
+    var iOSDetails = IOSNotificationDetails();
+
+    var generalNotificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iOSDetails,
+    );
+
+    await localNotification.zonedSchedule(
+        0,
+        'Assignment Reminder',
+        'Do the specified assignment at the specified time!',
+        scheduleNotificationDateTime,
+        generalNotificationDetails,
+        uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
+
+  }
+
 }
 
 

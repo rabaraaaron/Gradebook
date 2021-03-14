@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/CategoriesPage.dart';
 import 'package:gradebook/pages/SettingsPage.dart';
@@ -16,10 +17,24 @@ import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:theme_provider/theme_provider.dart';
 
+FlutterLocalNotificationsPlugin localNotification;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  var initializeAndroid =
+    AndroidInitializationSettings('icon');
+
+  var initializeIOS = IOSInitializationSettings();
+
+  var initializationSettings = InitializationSettings(
+      android: initializeAndroid, iOS: initializeIOS);
+
+  localNotification = FlutterLocalNotificationsPlugin();
+
+  localNotification.initialize(initializationSettings);
+
   runApp(Gradebook());
 }
 
