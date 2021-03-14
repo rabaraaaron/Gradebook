@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
@@ -84,16 +85,21 @@ class _TermsPageState extends State<TermClassesPage> {
               actionExtentRatio: .2,
               secondaryActions: [
                 IconSlideAction(
+                  foregroundColor: Colors.transparent,
+                  closeOnTap: true,
                   iconWidget: Icon(
                     Icons.more_horiz,
                     color: Theme
                         .of(context)
                         .dividerColor,
+
                     size: 35,
                   ),
                   onTap: () => null,
                 ),
                 IconSlideAction(
+                  foregroundColor: Colors.transparent,
+                  closeOnTap: true,
                   iconWidget: Icon(
                     Icons.delete,
                     color: Theme
@@ -153,22 +159,25 @@ class _TermsPageState extends State<TermClassesPage> {
                       child: Column(
                         children: [
                           Container(
-                            //todo: need to make the grade letter changes dynamically changes depending the grade percentage coming from Grade()
-
                             child: SizedBox(
                               width: 50,
                               height: 50,
-                              child: Text(
-                                "${classes[index].getGradeLetter}",
-                                textScaleFactor: 2,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3,
+                              child: Center(
+                                child: Text(
+                                  "${classes[index].getGradeLetter}",
+                                  textScaleFactor: 2,
+                                  style: TextStyle(
+                                    color: Theme.of(context).dividerColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
+                            height: 20,
+                            width: 60,
                             child: Grade(classes[index], term.termID),
                           ),
                         ],
@@ -186,7 +195,6 @@ class _TermsPageState extends State<TermClassesPage> {
       listView = Container();
     }
 
-    //Random rand = new Random();
     return Scaffold(
       key: scaffoldKey,
       drawer: MenuDrawer(),

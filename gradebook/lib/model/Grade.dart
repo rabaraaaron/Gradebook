@@ -166,6 +166,13 @@ class _SubGradeState extends State<SubGrade> {
       // );
 
 
-      return Text(results.toString());
+      return Text(
+        results.toString(),
+        style: TextStyle(
+          color: Theme.of(context).dividerColor,
+          fontSize: 22.0,
+          fontWeight: FontWeight.w300,
+        ),
+      );
   }
 }

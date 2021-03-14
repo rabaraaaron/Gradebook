@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/main.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
@@ -15,6 +16,7 @@ import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class CategoriesPageWrap extends StatefulWidget {
@@ -131,6 +133,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       termID: term.termID,
                       courseID: course.id,
                       cat: categories[index],
+                      courseName: course.name,
                     ),
                 ),
               ),
@@ -328,24 +331,27 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
 class AssessmentTile extends StatefulWidget {
   String termID;
   String courseID;
+  String courseName;
   Category cat;
 
-  AssessmentTile({this.termID, this.courseID, this.cat});
+  AssessmentTile({this.termID, this.courseID, this.cat, this.courseName});
 
   @override
   _AssessmentTileState createState() =>
-      _AssessmentTileState(termID, courseID, cat);
+      _AssessmentTileState(termID, courseID, cat, courseName);
 }
 
 class _AssessmentTileState extends State<AssessmentTile> {
   String termID;
   String courseID;
   Category cat;
+  String courseName;
 
-  _AssessmentTileState(String tID, String cID, Category c) {
+  _AssessmentTileState(String tID, String cID, Category c, String courseN) {
     this.termID = tID;
     this.courseID = cID;
     this.cat = c;
+    this.courseName = courseN;
   }
 
   @override
@@ -405,6 +411,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
             termID: termID,
             courseID: courseID,
             categoryID: cat.id,
+            courseName: courseName,
           )
         ],
       ),
@@ -413,19 +420,28 @@ class _AssessmentTileState extends State<AssessmentTile> {
 }
 
 class AssessmentList extends StatefulWidget {
-  String termID, courseID, categoryID;
+  String termID, courseID, categoryID, courseName;
 
-  AssessmentList({Key key, this.termID, this.courseID, this.categoryID})
+  AssessmentList({Key key, this.termID, this.courseID, this.categoryID, this.courseName})
       : super(key: key);
   @override
-  _AssessmentListState createState() => _AssessmentListState();
+  _AssessmentListState createState() => _AssessmentListState(
+    tID: this.termID,
+    cID: this.courseID,
+    c: this.categoryID,
+    courseN: this.courseName,
+  );
 }
 
 class _AssessmentListState extends State<AssessmentList> {
 
-  String termID, courseID, categoryID;
+
+  String termID, courseID, categoryID, courseName;
+
+
+
   final SlidableController slidableController = new SlidableController();
-  _AssessmentListState({this.termID, this.courseID, this.categoryID});
+  _AssessmentListState({String tID, String cID, String c, String courseN});
 
 
 
@@ -450,7 +466,7 @@ class _AssessmentListState extends State<AssessmentList> {
                     color: Theme.of(context).dividerColor,
                     size: 35,
                   ),
-                  onTap: () => scheduleNotification(),
+                  onTap: () => scheduleNotification(courseName, element.name),
                 ),
                 IconSlideAction(
                   color: Colors.transparent,
@@ -543,42 +559,133 @@ class _AssessmentListState extends State<AssessmentList> {
     return Column(children: entries);
   }
 
-  Future scheduleNotification() async {
+  Future scheduleNotification(String courseID, String assignmentName) async {
 
+    print('local notification scheduler reached' + courseID.toString());
     tz.initializeTimeZones();
 
-    var scheduleNotificationDateTime =
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
 
-    var androidDetails = AndroidNotificationDetails(
-      'channelID',
-      'Local Notifications',
-      'Scheduled alarm notification',
-      icon: 'icon',
-      largeIcon: DrawableResourceAndroidBitmap('icon'),
-      importance: Importance.high
+    DateTime d;
+    TextStyle cancelAndDone = TextStyle(
+        fontSize: 25.0,
+        color: Colors.white,
+        fontFamily: GoogleFonts.quicksand().toStringShort(),
+        fontWeight: FontWeight.w300);
+    TextStyle itemStyle = TextStyle(
+        fontSize: 25.0,
+        fontFamily: GoogleFonts.quicksand().toStringShort(),
+        color: Colors.black,
+        fontWeight: FontWeight.w400);
+
+    DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        DateTime.now().hour,
+        DateTime.now().minute + 1,
+      ),
+      theme: DatePickerTheme(
+        headerColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
+        cancelStyle: cancelAndDone,
+        doneStyle: cancelAndDone,
+        itemStyle: itemStyle,
+      ),
+      onConfirm: (date) async {
+        d = date;
+
+        var scheduleNotificationDateTime =
+        // tz.TZDateTime.local(d.year, d.month, d.day, d.hour, d.minute);
+        tz.TZDateTime.from(d, tz.local);
+
+        var androidDetails = AndroidNotificationDetails(
+            'channelID',
+            'Local Notifications',
+            'Scheduled alarm notification',
+            icon: 'icon',
+            largeIcon: DrawableResourceAndroidBitmap('icon'),
+            importance: Importance.high
+        );
+
+        var iOSDetails = IOSNotificationDetails();
+
+        var generalNotificationDetails = NotificationDetails(
+          android: androidDetails,
+          iOS: iOSDetails,
+        );
+
+
+        String message1stHalf = 'Do ' + assignmentName;
+
+        if(!d.toLocal().isBefore(DateTime.now())){
+          print("Passed isAfter");
+          print('d: ' + d.year.toString() + ' ' + d.month.toString() + ' ' + d.day.toString() + ' '
+              + d.hour.toString() + ' ' + d.minute.toString() + '\n');
+          print(DateTime.now().toString());
+          await localNotification.zonedSchedule(
+              0,
+              'Assignment Reminder',
+              message1stHalf,
+              scheduleNotificationDateTime,
+              generalNotificationDetails,
+              uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+              androidAllowWhileIdle: true);
+        }
+
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ReminderConfirmation(assignmentName, d);
+            },
+        );
+      }
     );
-
-    var iOSDetails = IOSNotificationDetails();
-
-    var generalNotificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iOSDetails,
-    );
-
-    await localNotification.zonedSchedule(
-        0,
-        'Assignment Reminder',
-        'Do the specified assignment at the specified time!',
-        scheduleNotificationDateTime,
-        generalNotificationDetails,
-        uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
 
   }
 
 }
+
+class ReminderConfirmation extends StatelessWidget {
+  String assignmentName;
+  DateTime d;
+
+  ReminderConfirmation(String assignment, DateTime d) {
+    this.assignmentName = assignment;
+    this.d = d;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(
+          "Reminder Confirmation",
+          style: TextStyle(
+            fontSize: 25.0,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Divider(
+          color: Theme.of(context).dividerColor,
+        ),
+        Text(
+          '$assignmentName reminder was set for:\n\n'
+              '${d.toString()}',
+          style: TextStyle(
+            fontWeight: FontWeight.w200,
+            fontSize: 20.0
+          ),
+        ),
+        SizedBox(height: 20),
+      ]),
+    );
+  }
+}
+
 
 
 Widget newAssessmentPopUp(
