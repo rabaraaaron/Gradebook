@@ -241,7 +241,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
 
               child: Text(
                 "${categoriesStrings[i]}",
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             value: categoriesStrings[i],
@@ -674,10 +674,10 @@ class ReminderConfirmation extends StatelessWidget {
           color: Theme.of(context).dividerColor,
         ),
         Text(
-          '$assignmentName reminder was set for:\n\n'
+          '\n$assignmentName reminder was set for:\n\n'
               '${d.toString()}',
           style: TextStyle(
-            fontWeight: FontWeight.w200,
+            fontWeight: FontWeight.w300,
             fontSize: 20.0
           ),
         ),
