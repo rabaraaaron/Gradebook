@@ -85,119 +85,127 @@ class _TermsPageState extends State<TermClassesPage> {
         ),
         itemCount: classes.length,
         itemBuilder: (context, index) {
-          Grade(classes[index], term.termID);
-          print(classes[index].gradePercent);
+          // Grade(classes[index], term.termID);
+          // print(classes[index].gradePercent);
           classes[index].updateGradeLetter(classes[index].gradePercent);
-          return Padding(
-            padding: EdgeInsets.all(0.0),
-            child: Slidable(
-              controller: slidableController,
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: .2,
-              secondaryActions: [
-                IconSlideAction(
-                  closeOnTap: true,
-                  color: Colors.transparent,
-                  iconWidget: Icon(
-                    Icons.more_horiz,
-                    color: Theme
-                        .of(context)
-                        .dividerColor,
+          return Column(
+            children: [
+              // Grade(classes[index], term.termID),
+              Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Slidable(
+                  controller: slidableController,
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: .2,
+                  secondaryActions: [
+                    IconSlideAction(
+                      foregroundColor: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.more_horiz,
+                        color: Theme
+                            .of(context)
+                            .dividerColor,
 
-                    size: 35,
-                  ),
-                  onTap: () => null,
-                ),
-                IconSlideAction(
-                  closeOnTap: true,
-                  color: Colors.transparent,
-                  iconWidget: Icon(
-                    Icons.delete,
-                    color: Theme
-                        .of(context)
-                        .dividerColor,
-                    size: 35,
-                  ),
-                  onTap: () async {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DeleteConfirmation(term.termID, classes, index);
+                        size: 35,
+                      ),
+                      onTap: () => null,
+                    ),
+                    IconSlideAction(
+                      foregroundColor: Colors.transparent,
+                      closeOnTap: true,
+                      iconWidget: Icon(
+                        Icons.delete,
+                        color: Theme
+                            .of(context)
+                            .dividerColor,
+                        size: 35,
+                      ),
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DeleteConfirmation(term.termID, classes, index);
+                          },
+                        );
                       },
-                    );
-                  },
-                )
-              ],
-              child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Icon(
-                        Icons.computer,
-                        size: 50,
-                      ),
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CategoriesPageWrap(
-                                          term: term, course: classes[index])));
-                        },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text(
-                            "${classes[index].name}",
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .headline4,
+                    )
+                  ],
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Icon(
+                            Icons.computer,
+                            size: 50,
                           ),
+                          padding: EdgeInsets.all(10.0),
                         ),
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Center(
-                                child: Text(
-                                  "${classes[index].getGradeLetter}",
-                                  textScaleFactor: 2,
-                                  style: TextStyle(
-                                    color: Theme.of(context).dividerColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15.0,
-                                  ),
-                                ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CategoriesPageWrap(
+                                              term: term, course: classes[index])));
+                            },
+                            child: new Padding(
+                              padding: new EdgeInsets.all(20.0),
+                              child: Text(
+                                "${classes[index].name}",
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline4,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                            width: 60,
-                            child: Grade(classes[index], term.termID),
+                        ),
+                        Container(
+                          child: Column(
+                            children: [
+                              Container(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text("A",
+                                      // "${classes[index].getGradeLetter}",
+                                      textScaleFactor: 2,
+                                      style: TextStyle(
+                                        color: Theme.of(context).dividerColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                                width: 60,
+                                child: Text( "1"
+                                    // "${classes[index].gradePercent}"
+                                ),
+
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           );
 
         }
@@ -277,13 +285,12 @@ class newClassPopUp extends StatefulWidget {
 }
 
 class _newClassPopUpState extends State<newClassPopUp> {
-  static String termID;
+  String termID;
 
   _newClassPopUpState(BuildContext c, List<Course> t, String tID) {
-    termID = tID;
+    this.termID = tID;
   }
 
-  CourseService courseServ = new CourseService(termID);
 
   final classTitleController = TextEditingController();
   final creditHoursController = TextEditingController();
@@ -362,7 +369,7 @@ class _newClassPopUpState extends State<newClassPopUp> {
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(13.0)))),
                     onPressed: () async {
-                      await courseServ.addCourse(classTitleController.text,
+                      await CourseService(termID).addCourse(classTitleController.text,
                           creditHoursController.text);
                       if (int.parse(creditHoursController.text) is int) {
                         print(creditHoursController.text);
