@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/Assessment.dart';
+import 'package:gradebook/services/category_service.dart';
 
 class AssessmentService {
   CollectionReference assessmentRef;
@@ -33,6 +34,7 @@ class AssessmentService {
       })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
+      await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
   Stream<List<Assessment>> get assessments {
@@ -45,7 +47,7 @@ class AssessmentService {
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
       var perc = yp/tp;
-      //print ("HERERERERE!" + doc.data().toString() + " perc = " + perc.toString());
+
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id, catID: catID, courseID: courseID, termID: termID

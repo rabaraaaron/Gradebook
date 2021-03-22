@@ -81,7 +81,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     final List categories = Provider.of<List<Category>>(context);
     Widget listView;
 
-    if(Provider.of<List<Category>>(context) != null){
+    if(categories != null){
       listView = ListView.separated(
           separatorBuilder: (context, index) => Divider(
             color: Theme.of(context).dividerColor,
@@ -359,15 +359,18 @@ class _AssessmentTileState extends State<AssessmentTile> {
     AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
     final name = TextEditingController();
     final assessments = Provider.of<List<Assessment>>(context);
-    double totalPoints = 0;
-    double yourPoints = 0;
+    double totalPoints = cat.total;
+    double yourPoints = cat.earned;
     if(Provider.of<List<Assessment>>(context) != null) {
-      for (int i = 0; i < assessments.length; i++) {
-        totalPoints += assessments[i].totalPoints;
-        yourPoints += assessments[i].yourPoints;
-      }
-    }
+      // for (int i = 0; i < assessments.length; i++) {
+      //   totalPoints += assessments[i].totalPoints;
+      //   yourPoints += assessments[i].yourPoints;
+      // }
 
+    }
+    print(cat.categoryName);
+    print(cat.earned);
+    print(cat.total);
     return Container(
       child: ExpansionTile(
         title: Row(
@@ -388,7 +391,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
         children: [
           Center(
             child: Text(
-              "$yourPoints" + "/" + "$totalPoints",
+               "$yourPoints" + "/" + "$totalPoints",
               style: Theme.of(context).textTheme.headline4,
             ),
           ),
@@ -400,8 +403,8 @@ class _AssessmentTileState extends State<AssessmentTile> {
               onPressed: () async {
                 await showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      newAssessmentPopUp(context, termID, courseID, cat.id),
+                  builder: (BuildContext context){
+                   return   newAssessmentPopUp(context, termID, courseID, cat.id);}
                 );
                 setState(() { });
               },
@@ -429,19 +432,14 @@ class AssessmentList extends StatefulWidget {
     termID: this.termID,
     courseID: this.courseID,
     categoryID: this.categoryID,
-    courseName: this.courseName,
+    // courseName: this.courseName,
   );
 }
-
 class _AssessmentListState extends State<AssessmentList> {
 
-
-  String termID, courseID, categoryID, courseName;
-
-
-
+  String termID, courseID, categoryID;
   final SlidableController slidableController = new SlidableController();
-  _AssessmentListState({this.termID, this.categoryID, this.courseID, this.courseName});
+  _AssessmentListState({this.termID, this.courseID, this.categoryID});
 
 
 
@@ -450,115 +448,188 @@ class _AssessmentListState extends State<AssessmentList> {
     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
     final assessments = Provider.of<List<Assessment>>(context);
     List<Widget> entries = [];
-    if (Provider.of<List<Assessment>>(context) != null) {
+    if (assessments != null)
       assessments.forEach((element) {
-        entries.add(
-            Slidable(
-              controller: slidableController,
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: .2,
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  color: Colors.transparent,
-                  closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.add_alert,
-                    color: Theme.of(context).dividerColor,
-                    size: 35,
-                  ),
-                  onTap: () => scheduleNotification(courseName, element.name),
-                ),
-                IconSlideAction(
-                  color: Colors.transparent,
-                  closeOnTap: true,
-                  iconWidget: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).dividerColor,
-                    size: 35,
-                  ),
-                  onTap: () async {
-                    //print("deleting assessment");
-                    await assServ.deleteAssessment(element.id);
-                  },
-                )
-              ],
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 10,),
-                  Expanded(
-                      flex: 8,
-                      child: TextFormField(
-                        initialValue: element.name,
-                        style: Theme.of(context).textTheme.headline5,
-                        inputFormatters: [LengthLimitingTextInputFormatter(20)],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        onFieldSubmitted: (itemName) {
-                          //TODO: Push changed name to database
-                          print(itemName);
-                        },
-                      )
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: "${element.yourPoints}",
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(4)
-                              ],
-                              style: Theme.of(context).textTheme.headline5,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
-                              onFieldSubmitted: (yourScore) {
-                                if (double.tryParse(yourScore) != null) {
-                                  print("Good change");
-                                  //TODO: Push change to database
-                                }
-                                setState(() {
-                                  //This is so that incorrect inputs that are not
-                                  //pushed to the server will revert to the previous
-                                  //version
-                                });
-                                print(yourScore);
-                              },
-                            ),
-                          ),
-                          Text("/ ", style: Theme.of(context).textTheme.headline5,),
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: "${element.totalPoints}",
-                              inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                              style: Theme.of(context).textTheme.headline5,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
-                              onFieldSubmitted: (totalPoints) {
-                                if (double.tryParse(totalPoints) != null) {
-                                  print("Good change");
-                                  //TODO: Push change to database
-                                }
-                                setState(() {
-                                  //This is so that incorrect inputs that are not
-                                  //pushed to the server will revert to the previous
-                                  //version
-                                });
-                              },
-                            ),
-                          )
-                        ]
-                    ),
-                  ),
-                ],
+        entries.add(Slidable(
+
+          controller: slidableController,
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: .2,
+          secondaryActions: <Widget>[
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.more_vert,
+                color: Colors.white,
+                size: 35,
               ),
-            ));
+              onTap: () => null,
+            ),
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.delete,
+                color: Colors.white,
+                size: 35,
+              ),
+              onTap: ()async {
+                await assServ.deleteAssessment(element.id);
+              },
+            )
+          ],
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 30,),
+              Expanded(
+                  child: Text(
+                    element.name,
+                    style: Theme.of(context).textTheme.headline6,
+                  )),
+              Text(
+                "${element.yourPoints} / ${element.totalPoints}",
+                style: Theme.of(context).textTheme.headline6,
+              )
+            ],
+          ),
+        ));
       });
-    }
+
     return Column(children: entries);
   }
+
+
+// class _AssessmentListState extends State<AssessmentList> {
+//
+//
+//   String termID, courseID, categoryID, courseName;
+//
+//
+//
+//   final SlidableController slidableController = new SlidableController();
+//   _AssessmentListState({this.termID, this.categoryID, this.courseID, this.courseName});
+//
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
+//    List assessments = Provider.of<List<Assessment>>(context);
+//     List<Widget> entries = [];
+//     if (Provider.of<List<Assessment>>(context) != null)  {
+//       assessments.forEach((element) {
+//         print(element);
+//         entries.add(
+//             Slidable(
+//               controller: slidableController,
+//               actionPane: SlidableDrawerActionPane(),
+//               actionExtentRatio: .2,
+//               secondaryActions: <Widget>[
+//                 IconSlideAction(
+//                   color: Colors.transparent,
+//                   closeOnTap: true,
+//                   iconWidget: Icon(
+//                     Icons.add_alert,
+//                     color: Theme.of(context).dividerColor,
+//                     size: 35,
+//                   ),
+//                   onTap: () => scheduleNotification(courseName, element.name),
+//                 ),
+//                 IconSlideAction(
+//                   color: Colors.transparent,
+//                   closeOnTap: true,
+//                   iconWidget: Icon(
+//                     Icons.delete,
+//                     color: Theme.of(context).dividerColor,
+//                     size: 35,
+//                   ),
+//                   onTap: () async {
+//
+//                     await assServ.deleteAssessment(element.id);
+//                   },
+//                 )
+//               ],
+//               child: Row(
+//                 // mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   SizedBox(width: 10,),
+//                   Expanded(
+//                       flex: 8,
+//                       child: TextFormField(
+//                         initialValue: element.name,
+//                         style: Theme.of(context).textTheme.headline5,
+//                         inputFormatters: [LengthLimitingTextInputFormatter(20)],
+//                         decoration: InputDecoration(
+//                           border: InputBorder.none,
+//                         ),
+//                         onFieldSubmitted: (itemName) {
+//                           //TODO: Push changed name to database
+//                           print(itemName);
+//                         },
+//                       )
+//                   ),
+//                   Expanded(
+//                     flex: 4,
+//                     child: Row(
+//                         children: [
+//                           Expanded(
+//                             child: TextFormField(
+//                               initialValue: "${element.yourPoints}",
+//                               inputFormatters: [
+//                                 LengthLimitingTextInputFormatter(4)
+//                               ],
+//                               style: Theme.of(context).textTheme.headline5,
+//                               keyboardType: TextInputType.numberWithOptions(
+//                                   signed: true, decimal: true),
+//                               onFieldSubmitted: (yourScore) {
+//                                 if (double.tryParse(yourScore) != null) {
+//                                   print("Good change");
+//                                   //TODO: Push change to database
+//                                 }
+//                                 setState(() {
+//                                   //This is so that incorrect inputs that are not
+//                                   //pushed to the server will revert to the previous
+//                                   //version
+//                                 });
+//                                 print(yourScore);
+//                               },
+//                             ),
+//                           ),
+//                           Text("/ ", style: Theme.of(context).textTheme.headline5,),
+//                           Expanded(
+//                             child: TextFormField(
+//                               initialValue: "${element.totalPoints}",
+//                               inputFormatters: [LengthLimitingTextInputFormatter(4)],
+//                               style: Theme.of(context).textTheme.headline5,
+//                               keyboardType: TextInputType.numberWithOptions(
+//                                   signed: true, decimal: true),
+//                               onFieldSubmitted: (totalPoints) {
+//                                 if (double.tryParse(totalPoints) != null) {
+//                                   print("Good change");
+//                                   //TODO: Push change to database
+//                                 }
+//                                 setState(() {
+//                                   //This is so that incorrect inputs that are not
+//                                   //pushed to the server will revert to the previous
+//                                   //version
+//                                 });
+//                               },
+//                             ),
+//                           )
+//                         ]
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ));
+//       });
+//     }
+//
+//     return Column(children: entries);
+
+
 
   Future scheduleNotification(String courseID, String assignmentName) async {
 
@@ -762,6 +833,7 @@ Widget newAssessmentPopUp(
                             yourPoints.text != ""){
                           await assServ.addAssessment(
                               name.text, totalPoints.text, yourPoints.text);
+                          await CategoryService(termID, courseID).calculateGrade(categoryID);
                           Navigator.pop(context);
                         } else if(name.text == ""){
                           //TODO: alert the user of invalid input
@@ -770,6 +842,8 @@ Widget newAssessmentPopUp(
                               name.text, "0", "0");
                           Navigator.pop(context);
                         }
+
+
                         },
                       child: Text(
                         "Add",
