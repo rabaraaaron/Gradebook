@@ -61,7 +61,7 @@ class CategoryService {
       listOfCategories = v;
       return v;
     } catch(err){
-      print("Error with getting 'DropLowest' field value: " + err.toString() );
+      print("Error: " + err.toString() );
       var v = snapshot.docs.map<Category>((doc) {
         return Category(
             categoryName: doc.get('name') ?? "",

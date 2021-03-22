@@ -117,7 +117,7 @@ class _SubGradeState extends State<SubGrade> {
       double results = 0.0;
       double sumOfWeights = 0.0;
 
-      if (catList.isNotEmpty && aList != null) {
+      if (catList.isNotEmpty && aList != null && aList.isNotEmpty) {
         for (Category category in catList) {
           category.categoryItems = new List<Assessment>();
 

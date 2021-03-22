@@ -31,7 +31,7 @@ class AssessmentService {
         'totalPoints': totalPoints,
         'yourPoints' : yourPoints
       })
-          .then((value) => print("Course Added"))
+          .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
           .catchError((error) => print("Failed to add course: $error"));
   }
 
@@ -45,7 +45,6 @@ class AssessmentService {
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
       var perc = yp/tp;
-      //print ("HERERERERE!" + doc.data().toString() + " perc = " + perc.toString());
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",yourPoints: yp ?? "", id: doc.id, catID: catID, courseID: courseID, termID: termID
