@@ -109,6 +109,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         size: 35,
                       ),
                       onTap: () => null,
+                      //TODO: Add alert box for the category settings
                     ),
                     IconSlideAction(
                       color: Colors.transparent,
@@ -460,18 +461,18 @@ class _AssessmentListState extends State<AssessmentList> {
               color: Colors.transparent,
               closeOnTap: true,
               iconWidget: Icon(
-                Icons.more_vert,
-                color: Colors.white,
+                Icons.add_alert,
+                color: Theme.of(context).dividerColor,
                 size: 35,
               ),
-              onTap: () => null,
+              onTap: () => scheduleNotification(courseID, element.name),
             ),
             IconSlideAction(
               color: Colors.transparent,
               closeOnTap: true,
               iconWidget: Icon(
                 Icons.delete,
-                color: Colors.white,
+                color: Theme.of(context).dividerColor,
                 size: 35,
               ),
               onTap: ()async {
@@ -565,7 +566,6 @@ class _AssessmentListState extends State<AssessmentList> {
 //                           border: InputBorder.none,
 //                         ),
 //                         onFieldSubmitted: (itemName) {
-//                           //TODO: Push changed name to database
 //                           print(itemName);
 //                         },
 //                       )
@@ -586,7 +586,6 @@ class _AssessmentListState extends State<AssessmentList> {
 //                               onFieldSubmitted: (yourScore) {
 //                                 if (double.tryParse(yourScore) != null) {
 //                                   print("Good change");
-//                                   //TODO: Push change to database
 //                                 }
 //                                 setState(() {
 //                                   //This is so that incorrect inputs that are not
@@ -608,7 +607,6 @@ class _AssessmentListState extends State<AssessmentList> {
 //                               onFieldSubmitted: (totalPoints) {
 //                                 if (double.tryParse(totalPoints) != null) {
 //                                   print("Good change");
-//                                   //TODO: Push change to database
 //                                 }
 //                                 setState(() {
 //                                   //This is so that incorrect inputs that are not
@@ -670,7 +668,6 @@ class _AssessmentListState extends State<AssessmentList> {
         d = date;
 
         var scheduleNotificationDateTime =
-        // tz.TZDateTime.local(d.year, d.month, d.day, d.hour, d.minute);
         tz.TZDateTime.from(d, tz.local);
 
         var androidDetails = AndroidNotificationDetails(
@@ -690,13 +687,11 @@ class _AssessmentListState extends State<AssessmentList> {
         );
 
 
-        String message1stHalf = 'Do ' + assignmentName;
+        String message1stHalf = 'Do ' + assignmentName + 'from ' + courseID;
+        //TODO: Get the name of the course
 
         if(!d.toLocal().isBefore(DateTime.now())){
-          print("Passed isAfter");
-          print('d: ' + d.year.toString() + ' ' + d.month.toString() + ' ' + d.day.toString() + ' '
-              + d.hour.toString() + ' ' + d.minute.toString() + '\n');
-          print(DateTime.now().toString());
+
           await localNotification.zonedSchedule(
               0,
               'Assignment Reminder',
@@ -836,7 +831,6 @@ Widget newAssessmentPopUp(
                           await CategoryService(termID, courseID).calculateGrade(categoryID);
                           Navigator.pop(context);
                         } else if(name.text == ""){
-                          //TODO: alert the user of invalid input
                         } else{
                           await assServ.addAssessment(
                               name.text, "0", "0");
