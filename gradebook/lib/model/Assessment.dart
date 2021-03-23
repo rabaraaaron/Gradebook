@@ -6,8 +6,8 @@ import 'package:gradebook/services/assessment_service.dart';
 class Assessment with ChangeNotifier{
 
   String name;
-  final double totalPoints;
-  final double yourPoints;
+  double totalPoints;
+  double yourPoints;
   final String id;
   final String catID;
   final String termID;

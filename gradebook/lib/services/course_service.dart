@@ -26,7 +26,7 @@ class CourseService {
     bool duplicate;
     await courseRef
         .where('name', isEqualTo: name)
-        .where('credits', isEqualTo: credits)
+        .where('credits', isEqualTo: credits.toString())
         .get()
         .then((value) {
       duplicate = value.docs.isNotEmpty;
@@ -37,17 +37,17 @@ class CourseService {
       await courseRef
           .add({
             'name': name,
-            'credits': credits,
-            'gradePercent' : 0.0,
+            'credits': int.parse(credits),
+            'gradePercent' : 0,
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
   }
 
-  Future<void> updateGradePercent(courseID, gradePercent) async{
-    await courseRef.doc(courseID).update({'gradePercent':gradePercent});
-
-  }
+  // Future<void> updateGradePercent(courseID, gradePercent) async{
+  //   await courseRef.doc(courseID).update({'gradePercent':gradePercent});
+  //
+  // }
 
   Stream<List<Course>> get courses {
     return courseRef.snapshots().map(_courseFromSnap);
@@ -60,20 +60,20 @@ class CourseService {
      var v = snapshot.docs.map<Course>((doc) {
 
       return Course(name: doc.get('name'),
-                    credits: doc.get('credits') ?? "",
+                    credits: doc.get('credits').toString() ?? "0",
                     id: doc.id,
-                    gradePercent: doc.get('gradePercent') ?? 0.0);
-                    }).toList();
+                    gradePercent: doc.get('gradePercent').toString() ?? "0",
+                    );}).toList();
      return v;
 
     } catch (err){
-      print(err.toString());
+      print("Error adding course form courseService.dart, catch block error is: "+err.toString());
 
       var v2 = snapshot.docs.map<Course>((doc) {
       return Course( name: doc.get('name'),
                     credits: doc.get('credits') ?? "",
                     id: doc.id,
-                    gradePercent: 0.0);
+                    gradePercent: "0");
                     }).toList();
       return v2;
     }

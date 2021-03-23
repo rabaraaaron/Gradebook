@@ -15,18 +15,18 @@ class Course with ChangeNotifier {
   final int year;
   final String id;
   double _sumOfCategoriesWeights = 0.0;
-  double gradePercent;
+  String gradePercent;
 
 
 
-  double get sumOfCategoriesWeights {
-    for(var category in categories){
-      _sumOfCategoriesWeights += category.categoryWeight;
-    }
-
-    return _sumOfCategoriesWeights;
-
-  }
+  // double get sumOfCategoriesWeights {
+  //   for(var category in categories){
+  //     _sumOfCategoriesWeights += category.categoryWeight;
+  //   }
+  //
+  //   return _sumOfCategoriesWeights;
+  //
+  // }
 
   Course({this.name, this.categories, this.term, this.year, this.credits, this.id, this.gradePercent});
 
@@ -45,36 +45,44 @@ class Course with ChangeNotifier {
   }
 
 
-  void updateGradeLetter(double grade) {
+  // void updateGradeLetter(double grade) {
+  //
+  //
+  //   if(grade > 90){
+  //     print("this print is from course.dart line 52 : updating grade to A");
+  //     _gradeLetter = "A";
+  //     //notifyListeners();
+  //     return;
+  //   }
+  //   if(grade > 80){
+  //     print("this print is from course.dart line 58 :updating grade to B");
+  //     _gradeLetter = "B";
+  //     //notifyListeners();
+  //     return;
+  //   }
+  //   if(grade > 70){
+  //     _gradeLetter = "C";
+  //     //notifyListeners();
+  //     return;
+  //   }
+  //   if(grade > 60){
+  //     _gradeLetter = "D";
+  //     //notifyListeners();
+  //     return;
+  //   } else {
+  //     _gradeLetter = "F";
+  //     //notifyListeners();
+  //     return;
+  //   }
+  //
+  // }
 
-
-    if(grade > 90){
-      print("this print is from course.dart line 52 : updating grade to A");
-      _gradeLetter = "A";
-      //notifyListeners();
-      return;
-    }
-    if(grade > 80){
-      print("this print is from course.dart line 58 :updating grade to B");
-      _gradeLetter = "B";
-      //notifyListeners();
-      return;
-    }
-    if(grade > 70){
-      _gradeLetter = "C";
-      //notifyListeners();
-      return;
-    }
-    if(grade > 60){
-      _gradeLetter = "D";
-      //notifyListeners();
-      return;
-    } else {
-      _gradeLetter = "F";
-      //notifyListeners();
-      return;
-    }
-
+  String getLetterGrade(){
+    var gPercent = double.parse(gradePercent);
+    if(gPercent > 90){ return"A"; }
+    if(gPercent > 80){ return"B"; }
+    if(gPercent > 70){ return"C"; }
+    if(gPercent > 60){ return"D"; } else {return "F";}
   }
 
 
