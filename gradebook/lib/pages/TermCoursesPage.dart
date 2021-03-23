@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:gradebook/utils/IconOptions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
@@ -47,10 +49,10 @@ class TermClassesPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermClassesPage> {
-  //final List<String> classes = ["CS 371", "CS 499", "GEOS 201", "MILS 401"];
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
   Term term;
+
 
   @override
   _TermsPageState(Term tID) {
@@ -60,6 +62,15 @@ class _TermsPageState extends State<TermClassesPage> {
   @override
   Widget build(BuildContext context) {
     //final course = Provider.of<Course>(context);
+
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    Future<int> _counter;
+    Icon icon;
+
+    Future<void> changeIcon() async {
+      final SharedPreferences prefs = await _prefs;
+
+    }
 
     final classes = Provider.of<List<Course>>(context);
     Widget listView;
