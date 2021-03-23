@@ -107,6 +107,7 @@ class CategoryService {
     return listOfCategories;
   }
 
+
   //   return categoryRef.categories((data) {
   //     print(data);
   //     for(Category cat in data){
