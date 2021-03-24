@@ -19,6 +19,8 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import 'newAssessmentPopUp.dart';
+
 class CategoriesPageWrap extends StatefulWidget {
   Term term;
   Course course;
@@ -413,7 +415,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
                 await showDialog(
                   context: context,
                   builder: (BuildContext context){
-                   return   newAssessmentPopUp(context, termID, courseID, cat.id);}
+                   return   nAssessmentPopUp(context, termID, courseID, cat.id);}
                 );
                 setState(() { });
               },
@@ -459,6 +461,18 @@ class _AssessmentListState extends State<AssessmentList> {
     List<Widget> entries = [];
     if (assessments != null)
       assessments.forEach((element) {
+        Text item;
+        if(element.dropped == true){
+          item = Text(
+            element.name + " (dropped)",
+            style: Theme.of(context).textTheme.headline6,
+          );
+        } else{
+          item = Text(
+            element.name,
+            style: Theme.of(context).textTheme.headline6,
+          );
+        }
         entries.add(Slidable(
 
           controller: slidableController,
@@ -479,6 +493,15 @@ class _AssessmentListState extends State<AssessmentList> {
               color: Colors.transparent,
               closeOnTap: true,
               iconWidget: Icon(
+                Icons.settings,
+                color: Theme.of(context).dividerColor,
+                size: 35,
+              ),
+            ),
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
                 Icons.delete,
                 color: Theme.of(context).dividerColor,
                 size: 35,
@@ -493,10 +516,8 @@ class _AssessmentListState extends State<AssessmentList> {
             children: [
               SizedBox(width: 30,),
               Expanded(
-                  child: Text(
-                    element.name,
-                    style: Theme.of(context).textTheme.headline6,
-                  )),
+                  child: item
+              ),
               Text(
                 "${element.yourPoints} / ${element.totalPoints}",
                 style: Theme.of(context).textTheme.headline6,
@@ -763,105 +784,6 @@ class ReminderConfirmation extends StatelessWidget {
 
 
 
-Widget newAssessmentPopUp(
-    BuildContext context, String termID, courseID, categoryID) {
-  AssessmentService assServ =
-      new AssessmentService(termID, courseID, categoryID);
-
-  final name = TextEditingController();
-  final totalPoints = TextEditingController();
-  final yourPoints = TextEditingController();
-
-  List<DropdownMenuItem> listOfYears = [];
-  for (var i = 2015; i <= DateTime.now().year; i++) {
-    listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
-  }
-
-  FocusScopeNode focusScopeNode = FocusScopeNode();
-  void handleSubmitted(){
-    focusScopeNode.nextFocus();
-  }
-
-  return AlertDialog(
-      content: SizedBox(
-        child: FocusScope(
-          node: focusScopeNode,
-          child: Column(children: [
-            Text(
-              "Add new Item",
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Divider(color: Theme.of(context).dividerColor,),
-            TextFormField(
-            controller: name,
-            inputFormatters: [LengthLimitingTextInputFormatter(20)],
-            onEditingComplete: handleSubmitted,
-            decoration: const InputDecoration(
-              hintText: "ex Quiz 1",
-              labelText: 'Assessment Title',
-            ),
-          ),
-            TextFormField(
-              controller: totalPoints,
-              inputFormatters: [LengthLimitingTextInputFormatter(4)],
-              onEditingComplete: handleSubmitted,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: "ex 100",
-                labelText: 'Total Points',
-              ),
-            ),
-            TextFormField(
-              controller: yourPoints,
-              inputFormatters: [LengthLimitingTextInputFormatter(4)],
-              onEditingComplete: handleSubmitted,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: "ex 89.8",
-                labelText: 'Points Earned',
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Expanded(
-              child: SizedBox(
-                  width: 300,
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13.0),
-                      ),
-                      onPressed: () async {
-                        if(name.text != "" && totalPoints.text != "" &&
-                            yourPoints.text != ""){
-                          await assServ.addAssessment(
-                              name.text, totalPoints.text, yourPoints.text);
-                          //await CategoryService(termID, courseID).calculateGrade(categoryID);
-                          Navigator.pop(context);
-                        } else if(name.text == ""){
-                        } else{
-                          await assServ.addAssessment(
-                              name.text, "0", "0");
-                          Navigator.pop(context);
-                        }
-
-
-                        },
-                      child: Text(
-                        "Add",
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                    color: Theme.of(context).primaryColor,
-                  )
-              ),
-          ),
-        ]),
-        ),
-        width: 150,
-        height: 285,
-      )
-  );
-}
 
 class DeleteConfirmation extends StatelessWidget{
   CategoryService catServ;
