@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/User.dart';
-import 'package:gradebook/pages/CategoriesPage.dart';
+import 'file:///C:/Users/rabar/OneDrive/Desktop/499/grade-book/gradebook/lib/pages/Category/CategoryPage.dart';
+import 'package:gradebook/pages/Courses/CoursePage.dart';
 import 'package:gradebook/pages/SettingsPage.dart';
 import 'package:gradebook/pages/UpcomingAssignmentsPage.dart';
 import 'package:gradebook/pages/WelcomePage.dart';
@@ -10,8 +11,7 @@ import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/pages/LoginPage.dart';
 import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gradebook/pages/TermsPage.dart';
-import 'package:gradebook/pages/TermCoursesPage.dart';
+import 'file:///C:/Users/rabar/OneDrive/Desktop/499/grade-book/gradebook/lib/pages/Term/TermsPage.dart';
 import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:provider/provider.dart';
@@ -116,8 +116,8 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/Login': (context) => LoginPage(),
               '/Sign_up': (context) => SignUpPage(),
               '/Terms': (context) => TermsPage(),
-              '/Home': (context) => TermClassesPage(),
-              '/Categories': (context) => CategoriesPageWrap(),
+              '/Home': (context) => TermCoursePage(),
+              '/Categories': (context) => CategoryPageWrap(),
               '/Welcome': (context) => WelcomePage(),
               '/resetPassword': (context) => ResetPassword(),
               '/Settings': (context) => SettingsPage(),

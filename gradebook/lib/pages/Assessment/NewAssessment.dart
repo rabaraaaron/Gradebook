@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:gradebook/services/assessment_service.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-class nAssessmentPopUp extends StatefulWidget {
+
+// ignore: must_be_immutable
+class AssessmentPopUp extends StatefulWidget {
 
   BuildContext c;
   String termID;
@@ -11,7 +13,7 @@ class nAssessmentPopUp extends StatefulWidget {
   String categoryID;
 
 
-  nAssessmentPopUp(BuildContext bc, String termID, String courseID, String categoryID){
+  AssessmentPopUp(BuildContext bc, String termID, String courseID, String categoryID){
     c = bc;
     this.termID = termID;
     this.courseID = courseID;
@@ -20,16 +22,17 @@ class nAssessmentPopUp extends StatefulWidget {
 
 
   @override
-  _nAssessmentPopUpState createState() => _nAssessmentPopUpState(c, termID, courseID, categoryID);
+  _AssessmentPopUpState createState() => _AssessmentPopUpState(c, termID, courseID, categoryID);
 }
 
-class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
+// ignore: camel_case_types
+class _AssessmentPopUpState extends State<AssessmentPopUp> {
   BuildContext context;
   String termID;
   String courseID;
   String categoryID;
 
-  _nAssessmentPopUpState(BuildContext bc, String termID, String courseID, String categoryID){
+  _AssessmentPopUpState(BuildContext bc, String termID, String courseID, String categoryID){
     context = bc;
     this.termID = termID;
     this.courseID = courseID;
@@ -163,13 +166,14 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
                 ),
                 onPressed: () async {
                   if(name.text != "" && totalPoints.text != "" &&
-                      yourPoints.text != ""){
+                      yourPoints.text != ""){//When assignment is completed
                     await assServ.addAssessment(
+                      //TODO: add due date to the database
                         name.text, totalPoints.text, yourPoints.text);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(name.text == ""){
-                  } else{
+                  } else{ //When assignment is not completed yet
                     await assServ.addAssessment(
                         name.text, "0", "0");
                     Navigator.pop(context);
