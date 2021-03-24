@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/CategoriesPage.dart';
 import 'package:gradebook/pages/SettingsPage.dart';
+import 'package:gradebook/pages/UpcomingAssignmentsPage.dart';
 import 'package:gradebook/pages/WelcomePage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';
 import 'package:gradebook/pages/loading.dart';
@@ -120,6 +121,7 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/Welcome': (context) => WelcomePage(),
               '/resetPassword': (context) => ResetPassword(),
               '/Settings': (context) => SettingsPage(),
+              '/Upcoming': (context) => UpcomingAssignments(),
             },
           ),
         ),

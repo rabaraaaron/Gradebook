@@ -45,6 +45,7 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
   final totalPoints = TextEditingController();
   final yourPoints = TextEditingController();
   final date = TextEditingController();
+  DateTime d = DateTime.now();
 
   bool isChecked = false;
   Column col;
@@ -95,13 +96,21 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
               iconSize: 40,
               icon: Icon(Icons.date_range),
               onPressed: (){
-                DatePicker.showDatePicker(
-                  context,
-                  minTime: DateTime.now(),
-                  onConfirm: (d){
-                    date.text = d.year.toString()+'/'+d.month.toString()+'/'+d.day.toString();
+                showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2025),
+                ).then((v) {
+                  if(v == null){
+                    return null;
+                  } else{
+                    d = v;
+                    setState(() {
+                      date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
+                    });
                   }
-                );
+                });
               },
             )
           ],
@@ -194,13 +203,41 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
             labelText: 'Assessment Title',
           ),
         ),
-        TextFormField(
-          controller: date,
-          onEditingComplete: handleSubmitted,
-          keyboardType: TextInputType.datetime,
-          decoration: const InputDecoration(
-              labelText: 'Due Date'
-          ),
+        Row(
+          children: [
+            SizedBox(
+              width: 175,
+              child: TextFormField(
+                enabled: false,
+                readOnly: true,
+                controller: date,
+                decoration: const InputDecoration(
+                    labelText: 'Due Date'
+                ),
+              ),
+            ),
+            IconButton(
+              iconSize: 40,
+              icon: Icon(Icons.date_range),
+              onPressed: (){
+                showDatePicker(
+                  context: context,
+                  initialDate: d,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2025),
+                ).then((v) {
+                  if(v == null){
+                    return null;
+                  } else{
+                    d = v;
+                    setState(() {
+                      date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
+                    });
+                  }
+                });
+              },
+            )
+          ],
         ),
         Row(
           children: [
