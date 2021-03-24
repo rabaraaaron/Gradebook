@@ -63,7 +63,7 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
 
 
     if(isChecked){
-      dialogueHeight = 410;
+      dialogueHeight = 395;
       col = Column(children: [
         Text(
           "Add new Item",
@@ -138,6 +138,22 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
         SizedBox(
           height: 15,
         ),
+        Row(
+          children: [
+            Switch(
+              value: isChecked,
+              activeColor: Theme.of(context).accentColor,
+              onChanged: (updateChecked) {
+                setState(() {
+                  isChecked = updateChecked;
+                });
+              },
+            ),
+            Text(
+                "Assignment Completed"
+            ),
+          ],
+        ),
         Expanded(
           child: SizedBox(
               width: 300,
@@ -169,25 +185,10 @@ class _nAssessmentPopUpState extends State<nAssessmentPopUp> {
               )
           ),
         ),
-        Row(
-          children: [
-            Switch(
-              value: isChecked,
-              activeColor: Theme.of(context).accentColor,
-              onChanged: (updateChecked) {
-                setState(() {
-                  isChecked = updateChecked;
-                });
-              },
-            ),
-            Text(
-              "Assignment Completed"
-            ),
-          ],
-        )
+
       ]);
     } else {
-      dialogueHeight = 275;
+      dialogueHeight = 260;
       col = Column(children: [
         Text(
           "Add new Item",
