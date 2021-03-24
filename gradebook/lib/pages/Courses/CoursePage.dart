@@ -9,6 +9,7 @@ import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/Course.dart';
 import 'DeleteCourseConfirmation.dart';
+import 'CourseOptions.dart';
 import 'package:gradebook/utils/IconOptions.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/assessment_service.dart';
@@ -45,6 +46,7 @@ class TermClassesPageWrap extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class TermCoursePage extends StatefulWidget {
   Term term;
   TermCoursePage({Key key, @required this.term}) : super(key: key);
@@ -113,7 +115,14 @@ class _TermCoursePageState extends State<TermCoursePage> {
                             .dividerColor,
                         size: 35,
                       ),
-                      onTap: () => null,
+                      onTap: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context){
+                                return CourseOptions(term.termID, classes[index]);
+                              }
+                          );
+                          },
                     ),
                     IconSlideAction(
                       color: Colors.transparent,
