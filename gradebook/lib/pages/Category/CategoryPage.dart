@@ -12,15 +12,7 @@ import 'CategoryOptions.dart';
 import 'DeleteCategoryConfirmation.dart';
 import 'NewCategory.dart';
 import '../Assessment/AssessmentTile.dart';
-import 'package:gradebook/services/validator_service.dart';
-import 'package:gradebook/utils/MyAppTheme.dart';
-import '../Assessment/ReminderConfirmation.dart';
-import '../Assessment/NewAssessment.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:gradebook/main.dart';
-import 'package:gradebook/model/Assessment.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 // ignore: must_be_immutable
 class CategoryPageWrap extends StatefulWidget {

@@ -4,6 +4,7 @@ import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/pages/Courses/CoursePage.dart';
 import 'package:gradebook/pages/SettingsPage.dart';
+import 'package:gradebook/pages/Term/TermsPage.dart';
 import 'package:gradebook/pages/UpcomingAssignmentsPage.dart';
 import 'package:gradebook/pages/WelcomePage.dart';
 import 'package:gradebook/pages/auth_wrapper.dart';

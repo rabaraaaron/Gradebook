@@ -152,9 +152,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 });
               },
             ),
-            Text(
-                "Assignment Completed"
-            ),
+            Expanded(flex:10, child: Text("Assignment Completed")),
           ],
         ),
         Expanded(
@@ -255,14 +253,13 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 });
               },
             ),
-            Text(
-                'Assignment completed'
-            ),
+            Expanded(flex: 10,
+                child: Text("Assignment Completed")),
           ],
         ),
         Expanded(
           child: SizedBox(
-              width: 275,
+              width: 295,
               child: RaisedButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(13.0),

@@ -26,15 +26,17 @@ class AssessmentService {
   }
 
   Future<void> addAssessment(name, totalPoints, yourPoints) async {
+
       await assessmentRef
           .add({
         'name': name,
         'totalPoints': totalPoints,
-        'yourPoints' : yourPoints
+        'yourPoints' : yourPoints,
+        'isDropped' : false,
+        'createDate' : getFormattedDate(),
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
           .catchError((error) => print("Failed to add course: $error"));
-      //await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
   Stream<List<Assessment>> get assessments {
@@ -42,22 +44,32 @@ class AssessmentService {
   }
 
   List<Assessment> _assessmentFromSnap(QuerySnapshot snapshot) {
+    
     var v = snapshot.docs.map<Assessment>((doc) {
 
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
       var perc = yp/tp;
+      // var test = doc.get('createDate');
+      // print(" ---->" + test);
+      //DateTime myDateTime = (doc.get('createDate')).toDate();
 
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",
           yourPoints: yp ?? "",
+          isDropped: doc.get('isDropped') ?? false,
+          createDate: int.parse(doc.get('createDate')) ?? 0000000,
           id: doc.id,
           catID: catID,
           courseID: courseID,
           termID: termID
       );
     }).toList();
+
+    ///sort by date before here.
+    v.sort((a, b) => b.createDate.compareTo(a.createDate));
+
     return v;
   }
 
@@ -70,5 +82,16 @@ class AssessmentService {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'name': name});
+  }
+
+  /// Convert current date to a string of numbers so we can
+  /// use it for sorting the assessments by creation date.
+  /// @return Date in the following format "2021325182346"
+  String getFormattedDate(){
+    DateTime now = DateTime.now();
+    String convertedDateTime = "${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}";
+    print(convertedDateTime);
+    return convertedDateTime;
+
   }
 }
