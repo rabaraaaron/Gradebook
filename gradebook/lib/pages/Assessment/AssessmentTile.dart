@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
-import 'file:///C:/Users/rabar/OneDrive/Desktop/499/grade-book/gradebook/lib/pages/Assessment/NewAssessment.dart';
+import 'package:gradebook/pages/Assessment/NewAssessment.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
 import 'AssessmentList.dart';

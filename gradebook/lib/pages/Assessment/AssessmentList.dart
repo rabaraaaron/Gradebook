@@ -4,7 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/Assessment.dart';
-import 'file:///C:/Users/rabar/OneDrive/Desktop/499/grade-book/gradebook/lib/pages/Assessment/ReminderConfirmation.dart';
+import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
