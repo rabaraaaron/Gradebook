@@ -47,14 +47,14 @@ class _AssessmentListState extends State<AssessmentList> {
               "<-- Dropped",
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.red,
+                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.bold,
                 decorationStyle: TextDecorationStyle.wavy,
               ));
         } else{
           isDroppedText = Text("");
         }
-        entries.add(Card( ///this cad is to add transparent background to the assessment tile
+        entries.add(Card( ///this card is to add transparent background to the assessment tile
           color: Colors.brown[50].withOpacity(.2),
           child: Slidable(
             controller: slidableController,

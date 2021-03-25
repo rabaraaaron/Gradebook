@@ -42,7 +42,8 @@ class _CourseOptionsState extends State<CourseOptions> {
     focusScopeNode.nextFocus();
   }
 
-  bool checked = false;
+  bool checked1 = false;
+  bool checked2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +100,29 @@ class _CourseOptionsState extends State<CourseOptions> {
                   Row(
                     children: [
                       Switch(
-                        value: checked,
+                        value: checked1,
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
                           setState(() {
-                            checked = updateChecked;
+                            checked1 = updateChecked;
                           });
                         },
                       ),
                       Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: checked2,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            checked2 = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Equally weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
                     ],
                   ),
                   Expanded(
@@ -128,6 +143,10 @@ class _CourseOptionsState extends State<CourseOptions> {
                                   initialCredits = null;
                                 }
                                 //TODO: Update the changes to the course
+                                // Get updated title with courseTitleController.text
+                                // Get updated credits with creditHoursController.text
+                                // Get Pass/fail updated value with checked1
+                                // Get equally weighed assignments with checked2
                                 // await CourseService(termID).addCourse(courseTitleController.text,
                                 //     creditHoursController.text);
                                   if (int.parse(creditHoursController.text) is int) {
@@ -147,7 +166,7 @@ class _CourseOptionsState extends State<CourseOptions> {
             ),
           ),
           width: 100,
-          height: 260,
+          height: 310,
         ));
   }
 }

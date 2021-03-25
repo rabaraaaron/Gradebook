@@ -12,7 +12,6 @@ import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/pages/LoginPage.dart';
 import 'package:gradebook/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gradebook/pages/Term/TermsPage.dart';
 import 'package:gradebook/pages/resetPasswrd.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:provider/provider.dart';
