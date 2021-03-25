@@ -116,6 +116,9 @@ class _CategoryOptions extends State<CategoryOptions> {
                       categoryWeightController = TextEditingController();
                       categoryWeightController.text = initialWeight;
                       initialWeight = null;
+                      setState(() {
+
+                      });
                     }
                   },
                 ),
@@ -143,7 +146,14 @@ class _CategoryOptions extends State<CategoryOptions> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13.0)),
                       onPressed: () async {
+                        if(categoryWeightController == null){
+                          categoryWeightController = TextEditingController();
+                          categoryWeightController.text = initialWeight;
+                          initialWeight = null;
+                        }
                         print(addedCategory);
+                        print(categoryWeightController.text);
+                        print(dropLowest);
                         //TODO: Update the category info in the database
                         // Get updated category name with addedCategory
                         // Get updated weight with categoryWeightController.text
