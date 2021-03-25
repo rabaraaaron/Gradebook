@@ -86,7 +86,7 @@ exports.onAssessmentCreate = functions.firestore
       const catSnap = await catReff.get();
       const catTotal = await catSnap.data().total;
       const catEarend = await catSnap.data().earned;
-      console.log("-++------>>== "+ catEarend);
+      console.log("-++-------->>"+ catEarend);
       // fetchAllCategories(par.userId, par.termId, par.courseId);
       // fetchAllAssessments(par.userId, par.termId,
       //  par.courseId, par.categoryId);

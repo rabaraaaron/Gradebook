@@ -12,34 +12,40 @@ class Assessment with ChangeNotifier{
   final String catID;
   final String termID;
   final String courseID;
-  bool dropped = false;
-  final String  dropString = " (Dropped)";
+  final int createDate;
+  bool isDropped = false;
 
 
-  Assessment({this.name, this.totalPoints, this.yourPoints, this.id, this.catID, this.courseID, this.termID});
+  Assessment({
+    this.name,
+    this.totalPoints,
+    this.yourPoints,
+    this.id,
+    this.catID,
+    this.courseID,
+    this.termID,
+    this.isDropped,
+    this.createDate,
+  });
 
   // bool LowestScoreCompare(Assessment a1, Assessment a2) {
   //   return a2.yourPoints < a1.yourPoints;
   // }
-  @override
-  double compareTo(Assessment other) => this.yourPoints - other.yourPoints;
+  // @override
+  // double compareTo(Assessment other) => this.createDate.toDouble() - other.createDate.toDouble();
 
-
   @override
-  String toString() {
-    return {name, totalPoints, yourPoints}.toString();
+  int compareTo(Assessment that) {
+    return that.createDate - this.createDate;
   }
 
-  // void drop(){
-  //   dropped = true;
-  //   this.name = name + dropString;
-  //  // var assessmentServ = AssessmentService(termID, courseID, catID);
-  //   //assessmentServ.updateAssessmentName(id, name);
-  //
-  // }
-  //  void unDrop(){
-  //    dropped = false;
-  //    name.replaceAll(dropString, '');
-  //  }
+    // @override
+    // double compareTo(Assessment other) => this.yourPoints - other.yourPoints;
 
-}
+
+    @override
+    String toString() {
+      return {name, totalPoints, yourPoints}.toString();
+    }
+  }
+
