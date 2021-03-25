@@ -101,9 +101,9 @@ class _AssessmentListState extends State<AssessmentList> {
                   element.name,
                   style: Theme.of(context).textTheme.headline6,),
                 SizedBox(width: 10,),
-                isDroppedText,
+                isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
+                //Text(element.createDate.toString()),
                 Expanded(child: Container(),),
-                //expanded, //to display "(dropped)" if this assessment is dropped
                 Text(
                   "${element.yourPoints} / ${element.totalPoints}",
                   style: Theme.of(context).textTheme.headline6,

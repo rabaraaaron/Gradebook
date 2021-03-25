@@ -12,6 +12,7 @@ class Assessment with ChangeNotifier{
   final String catID;
   final String termID;
   final String courseID;
+  final int createDate;
   bool isDropped = false;
 
 
@@ -23,19 +24,28 @@ class Assessment with ChangeNotifier{
     this.catID,
     this.courseID,
     this.termID,
-    this.isDropped
+    this.isDropped,
+    this.createDate,
   });
 
   // bool LowestScoreCompare(Assessment a1, Assessment a2) {
   //   return a2.yourPoints < a1.yourPoints;
   // }
-  @override
-  double compareTo(Assessment other) => this.yourPoints - other.yourPoints;
+  // @override
+  // double compareTo(Assessment other) => this.createDate.toDouble() - other.createDate.toDouble();
 
-
   @override
-  String toString() {
-    return {name, totalPoints, yourPoints}.toString();
+  int compareTo(Assessment that) {
+    return that.createDate - this.createDate;
   }
 
-}
+    // @override
+    // double compareTo(Assessment other) => this.yourPoints - other.yourPoints;
+
+
+    @override
+    String toString() {
+      return {name, totalPoints, yourPoints}.toString();
+    }
+  }
+
