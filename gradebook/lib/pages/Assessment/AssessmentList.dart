@@ -55,7 +55,7 @@ class _AssessmentListState extends State<AssessmentList> {
           isDroppedText = Text("");
         }
         entries.add(Card( ///this cad is to add transparent background to the assessment tile
-          color: Colors.brown[50].withOpacity(.4),
+          color: Colors.brown[50].withOpacity(.2),
           child: Slidable(
             controller: slidableController,
             actionPane: SlidableDrawerActionPane(),
