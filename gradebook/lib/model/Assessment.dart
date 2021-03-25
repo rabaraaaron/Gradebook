@@ -12,11 +12,19 @@ class Assessment with ChangeNotifier{
   final String catID;
   final String termID;
   final String courseID;
-  bool dropped = false;
-  final String  dropString = " (Dropped)";
+  bool isDropped = false;
 
 
-  Assessment({this.name, this.totalPoints, this.yourPoints, this.id, this.catID, this.courseID, this.termID});
+  Assessment({
+    this.name,
+    this.totalPoints,
+    this.yourPoints,
+    this.id,
+    this.catID,
+    this.courseID,
+    this.termID,
+    this.isDropped
+  });
 
   // bool LowestScoreCompare(Assessment a1, Assessment a2) {
   //   return a2.yourPoints < a1.yourPoints;
@@ -29,17 +37,5 @@ class Assessment with ChangeNotifier{
   String toString() {
     return {name, totalPoints, yourPoints}.toString();
   }
-
-  // void drop(){
-  //   dropped = true;
-  //   this.name = name + dropString;
-  //  // var assessmentServ = AssessmentService(termID, courseID, catID);
-  //   //assessmentServ.updateAssessmentName(id, name);
-  //
-  // }
-  //  void unDrop(){
-  //    dropped = false;
-  //    name.replaceAll(dropString, '');
-  //  }
 
 }

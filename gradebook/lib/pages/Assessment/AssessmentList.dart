@@ -37,71 +37,80 @@ class _AssessmentListState extends State<AssessmentList> {
   Widget build(BuildContext context) {
     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
     final assessments = Provider.of<List<Assessment>>(context);
+    Text isDroppedText;
     List<Widget> entries = [];
     if (assessments != null)
       assessments.forEach((element) {
-        Text item;
-        if(element.dropped == true){
-          item = Text(
-            element.name + " (dropped)",
-            style: Theme.of(context).textTheme.headline6,
-          );
-        } else{
-          item = Text(
-            element.name,
-            style: Theme.of(context).textTheme.headline6,
-          );
-        }
-        entries.add(Slidable(
 
-          controller: slidableController,
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: .2,
-          secondaryActions: <Widget>[
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.add_alert,
-                color: Theme.of(context).dividerColor,
-                size: 35,
+        if(element.isDropped == true){
+          isDroppedText = Text(
+              "<-- Dropped",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                decorationStyle: TextDecorationStyle.wavy,
+              ));
+        } else{
+          isDroppedText = Text("");
+        }
+        entries.add(Card( ///this cad is to add transparent background to the assessment tile
+          color: Colors.brown[50].withOpacity(.4),
+          child: Slidable(
+            controller: slidableController,
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: .2,
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                color: Colors.transparent,
+                closeOnTap: true,
+                iconWidget: Icon(
+                  Icons.add_alert,
+                  color: Theme.of(context).dividerColor,
+                  size: 35,
+                ),
+                onTap: () => scheduleNotification(courseID, element.name),
               ),
-              onTap: () => scheduleNotification(courseID, element.name),
-            ),
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.settings,
-                color: Theme.of(context).dividerColor,
-                size: 35,
+              IconSlideAction(
+                color: Colors.transparent,
+                closeOnTap: true,
+                iconWidget: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).dividerColor,
+                  size: 35,
+                ),
               ),
-            ),
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.delete,
-                color: Theme.of(context).dividerColor,
-                size: 35,
-              ),
-              onTap: ()async {
-                await assServ.deleteAssessment(element.id);
-              },
-            )
-          ],
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: 30,),
-              Expanded(
-                  child: item
-              ),
-              Text(
-                "${element.yourPoints} / ${element.totalPoints}",
-                style: Theme.of(context).textTheme.headline6,
+              IconSlideAction(
+                color: Colors.transparent,
+                closeOnTap: true,
+                iconWidget: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).dividerColor,
+                  size: 35,
+                ),
+                onTap: ()async {
+                  await assServ.deleteAssessment(element.id);
+                },
               )
             ],
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 10,),
+                Text(
+                  element.name,
+                  style: Theme.of(context).textTheme.headline6,),
+                SizedBox(width: 10,),
+                isDroppedText,
+                Expanded(child: Container(),),
+                //expanded, //to display "(dropped)" if this assessment is dropped
+                Text(
+                  "${element.yourPoints} / ${element.totalPoints}",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(width: 10, height: 60,)
+              ],
+            ),
           ),
         ));
       });

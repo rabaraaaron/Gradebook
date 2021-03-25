@@ -30,7 +30,8 @@ class AssessmentService {
           .add({
         'name': name,
         'totalPoints': totalPoints,
-        'yourPoints' : yourPoints
+        'yourPoints' : yourPoints,
+        'isDropped' : false,
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
           .catchError((error) => print("Failed to add course: $error"));
@@ -52,6 +53,7 @@ class AssessmentService {
           name: doc.get('name'),
           totalPoints: tp ?? "",
           yourPoints: yp ?? "",
+          isDropped: doc.get('isDropped') ?? false,
           id: doc.id,
           catID: catID,
           courseID: courseID,
