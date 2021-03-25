@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/course_service.dart';
