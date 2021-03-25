@@ -121,7 +121,7 @@ class _NewCourseState extends State<NewCourse> {
                                         borderRadius: BorderRadius.circular(13.0)))),
                             onPressed: () async {
                               await CourseService(termID).addCourse(classTitleController.text,
-                                  creditHoursController.text);
+                                  creditHoursController.text, checked1);
                               if (int.parse(creditHoursController.text) is int) {
                                 print(creditHoursController.text);
                               }
