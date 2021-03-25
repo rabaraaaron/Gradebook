@@ -39,7 +39,8 @@ class _NewCourseState extends State<NewCourse> {
     focusScopeNode.nextFocus();
   }
 
-  bool checked = false;
+  bool checked1 = false;
+  bool checked2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +84,29 @@ class _NewCourseState extends State<NewCourse> {
                   Row(
                     children: [
                       Switch(
-                        value: checked,
+                        value: checked1,
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
                           setState(() {
-                            checked = updateChecked;
+                            checked1 = updateChecked;
                           });
                         },
                       ),
                       Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: checked2,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            checked2 = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
                     ],
                   ),
                   Expanded(
@@ -121,7 +136,7 @@ class _NewCourseState extends State<NewCourse> {
                 ])),
           ),
           width: 100,
-          height: 260,
+          height: 310,
         ));
   }
 }

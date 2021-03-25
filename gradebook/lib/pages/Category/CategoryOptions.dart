@@ -22,7 +22,7 @@ class CategoryOptions extends StatefulWidget {
 
 class _CategoryOptions extends State<CategoryOptions> {
   // ignore: non_constant_identifier_names
-  bool dropLowest_isChecked;
+  bool dropLowest;
   Category c;
   String addedCategory;
   String initialWeight;
@@ -35,7 +35,11 @@ class _CategoryOptions extends State<CategoryOptions> {
     categoryService = new CategoryService(term.termID, course.id);
     addedCategory = c.categoryName;
     initialWeight = c.categoryWeight;
-    dropLowest_isChecked = c.dropLowestScore;
+    if(c.dropLowestScore == null){
+       dropLowest = false;
+    } else{
+       dropLowest = c.dropLowestScore;
+    }
   }
 
   TextEditingController categoryWeightController;
@@ -118,11 +122,11 @@ class _CategoryOptions extends State<CategoryOptions> {
                 Row(
                   children: [
                     Switch(
-                      value: dropLowest_isChecked,
+                      value: dropLowest,
                       activeColor: Theme.of(context).accentColor,
                       onChanged: (updateChecked) {
                         setState(() {
-                          dropLowest_isChecked = updateChecked;
+                           dropLowest = updateChecked;
                         });
                       },
                     ),
@@ -141,8 +145,12 @@ class _CategoryOptions extends State<CategoryOptions> {
                       onPressed: () async {
                         print(addedCategory);
                         //TODO: Update the category info in the database
+                        // Get updated category name with addedCategory
+                        // Get updated weight with categoryWeightController.text
+                        // Get updated drop lowest bool with dropLowest
                         // await categoryService.addCategory(
-                        //     addedCategory, categoryWeightController.text, dropLowest_isChecked);
+                        //     addedCategory, categoryWeightController.text, dropLowest
+                        //    );
                         Navigator.pop(context);
                       },
                       child: Text(
