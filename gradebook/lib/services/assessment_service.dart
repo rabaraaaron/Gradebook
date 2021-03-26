@@ -25,7 +25,7 @@ class AssessmentService {
         .collection('assessments');
   }
 
-  Future<void> addAssessment(name, totalPoints, yourPoints) async {
+  Future<void> addAssessment(name, totalPoints, yourPoints, [dueDate]) async {
 
       await assessmentRef
           .add({
@@ -34,6 +34,7 @@ class AssessmentService {
         'yourPoints' : yourPoints,
         'isDropped' : false,
         'createDate' : getFormattedDate(),
+        'dueDate' : dueDate ?? null
 
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
@@ -65,7 +66,8 @@ class AssessmentService {
           id: doc.id,
           catID: catID,
           courseID: courseID,
-          termID: termID
+          termID: termID,
+          dueDate:  doc.get('dueDate').toDate()
       );
     }).toList();
 
@@ -104,4 +106,12 @@ class AssessmentService {
     return convertedDateTime;
 
   }
+
+  Future<void> updateDueDate (DateTime date, String assessmentID){
+    assessmentRef.doc(assessmentID).update({
+      'dueDate' : date
+    });
+  }
+
+
 }
