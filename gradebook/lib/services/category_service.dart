@@ -5,6 +5,7 @@ import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
+import 'course_service.dart';
 import 'user_service.dart';
 import 'package:gradebook/model/Category.dart';
 
@@ -172,5 +173,13 @@ class CategoryService {
       'total': totalOfTotalPoints,
       'earned': totalofEarnedPoints
     });
+
+    String courseID = categoryRef.parent.id;
+    String termID = categoryRef.parent.parent.parent.id;
+
+    print(courseID);
+    print(termID);
+
+    CourseService(termID).calculateGrade(courseID);
   }
 }

@@ -7,6 +7,7 @@ import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:provider/provider.dart';
+import '../model/Category.dart';
 import 'assessment_service.dart';
 import 'user_service.dart';
 
@@ -93,14 +94,20 @@ class CourseService {
     });
   }
 
-  // String getGrade(courseID, termID){
-  //   AssessmentService assessmentServ = new AssessmentService(termID, courseID, categoryID)
-  //   print(courseRef.doc(courseID));
-  //   return "asdfdsf";
-  // }
-  //
-  // double getPercentage(courseID){
-  //
-  //   return null;
-  // }
+  Future<void> calculateGrade(courseID) async {
+    DocumentSnapshot course = await courseRef.doc(courseID).get();
+    QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
+    double courseGradeDecimal = 0.0;
+
+    for ( DocumentSnapshot category in categories.docs){
+      courseGradeDecimal += category.get('gradePercentAsDecimal');
+    }
+    double gradePercent = courseGradeDecimal;
+    print(courseGradeDecimal);
+    courseRef.doc(courseID).update({
+      'gradePercent' : gradePercent
+    });
+
+  }
+
 }
