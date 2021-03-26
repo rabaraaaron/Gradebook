@@ -169,7 +169,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                       yourPoints.text != ""){//When assignment is completed
                     await assServ.addAssessment(
                       //TODO: add due date to the database
-                        name.text, totalPoints.text, yourPoints.text);
+                        name.text, totalPoints.text, yourPoints.text, d);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(name.text == ""){

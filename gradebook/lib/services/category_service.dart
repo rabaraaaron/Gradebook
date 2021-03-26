@@ -125,7 +125,7 @@ class CategoryService {
         'weight': double.parse(weight),
         'dropLowest': dropLowest,
       });
-
+      await calculateGrade(catID);
   }
 
 
