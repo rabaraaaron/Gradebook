@@ -79,11 +79,17 @@ class AssessmentService {
 
     await assessmentRef.doc(id).delete().then((value) => print("Deleted assessment "))
         .catchError((error) => print("Failed to delete assessment: $error"));
+    await CategoryService(termID, courseID).calculateGrade(catID);
   }
   Future<void> updateAssessmentName(id, name) async {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'name': name});
+  }
+  Future<void> updateDropState(id, bool drop) async {
+    // print(id);
+    // print(name);
+    await assessmentRef.doc(id).update({'isDropped': drop});
   }
 
   /// Convert current date to a string of numbers so we can

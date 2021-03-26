@@ -1,18 +1,25 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
+import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
 import 'user_service.dart';
 import 'package:gradebook/model/Category.dart';
 
 class CategoryService {
+  String termID, courseID;
   CollectionReference categoryRef;
   List<Category> listOfCategories;
 
   CategoryService(String termID, String courseID) {
+    this.courseID = courseID;
+    this.termID = termID;
     categoryRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -142,6 +149,7 @@ class CategoryService {
 
   //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
+    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
     DocumentSnapshot category = await categoryRef.doc(catID).get();
     QuerySnapshot assessments =
         await categoryRef.doc(catID).collection('assessments').get();
@@ -152,18 +160,42 @@ class CategoryService {
     double weight =category.get('weight');
     bool dropLowest = category.get('dropLowest');
 
+    SplayTreeMap map = new SplayTreeMap<String, double>();
+
     //calculate Totals
     for (DocumentSnapshot assessment in assessments.docs) {
+      //reset all assessment so that none is dropped
+      aServ.updateDropState(assessment.id, false);
+
       double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
       double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
       totalOfTotalPoints += totalPoints;
       totalofEarnedPoints += yourPoints;
+      if(yourPoints > 0){
+        map.putIfAbsent( assessment.id, () => yourPoints / totalPoints );
+      }
     }
-
     ///todo: Check with Mohd on how to find lowest
+    ///I think the droplowest function is working now -------------- (added by: Mohd)
 
     //findLowest
-    if (dropLowest) {}
+    if (dropLowest && map.length >1) {
+      var sortedByValue = new SplayTreeMap.from(
+          map, (key1, key2) => map[key1].compareTo(map[key2]));
+
+      var id = sortedByValue.firstKey();
+
+      DocumentReference docRef = categoryRef.doc(catID).collection('assessments').doc(id);
+      DocumentSnapshot aSnap = await docRef.get();
+      var lowestEP = double.parse(aSnap.get('yourPoints'));
+      var lowestTP = double.parse(aSnap.get('totalPoints'));
+
+      aServ.updateDropState(aSnap.id, true);
+      totalofEarnedPoints -= lowestEP;
+      totalOfTotalPoints -= lowestTP;
+
+     // print("----->> " + test);
+    }
 
     gradePercentAsDecimal = weight * (totalofEarnedPoints / totalOfTotalPoints);
 
@@ -174,3 +206,4 @@ class CategoryService {
     });
   }
 }
+
