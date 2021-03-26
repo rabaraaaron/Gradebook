@@ -9,6 +9,8 @@ import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
+import 'assessment_service.dart';
+import 'course_service.dart';
 import 'course_service.dart';
 import 'user_service.dart';
 import 'package:gradebook/model/Category.dart';
@@ -103,7 +105,8 @@ class CategoryService {
   }
 
   Future<void> deleteCategory(id) async {
-    categoryRef.doc(id).delete();
+    await categoryRef.doc(id).delete();
+    await CourseService(termID).calculateGrade(courseID);
   }
 
   Future<void> setDropLowest(catID, value) async {
@@ -150,7 +153,8 @@ class CategoryService {
 
   //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
-    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
+
+    AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
     DocumentSnapshot category = await categoryRef.doc(catID).get();
     QuerySnapshot assessments =
         await categoryRef.doc(catID).collection('assessments').get();
