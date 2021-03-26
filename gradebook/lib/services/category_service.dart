@@ -107,6 +107,16 @@ class CategoryService {
     return listOfCategories;
   }
 
+  Future<void> updateCategory(name, weight, dropLowest, catID) async {
+      await categoryRef.doc(catID)
+          .update({
+        'name': name,
+        'weight': double.parse(weight),
+        'dropLowest': dropLowest,
+      });
+
+  }
+
 
   //   return categoryRef.categories((data) {
   //     print(data);
@@ -130,37 +140,37 @@ class CategoryService {
   //
   // }
 
-  ///todo: still need to implement "allAssessmentEqualWithinCategory"
-  // Future<void> calculateGrade(catID) async {
-  //   DocumentSnapshot category = await categoryRef.doc(catID).get();
-  //   QuerySnapshot assessments =
-  //       await categoryRef.doc(catID).collection('assessments').get();
-  //
-  //   double gradePercentAsDecimal,
-  //       totalOfTotalPoints = 0,
-  //       totalofEarnedPoints = 0;
-  //   double weight = double.parse(category.get('weight'));
-  //   bool dropLowest = category.get('dropLowest');
-  //
-  //   //calculate Totals
-  //   for (DocumentSnapshot assessment in assessments.docs) {
-  //     double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
-  //     double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
-  //     totalOfTotalPoints += totalPoints;
-  //     totalofEarnedPoints += yourPoints;
-  //   }
-  //
-  //   ///todo: Check with Mohd on how to find lowest
-  //
-  //   //findLowest
-  //   if (dropLowest) {}
-  //
-  //   gradePercentAsDecimal = weight * (totalofEarnedPoints / totalOfTotalPoints);
-  //
-  //   categoryRef.doc(catID).update({
-  //     'gradePercentAsDecimal': gradePercentAsDecimal,
-  //     'total': totalOfTotalPoints,
-  //     'earned': totalofEarnedPoints
-  //   });
-  // }
+  //todo: still need to implement "allAssessmentEqualWithinCategory"
+  Future<void> calculateGrade(catID) async {
+    DocumentSnapshot category = await categoryRef.doc(catID).get();
+    QuerySnapshot assessments =
+        await categoryRef.doc(catID).collection('assessments').get();
+
+    double gradePercentAsDecimal,
+        totalOfTotalPoints = 0,
+        totalofEarnedPoints = 0;
+    double weight =category.get('weight');
+    bool dropLowest = category.get('dropLowest');
+
+    //calculate Totals
+    for (DocumentSnapshot assessment in assessments.docs) {
+      double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
+      double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
+      totalOfTotalPoints += totalPoints;
+      totalofEarnedPoints += yourPoints;
+    }
+
+    ///todo: Check with Mohd on how to find lowest
+
+    //findLowest
+    if (dropLowest) {}
+
+    gradePercentAsDecimal = weight * (totalofEarnedPoints / totalOfTotalPoints);
+
+    categoryRef.doc(catID).update({
+      'gradePercentAsDecimal': gradePercentAsDecimal,
+      'total': totalOfTotalPoints,
+      'earned': totalofEarnedPoints
+    });
+  }
 }

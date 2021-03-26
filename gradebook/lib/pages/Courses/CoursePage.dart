@@ -19,23 +19,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'NewCourse.dart';
 
-
-
 class TermClassesPageWrap extends StatelessWidget {
   Term term;
   TermClassesPageWrap({Key key, @required this.term}) : super(key: key);
 
-//   @override
-//   _TermClassesPageWrapState createState() => _TermClassesPageWrapState(term);
-// }
-
-// class _TermClassesPageWrapState extends State<TermClassesPageWrap> {
-//   Term term;
-//
-//   @override
-//   _TermClassesPageWrapState(Term tID) {
-//     this.term = tID;
-//   }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +47,6 @@ class _TermCoursePageState extends State<TermCoursePage> {
   final GlobalKey scaffoldKey = new GlobalKey();
   Term term;
 
-
   @override
   _TermCoursePageState(Term tID) {
     this.term = tID;
@@ -68,7 +54,6 @@ class _TermCoursePageState extends State<TermCoursePage> {
 
   @override
   Widget build(BuildContext context) {
-    //final course = Provider.of<Course>(context);
 
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     Future<int> _counter;
@@ -76,7 +61,6 @@ class _TermCoursePageState extends State<TermCoursePage> {
 
     Future<void> changeIcon() async {
       final SharedPreferences prefs = await _prefs;
-
     }
 
     final classes = Provider.of<List<Course>>(context);
@@ -85,144 +69,128 @@ class _TermCoursePageState extends State<TermCoursePage> {
 
     if (Provider.of<List<Course>>(context) != null) {
       listView = ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-          color: Theme.of(context).dividerColor,
-          indent: 25.0,
-          endIndent: 25.0,
-        ),
-        itemCount: classes.length,
-        itemBuilder: (context, index) {
-          // Grade(classes[index], term.termID);
-          // print(classes[index].gradePercent);
-          //classes[index].updateGradeLetter(classes[index].gradePercent);
-          return Column(
-            children: [
-              // Grade(classes[index], term.termID),
-              Padding(
-                padding: EdgeInsets.all(0.0),
-                child: Slidable(
-                  controller: slidableController,
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: .2,
-                  secondaryActions: [
-                    IconSlideAction(
-                      color: Colors.transparent,
-                      closeOnTap: true,
-                      iconWidget: Icon(
-                        Icons.more_vert,
-                        color: Theme
-                            .of(context)
-                            .dividerColor,
-                        size: 35,
-                      ),
-                      onTap: () async {
+          separatorBuilder: (context, index) => Divider(
+                color: Theme.of(context).dividerColor,
+                indent: 25.0,
+                endIndent: 25.0,
+              ),
+          itemCount: classes.length,
+          itemBuilder: (context, index) {
+
+            return Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(0.0),
+                  child: Slidable(
+                    controller: slidableController,
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: .2,
+                    secondaryActions: [
+                      IconSlideAction(
+                        color: Colors.transparent,
+                        closeOnTap: true,
+                        iconWidget: Icon(
+                          Icons.more_vert,
+                          color: Theme.of(context).dividerColor,
+                          size: 35,
+                        ),
+                        onTap: () async {
                           showDialog(
                               context: context,
-                              builder: (BuildContext context){
-                                return CourseOptions(term.termID, classes[index]);
-                              }
-                          );
-                          },
-                    ),
-                    IconSlideAction(
-                      color: Colors.transparent,
-                      closeOnTap: true,
-                      iconWidget: Icon(
-                        Icons.delete,
-                        color: Theme
-                            .of(context)
-                            .dividerColor,
-                        size: 35,
+                              builder: (BuildContext context) {
+                                return CourseOptions(
+                                    term.termID, classes[index]);
+                              });
+                        },
                       ),
-                      onTap: () async {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return DeleteCourseConfirmation(term.termID, classes, index);
-                          },
-                        );
-                      },
-                    )
-                  ],
-                  child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Icon(
-                            Icons.computer,
-                            size: 50,
-                          ),
-                          padding: EdgeInsets.all(10.0),
+                      IconSlideAction(
+                        color: Colors.transparent,
+                        closeOnTap: true,
+                        iconWidget: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).dividerColor,
+                          size: 35,
                         ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CategoryPageWrap(
-                                              term: term, course: classes[index])));
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return DeleteCourseConfirmation(
+                                  term.termID, classes, index);
                             },
-                            child: new Padding(
-                              padding: new EdgeInsets.all(20.0),
-                              child: Text(
-                                "${classes[index].name}",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline4,
+                          );
+                        },
+                      )
+                    ],
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Icon(
+                              Icons.computer,
+                              size: 50,
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CategoryPageWrap(
+                                            term: term,
+                                            course: classes[index])));
+                              },
+                              child: new Padding(
+                                padding: new EdgeInsets.all(20.0),
+                                child: Text(
+                                  "${classes[index].name}",
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: Center(
-                                    child: Text( "${classes[index].getLetterGrade()}",
-                                      // "${classes[index].getGradeLetter}",
-                                      textScaleFactor: 2,
-                                      style: TextStyle(
-                                        color: Theme.of(context).dividerColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15.0,
+                          Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        "${classes[index].getLetterGrade()}",
+                                        // "${classes[index].getGradeLetter}",
+                                        textScaleFactor: 2,
+                                        style: TextStyle(
+                                          color: Theme.of(context).dividerColor,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 15.0,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                                width: 60,
-                                child: Text(
-                                     "${classes[index].gradePercent}"
+                                SizedBox(
+                                  height: 20,
+                                  width: 60,
+                                  child: Text("${classes[index].gradePercent}"),
                                 ),
-
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-
-        }
-      );
+              ],
+            );
+          });
     } else {
       listView = Container();
     }

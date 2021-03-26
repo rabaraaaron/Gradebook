@@ -34,9 +34,11 @@ class AssessmentService {
         'yourPoints' : yourPoints,
         'isDropped' : false,
         'createDate' : getFormattedDate(),
+
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
           .catchError((error) => print("Failed to add course: $error"));
+      await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
   Stream<List<Assessment>> get assessments {
