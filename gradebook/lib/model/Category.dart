@@ -6,6 +6,7 @@ class Category{
   String categoryWeight = '0';
   // List<Assessment> categoryItems;
   bool dropLowestScore = false;
+  bool equalWeights = false;
   String id;
   //double totalPoints = 0.0;
   //double totalEarnedPoints = 0.0;
@@ -20,7 +21,8 @@ class Category{
     this.id,
     this.dropLowestScore,
     this.total,
-    this.earned
+    this.earned,
+    this.equalWeights
   });
 
 

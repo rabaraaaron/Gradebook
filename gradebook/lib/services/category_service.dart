@@ -30,7 +30,7 @@ class CategoryService {
         .collection("categories");
   }
 
-  Future<void> addCategory(name, weight, dropLowest) async {
+  Future<void> addCategory(name, weight, dropLowest, equalWeights) async {
     bool duplicate;
     await categoryRef
         .where('name', isEqualTo: name)
@@ -49,7 +49,8 @@ class CategoryService {
             'dropLowest': dropLowest,
             'total': 0.0,
             'earned': 0.0,
-            'gradePercentAsDecimal': 0.0
+            'gradePercentAsDecimal': 0.0,
+            'equalWeights' : equalWeights,
           })
           .then((value) => print("Category Added"))
           .catchError((error) => print("Failed to add category: $error"));
@@ -78,7 +79,8 @@ class CategoryService {
             id: doc.id,
             dropLowestScore: doc.get('dropLowest') ?? false,
             total: doc.get('total').toString() ?? "0",
-            earned: doc.get('earned').toString() ?? "0"
+            earned: doc.get('earned').toString() ?? "0",
+            equalWeights: doc.get('equalWeights') ?? false,
         );
       }).toList();
       listOfCategories = v;
@@ -93,7 +95,8 @@ class CategoryService {
             id: doc.id,
             dropLowestScore: false,
             total: doc.get('total') ?? "0",
-            earned: doc.get('earned') ?? "0"
+            earned: doc.get('earned') ?? "0",
+            equalWeights: doc.get('equalWeights') ?? false,
         );
       }).toList();
       listOfCategories = v;
@@ -149,34 +152,35 @@ class CategoryService {
 
   //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
-    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
-    DocumentSnapshot category = await categoryRef.doc(catID).get();
-    QuerySnapshot assessments =
-        await categoryRef.doc(catID).collection('assessments').get();
 
+    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
+    DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
+    QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
+    SplayTreeMap map = new SplayTreeMap<String, double>();
     double gradePercentAsDecimal,
         totalOfTotalPoints = 0,
         totalofEarnedPoints = 0;
-    double weight =category.get('weight');
-    bool dropLowest = category.get('dropLowest');
+    double weight = categorySnap.get('weight');
+    bool dropLowest = categorySnap.get('dropLowest');
 
-    SplayTreeMap map = new SplayTreeMap<String, double>();
+    if(await categorySnap.get('equalWeights')){
+      calculateEqualWeightedGrade(catID);
+      return;
+    }
 
     //calculate Totals
-    for (DocumentSnapshot assessment in assessments.docs) {
+    for (DocumentSnapshot assessment in assessmentsSnap.docs) {
       //reset all assessment so that none is dropped
       aServ.updateDropState(assessment.id, false);
 
       double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
       double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
-      totalOfTotalPoints += totalPoints;
-      totalofEarnedPoints += yourPoints;
-      if(yourPoints > 0){
-        map.putIfAbsent( assessment.id, () => yourPoints / totalPoints );
-      }
+        totalOfTotalPoints += totalPoints;
+        totalofEarnedPoints += yourPoints;
+        if (yourPoints > 0) {
+          map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
+        }
     }
-    ///todo: Check with Mohd on how to find lowest
-    ///I think the droplowest function is working now -------------- (added by: Mohd)
 
     //findLowest
     if (dropLowest && map.length >1) {
@@ -204,6 +208,34 @@ class CategoryService {
       'total': totalOfTotalPoints,
       'earned': totalofEarnedPoints
     });
+  }
+
+  Future<void> calculateEqualWeightedGrade(catID) async {
+
+    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
+    DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
+    QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
+    SplayTreeMap map = new SplayTreeMap<String, double>();
+
+    double weight = categorySnap.get('weight');
+    bool dropLowest = categorySnap.get('dropLowest');
+
+    double totalEarnedWeights = 0;
+
+    for (DocumentSnapshot assessment in assessmentsSnap.docs) {
+      //reset all assessment so that none is dropped
+      aServ.updateDropState(assessment.id, false);
+
+      double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
+      double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
+
+      if (totalPoints > 0) {
+        double earnedWeight = (yourPoints / totalPoints) * (weight / assessmentsSnap.size);
+        totalEarnedWeights += earnedWeight;
+
+        map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
+      }
+    }
   }
 }
 

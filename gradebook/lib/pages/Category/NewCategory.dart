@@ -128,8 +128,12 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                           borderRadius: BorderRadius.circular(13.0)),
                       onPressed: () async {
                         print(addedCategory);
+                        //todo: -------------------------------------------------------------------------------
+                        //todo: add GUI thing to switch category from equally weighted to point-based weight.
+                        var equalWeights = false;
+                        //todo: -------------------------------------------------------------------------------
                         await categoryService.addCategory(
-                            addedCategory, categoryWeightController.text, dropLowest_isChecked);
+                            addedCategory, categoryWeightController.text, dropLowest_isChecked, equalWeights);
                         Navigator.pop(context);
                       },
                       child: Text(
