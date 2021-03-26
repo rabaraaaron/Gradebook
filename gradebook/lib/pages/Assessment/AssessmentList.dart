@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/Assessment.dart';
+import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
@@ -79,6 +80,14 @@ class _AssessmentListState extends State<AssessmentList> {
                   color: Theme.of(context).dividerColor,
                   size: 35,
                 ),
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AssessmentOptions(context, termID,
+                            courseID, categoryID, element);
+                      });
+                },
               ),
               IconSlideAction(
                 color: Colors.transparent,
