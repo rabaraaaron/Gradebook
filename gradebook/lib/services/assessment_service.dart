@@ -85,11 +85,13 @@ class AssessmentService {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'name': name});
+    await CategoryService(termID, courseID).calculateGrade(catID);
   }
   Future<void> updateDropState(id, bool drop) async {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'isDropped': drop});
+    await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
   /// Convert current date to a string of numbers so we can
