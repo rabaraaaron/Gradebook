@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/course_service.dart';
 
+import '../../services/course_service.dart';
+
 // ignore: camel_case_types, must_be_immutable
 class CourseOptions extends StatefulWidget {
   BuildContext context;
@@ -42,7 +44,8 @@ class _CourseOptionsState extends State<CourseOptions> {
     focusScopeNode.nextFocus();
   }
 
-  bool checked = false;
+  bool checked1 = false;
+  bool checked2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +79,9 @@ class _CourseOptionsState extends State<CourseOptions> {
                         courseTitleController = TextEditingController();
                         courseTitleController.text = initialTitle;
                         initialTitle = null;
+                        setState(() {
+
+                        });
                       }
                     },
                   ),
@@ -93,21 +99,38 @@ class _CourseOptionsState extends State<CourseOptions> {
                         creditHoursController = TextEditingController();
                         creditHoursController.text = initialCredits;
                         initialCredits = null;
+                        setState(() {
+
+                        });
                       }
                     },
                   ),
                   Row(
                     children: [
                       Switch(
-                        value: checked,
+                        value: checked1,
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (updateChecked) {
                           setState(() {
-                            checked = updateChecked;
+                            checked1 = updateChecked;
                           });
                         },
                       ),
                       Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: checked2,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            checked2 = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Equally weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
                     ],
                   ),
                   Expanded(
@@ -118,20 +141,27 @@ class _CourseOptionsState extends State<CourseOptions> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(13.0)),
                               onPressed: () async {
-                                if(courseTitleController == null ||
-                                    creditHoursController == null){
+                                if(courseTitleController == null){
                                   courseTitleController = TextEditingController();
-                                  creditHoursController = TextEditingController();
                                   courseTitleController.text = initialTitle;
-                                  creditHoursController.text = initialCredits;
                                   initialTitle = null;
+                                }
+                                if(creditHoursController == null){
+                                  creditHoursController = TextEditingController();
+                                  creditHoursController.text = initialCredits;
                                   initialCredits = null;
                                 }
                                 //TODO: Update the changes to the course
-                                // await CourseService(termID).addCourse(courseTitleController.text,
-                                //     creditHoursController.text);
+                                print(course.id);
+                                print(courseTitleController.text);
+                                print(creditHoursController.text);
+                                // Get updated title with courseTitleController.text
+                                // Get updated credits with creditHoursController.text
+                                // Get Pass/fail updated value with checked1
+                                // Get equally weighed assignments with checked2
+                                await CourseService(termID).updateCourse(courseTitleController.text, creditHoursController.text, course.id, checked1,);
                                   if (int.parse(creditHoursController.text) is int) {
-                                    print(creditHoursController.text);
+                                    // print(creditHoursController.text);
                                   }
                                   Navigator.pop(context);
                                   setState(() {});
@@ -147,7 +177,7 @@ class _CourseOptionsState extends State<CourseOptions> {
             ),
           ),
           width: 100,
-          height: 260,
+          height: 310,
         ));
   }
 }

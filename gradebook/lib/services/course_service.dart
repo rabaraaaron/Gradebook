@@ -22,7 +22,7 @@ class CourseService {
         .collection('courses');
   }
 
-  Future<void> addCourse(name, credits) async {
+  Future<void> addCourse(name, credits, passFail) async {
     bool duplicate;
     await courseRef
         .where('name', isEqualTo: name)
@@ -38,7 +38,8 @@ class CourseService {
           .add({
             'name': name,
             'credits': int.parse(credits),
-            'gradePercent' : 0,
+            'gradePercent': 0,
+        'passFail':passFail
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
@@ -54,35 +55,44 @@ class CourseService {
   }
 
   List<Course> _courseFromSnap(QuerySnapshot snapshot) {
-
-
-    try{
-     var v = snapshot.docs.map<Course>((doc) {
-
-      return Course(name: doc.get('name'),
-                    credits: doc.get('credits').toString() ?? "0",
-                    id: doc.id,
-                    gradePercent: doc.get('gradePercent').toString() ?? "0",
-                    );}).toList();
-     return v;
-
-    } catch (err){
-      print("Error adding course form courseService.dart, catch block error is: "+err.toString());
+    try {
+      var v = snapshot.docs.map<Course>((doc) {
+        return Course(
+          name: doc.get('name'),
+          credits: doc.get('credits').toString() ?? "0",
+          id: doc.id,
+          gradePercent: doc.get('gradePercent').toString() ?? "0",
+        );
+      }).toList();
+      return v;
+    } catch (err) {
+      print(
+          "Error adding course form courseService.dart, catch block error is: " +
+              err.toString());
 
       var v2 = snapshot.docs.map<Course>((doc) {
-      return Course( name: doc.get('name'),
-                    credits: doc.get('credits') ?? "",
-                    id: doc.id,
-                    gradePercent: "0");
-                    }).toList();
+        return Course(
+            name: doc.get('name'),
+            credits: doc.get('credits') ?? "",
+            id: doc.id,
+            gradePercent: "0");
+      }).toList();
       return v2;
     }
-
   }
 
   Future<void> deleteCourse(id) async {
-      courseRef.doc(id).delete();
+    courseRef.doc(id).delete();
   }
+
+  Future<void> updateCourse(name, credits, courseID, passFail) async {
+    await courseRef.doc(courseID).update({
+      'name': name,
+      'credits': int.parse(credits),
+      'passFail': passFail
+    });
+  }
+
   // String getGrade(courseID, termID){
   //   AssessmentService assessmentServ = new AssessmentService(termID, courseID, categoryID)
   //   print(courseRef.doc(courseID));

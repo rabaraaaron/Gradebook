@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/pages/Assessment/NewAssessment.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
+import '../../model/Category.dart';
 import 'AssessmentList.dart';
 
 // ignore: must_be_immutable
@@ -12,30 +12,31 @@ class AssessmentTile extends StatefulWidget {
   String termID;
   String courseID;
   String courseName;
-  Category cat;
+  int index;
 
-  AssessmentTile({this.termID, this.courseID, this.cat, this.courseName});
+  AssessmentTile({this.termID, this.courseID, this.index, this.courseName});
 
   @override
   _AssessmentTileState createState() =>
-      _AssessmentTileState(termID, courseID, cat, courseName);
+      _AssessmentTileState(termID, courseID, index, courseName);
 }
 
 class _AssessmentTileState extends State<AssessmentTile> {
   String termID;
   String courseID;
-  Category cat;
+  int index;
   String courseName;
 
-  _AssessmentTileState(String tID, String cID, Category c, String courseN) {
+  _AssessmentTileState(String tID, String cID, int index, String courseN) {
     this.termID = tID;
     this.courseID = cID;
-    this.cat = c;
+    this.index = index;
     this.courseName = courseN;
   }
 
   @override
   Widget build(BuildContext context) {
+    Category cat = Provider.of<List<Category>>(context)[index];
     AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
     final name = TextEditingController();
     final assessments = Provider.of<List<Assessment>>(context);
@@ -80,7 +81,7 @@ class _AssessmentTileState extends State<AssessmentTile> {
         children: [
           Center(
             child: Text(
-              "${catFromProvider.earned}" + "/" + "${catFromProvider.total}",
+              "${cat.earned}" + "/" + "${cat.total}",
               style: Theme.of(context).textTheme.headline4,
             ),
           ),
