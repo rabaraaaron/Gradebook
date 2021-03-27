@@ -154,7 +154,7 @@ class CategoryService {
   //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
 
-    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
+    AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
     QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
     SplayTreeMap map = new SplayTreeMap<String, double>();
