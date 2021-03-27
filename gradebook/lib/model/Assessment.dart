@@ -14,6 +14,7 @@ class Assessment with ChangeNotifier{
   final String courseID;
   final int createDate;
   bool isDropped = false;
+  bool isCompleted = false;
 
   // DateTime dueDate;
 
@@ -28,6 +29,7 @@ class Assessment with ChangeNotifier{
     this.termID,
     this.isDropped,
     this.createDate,
+    this.isCompleted,
     // this.dueDate,
   });
 

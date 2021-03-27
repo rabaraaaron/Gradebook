@@ -25,7 +25,7 @@ class AssessmentService {
         .collection('assessments');
   }
 
-  Future<void> addAssessment(name, totalPoints, yourPoints, [dueDate]) async {
+  Future<void> addAssessment(name, totalPoints, yourPoints, isCompleted, [dueDate]) async {
 
       await assessmentRef
           .add({
@@ -34,6 +34,7 @@ class AssessmentService {
         'yourPoints' : yourPoints,
         'isDropped' : false,
         'createDate' : getFormattedDate(),
+        'isCompleted' : isCompleted,
         // 'dueDate' : dueDate ?? null
 
       })
@@ -68,6 +69,7 @@ class AssessmentService {
           totalPoints: tp ?? "",
           yourPoints: yp ?? "",
           isDropped: doc.get('isDropped') ?? false,
+          isCompleted: doc.get('isCompleted') ?? false,
           createDate: int.parse(doc.get('createDate')) ?? 0000000,
           id: doc.id,
           catID: catID,

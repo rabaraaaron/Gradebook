@@ -50,9 +50,9 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
   final totalPoints = TextEditingController();
   final yourPoints = TextEditingController();
   final date = TextEditingController();
-  DateTime d = DateTime.now();
+  DateTime dateTime = DateTime.now();
 
-  bool isChecked = false;
+  bool isCompleted = false;
   Column col;
   double dialogueHeight = 325;
   double dialogueWidth = 150;
@@ -67,7 +67,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
 
 
 
-    if(isChecked){
+    if(isCompleted){
       dialogueHeight = 340;
       col = Column(children: [
         Text(
@@ -110,11 +110,11 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         Row(
           children: [
             Switch(
-              value: isChecked,
+              value: isCompleted,
               activeColor: Theme.of(context).accentColor,
               onChanged: (updateChecked) {
                 setState(() {
-                  isChecked = updateChecked;
+                  isCompleted = updateChecked;
                 });
               },
             ),
@@ -133,12 +133,12 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                       yourPoints.text != ""){//When assignment is completed
                     await assServ.addAssessment(
                       //TODO: add due date to the database
-                        name.text, totalPoints.text, yourPoints.text, d);
+                        name.text, totalPoints.text, yourPoints.text, isCompleted, dateTime);
                     Navigator.pop(context);
                   } else if(name.text == ""){
                   } else{ //When assignment is not completed yet
                     await assServ.addAssessment(
-                        name.text, "0", "0");
+                        name.text, isCompleted, "0", "0");
                     Navigator.pop(context);
                   }
 
@@ -190,14 +190,14 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
               onPressed: (){
                 showDatePicker(
                   context: context,
-                  initialDate: d,
+                  initialDate: dateTime,
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2025),
                 ).then((v) {
                   if(v == null){
                     return null;
                   } else{
-                    d = v;
+                    dateTime = v;
                     setState(() {
                       date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
                     });
@@ -210,11 +210,11 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         Row(
           children: [
             Switch(
-              value: isChecked,
+              value: isCompleted,
               activeColor: Theme.of(context).accentColor,
               onChanged: (updateChecked) {
                 setState(() {
-                  isChecked = updateChecked;
+                  isCompleted = updateChecked;
                 });
               },
             ),
@@ -233,13 +233,13 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                   if(name.text != "" && totalPoints.text != "" &&
                       yourPoints.text != ""){
                     await assServ.addAssessment(
-                        name.text, totalPoints.text, yourPoints.text);
+                        name.text, totalPoints.text, yourPoints.text, isCompleted);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(name.text == ""){
                   } else{
                     await assServ.addAssessment(
-                        name.text, "0", "0");
+                        name.text, "0", "0", isCompleted);
                     Navigator.pop(context);
                   }
                 },

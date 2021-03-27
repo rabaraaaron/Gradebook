@@ -95,20 +95,6 @@ class _NewCourseState extends State<NewCourse> {
                       Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Switch(
-                        value: checked2,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: (updateChecked) {
-                          setState(() {
-                            checked2 = updateChecked;
-                          });
-                        },
-                      ),
-                      Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
-                    ],
-                  ),
                   Expanded(
                     child: SizedBox(
                         width: 300,
@@ -136,7 +122,7 @@ class _NewCourseState extends State<NewCourse> {
                 ])),
           ),
           width: 100,
-          height: 310,
+          height: 280,
         ));
   }
 }

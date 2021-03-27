@@ -122,49 +122,18 @@ class CategoryService {
     return listOfCategories;
   }
 
-  Future<void> updateCategory(name, weight, dropLowest, catID) async {
+  Future<void> updateCategory(name, weight, dropLowest, equalWeights, catID) async {
       await categoryRef.doc(catID)
           .update({
         'name': name,
         'weight': double.parse(weight),
         'dropLowest': dropLowest,
+        'equalWeights' : equalWeights,
       });
       // await calculateGrade(catID);
   }
 
-
-  //   return categoryRef.categories((data) {
-  //     print(data);
-  //     for(Category cat in data){
-  //       print(cat);
-  //     }
-  //   },
-  //     onError: (err){
-  //       print('Error!!: ' + err.toString());
-  //     },
-  //     cancelOnError: false,);
-  // }
-
-  // Future<void> newAssessment(Assessment a, id) async{
-  //   DocumentSnapshot doc = await categoryRef.doc(id).get();
-  //   double totalpoints = double.parse(doc.get('totalPoints'));
-  //   double totalEarnedPoints = double.parse(doc.get('totalEarnedPoints'));
-  //   await categoryRef.doc(id).update({
-  //     'totalPoints':totalpoints + a.totalPoints,
-  //     'totalEarnedPoints' : totalEarnedPoints + a.yourPoints});
-  //
-  // }
-
-  //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
-// <<<<<<< HEAD
-// =======
-//
-//     AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
-//     DocumentSnapshot category = await categoryRef.doc(catID).get();
-//     QuerySnapshot assessments =
-//         await categoryRef.doc(catID).collection('assessments').get();
-// >>>>>>> 63e186bb409ea1cfe0e1d234fc16a571482e60af
 
     AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
@@ -172,14 +141,11 @@ class CategoryService {
     SplayTreeMap map = new SplayTreeMap<String, double>();
     double gradePercentAsDecimal,
         totalOfTotalPoints = 0,
-        totalofEarnedPoints = 0;
-    double weight = categorySnap.get('weight');
+        totalofEarnedPoints = 0,
+        totalEarnedWeights = 0;
+    double categoryWeight = categorySnap.get('weight');
     bool dropLowest = categorySnap.get('dropLowest');
 
-    if(await categorySnap.get('equalWeights')){
-      calculateEqualWeightedGrade(catID);
-      return;
-    }
 
     //calculate Totals
     for (DocumentSnapshot assessment in assessmentsSnap.docs) {
@@ -188,10 +154,15 @@ class CategoryService {
 
       double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
       double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
+      bool isCompleted = assessment.get('isCompleted') ?? false;
         totalOfTotalPoints += totalPoints;
         totalofEarnedPoints += yourPoints;
-        if (yourPoints > 0) {
+
+        if (isCompleted && totalPoints > 0 ) {
           map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
+          //this will be used only for equally wighted calc
+          double earnedWeight = (yourPoints / totalPoints) * ( categoryWeight / assessmentsSnap.size);
+          totalEarnedWeights += earnedWeight;
         }
     }
 
@@ -211,10 +182,20 @@ class CategoryService {
       totalofEarnedPoints -= lowestEP;
       totalOfTotalPoints -= lowestTP;
 
-     // print("----->> " + test);
+      //for equally weighted categroy,
+      double lowestEW = (lowestEP / lowestTP) * ( categoryWeight / assessmentsSnap.size);
+      totalEarnedWeights -= lowestEW;
+      //Add the full weight for that assessment to total earned weight
+      totalEarnedWeights += categoryWeight/ assessmentsSnap.size;
+
     }
 
-    gradePercentAsDecimal = weight * (totalofEarnedPoints / totalOfTotalPoints);
+    if(await categorySnap.get('equalWeights')){
+      gradePercentAsDecimal = totalEarnedWeights;
+    } else {
+      gradePercentAsDecimal =
+          categoryWeight * (totalofEarnedPoints / totalOfTotalPoints);
+    }
 
     categoryRef.doc(catID).update({
       'gradePercentAsDecimal': gradePercentAsDecimal,
@@ -222,38 +203,52 @@ class CategoryService {
       'earned': totalofEarnedPoints
     });
 
-    String courseID = categoryRef.parent.id;
-    String termID = categoryRef.parent.parent.parent.id;
-
     await CourseService(termID).calculateGrade(courseID);
   }
 
-  Future<void> calculateEqualWeightedGrade(catID) async {
-
-    AssessmentService aServ = AssessmentService(this.termID, courseID, catID);
-    DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
-    QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
-    SplayTreeMap map = new SplayTreeMap<String, double>();
-
-    double weight = categorySnap.get('weight');
-    bool dropLowest = categorySnap.get('dropLowest');
-
-    double totalEarnedWeights = 0;
-
-    for (DocumentSnapshot assessment in assessmentsSnap.docs) {
-      //reset all assessment so that none is dropped
-      aServ.updateDropState(assessment.id, false);
-
-      double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
-      double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
-
-      if (totalPoints > 0) {
-        double earnedWeight = (yourPoints / totalPoints) * (weight / assessmentsSnap.size);
-        totalEarnedWeights += earnedWeight;
-
-        map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
-      }
-    }
-  }
+  // Future<void> calculateEqualWeightedGrade(catID) async {
+  //
+  //   AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
+  //   DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
+  //   QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
+  //   SplayTreeMap map = new SplayTreeMap<String, double>();
+  //
+  //   double catWeight = categorySnap.get('weight');
+  //   double  totalOfTotalPoints = 0,
+  //           totalofEarnedPoints = 0;
+  //
+  //   bool dropLowest = categorySnap.get('dropLowest');
+  //
+  //   double totalEarnedWeights = 0;
+  //
+  //   for (DocumentSnapshot assessment in assessmentsSnap.docs) {
+  //     //reset all assessment so that none is dropped
+  //     aServ.updateDropState(assessment.id, false);
+  //
+  //     double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
+  //     double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
+  //     totalOfTotalPoints += totalPoints;
+  //     totalofEarnedPoints += yourPoints;
+  //
+  //     if (totalPoints > 0) {
+  //       double earnedWeight = (yourPoints / totalPoints) * (catWeight / assessmentsSnap.size);
+  //       totalEarnedWeights += earnedWeight;
+  //
+  //
+  //       map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
+  //     }
+  //   }
+  //
+  //   double gradePercentAsDecimal = (totalEarnedWeights);
+  //
+  //   categoryRef.doc(catID).update({
+  //     'gradePercentAsDecimal': gradePercentAsDecimal,
+  //     'total': totalOfTotalPoints,
+  //     'earned': totalofEarnedPoints
+  //   });
+  //
+  //
+  //   await CourseService(termID).calculateGrade(courseID);
+  // }
 }
 

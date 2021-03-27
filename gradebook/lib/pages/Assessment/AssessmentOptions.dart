@@ -53,9 +53,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     this.categoryID = categoryID;
     this.assessment = a;
     this.initialName = a.name;
+    this.assignmentIsCompleted = a.isCompleted;
     // TODO: add initialDate = a.date;
     initialYourPoints = a.yourPoints.toString();
     initialTotalPoints = a.totalPoints.toString();
+
   }
 
   FocusScopeNode focusScopeNode = FocusScopeNode();
@@ -209,7 +211,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   } else if(nameController.text == ""){
                   } else{ //When assignment is not completed yet
                     await assServ.addAssessment(
-                        nameController.text, "0", "0");
+                        nameController.text, assignmentIsCompleted, "0", "0");
                     Navigator.pop(context);
                   }
 
@@ -332,13 +334,13 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
                     //TODO: Send update to firebase
                     // await assServ.addAssessment(
-                    //     nameController.text, totalPointsController.text, yourPointsController.text);
+                    //     nameController.text, totalPointsController.text, yourPointsController.text, assignmentIsCompleted);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(nameController.text == ""){
                   } else{
                     await assServ.addAssessment(
-                        nameController.text, "0", "0");
+                        nameController.text, "0", "0", assignmentIsCompleted);
                     Navigator.pop(context);
                   }
                 },

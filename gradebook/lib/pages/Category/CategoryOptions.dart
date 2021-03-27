@@ -25,6 +25,7 @@ class _CategoryOptions extends State<CategoryOptions> {
   Category c;
   String addedCategory;
   String initialWeight;
+  bool equalWeights;
 
   CategoryService categoryService;
 
@@ -33,6 +34,7 @@ class _CategoryOptions extends State<CategoryOptions> {
     categoryService = new CategoryService(term.termID, course.id);
     addedCategory = c.categoryName;
     initialWeight = c.categoryWeight;
+    equalWeights = c.equalWeights;
     if (c.dropLowestScore == null) {
       dropLowest = false;
     } else {
@@ -135,6 +137,20 @@ class _CategoryOptions extends State<CategoryOptions> {
             ),
           ],
         ),
+            Row(
+              children: [
+                Switch(
+                  value: equalWeights,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      equalWeights = updateChecked;
+                    });
+                  },
+                ),
+                Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
         Expanded(
           child: SizedBox(
             width: 300,
@@ -152,7 +168,8 @@ class _CategoryOptions extends State<CategoryOptions> {
                 // Get updated weight with categoryWeightController.text
                 // Get updated drop lowest bool with dropLowest
                 await categoryService.updateCategory(addedCategory,
-                    categoryWeightController.text, dropLowest, c.id);
+                    categoryWeightController.text, dropLowest, equalWeights, c.id);
+                await categoryService.calculateGrade(c.id);
                 Navigator.pop(context);
               },
               child: Text(
@@ -165,7 +182,7 @@ class _CategoryOptions extends State<CategoryOptions> {
         )
       ])),
       width: 100,
-      height: 245,
+      height: 315,
     ));
   }
 }

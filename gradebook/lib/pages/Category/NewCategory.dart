@@ -24,6 +24,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   List<Category> c = [];
   // ignore: non_constant_identifier_names
   bool dropLowest_isChecked = false;
+  var equalWeights = false;
   String addedCategory;
 
   CategoryService categoryService;
@@ -120,6 +121,20 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    Switch(
+                      value: equalWeights,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (updateChecked) {
+                        setState(() {
+                          equalWeights = updateChecked;
+                        });
+                      },
+                    ),
+                    Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
+                  ],
+                ),
                 Expanded(
                   child: SizedBox(
                     width: 300,
@@ -129,10 +144,6 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                       onPressed: () async {
 
                         print(addedCategory);
-                        //todo: -------------------------------------------------------------------------------
-                        //todo: add GUI thing to switch category from equally weighted to point-based weight.
-                        var equalWeights = false;
-                        //todo: -------------------------------------------------------------------------------
                         await categoryService.addCategory(
                             addedCategory, categoryWeightController.text, dropLowest_isChecked, equalWeights);
                         Navigator.pop(context);
@@ -147,7 +158,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 )
               ])),
           width: 100,
-          height: 285,
+          height: 335,
         ));
   }
 }
