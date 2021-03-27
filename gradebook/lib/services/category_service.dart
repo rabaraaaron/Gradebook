@@ -9,6 +9,8 @@ import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
+import 'assessment_service.dart';
+import 'course_service.dart';
 import 'course_service.dart';
 import 'user_service.dart';
 import 'package:gradebook/model/Category.dart';
@@ -106,11 +108,13 @@ class CategoryService {
   }
 
   Future<void> deleteCategory(id) async {
-    categoryRef.doc(id).delete();
+    await categoryRef.doc(id).delete();
+    await CourseService(termID).calculateGrade(courseID);
   }
 
   Future<void> setDropLowest(catID, value) async {
     await categoryRef.doc(catID).update({'dropLowest': value});
+    // await CourseService(termID).calculateGrade(courseID);
   }
 
   List<Category> getCategoryData() {
@@ -125,7 +129,7 @@ class CategoryService {
         'weight': double.parse(weight),
         'dropLowest': dropLowest,
       });
-
+      // await calculateGrade(catID);
   }
 
 
@@ -153,6 +157,14 @@ class CategoryService {
 
   //todo: still need to implement "allAssessmentEqualWithinCategory"
   Future<void> calculateGrade(catID) async {
+// <<<<<<< HEAD
+// =======
+//
+//     AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
+//     DocumentSnapshot category = await categoryRef.doc(catID).get();
+//     QuerySnapshot assessments =
+//         await categoryRef.doc(catID).collection('assessments').get();
+// >>>>>>> 63e186bb409ea1cfe0e1d234fc16a571482e60af
 
     AssessmentService aServ = AssessmentService(this.termID, this.courseID, catID);
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
@@ -213,10 +225,7 @@ class CategoryService {
     String courseID = categoryRef.parent.id;
     String termID = categoryRef.parent.parent.parent.id;
 
-    print(courseID);
-    print(termID);
-
-    CourseService(termID).calculateGrade(courseID);
+    await CourseService(termID).calculateGrade(courseID);
   }
 
   Future<void> calculateEqualWeightedGrade(catID) async {

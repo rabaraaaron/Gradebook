@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/pages/Term/TermOptions.dart';
 import '../Courses/CoursePage.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
+import 'DeleteTermConfirmation.dart';
+import 'NewTerm.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/user_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 
-import 'DeleteTermConfirmation.dart';
-import 'NewTerm.dart';
 
 class TermsPage extends StatefulWidget {
   @override
@@ -68,7 +69,15 @@ class _TermsListState extends State<TermsList> {
                   color: Theme.of(context).dividerColor,
                   size: 35,
                 ),
-                onTap: () => null,
+                onTap: () async {
+                  Term t = terms[index];
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return TermOptions(t);
+                    },
+                  );
+                },
               ),
               IconSlideAction(
                 color: Colors.transparent,
@@ -118,7 +127,7 @@ class _TermsListState extends State<TermsList> {
                     ),
                     Text(
                       "${terms[index].gpa}",
-                      style: Theme.of(context).textTheme.headline3,
+                      style: Theme.of(context).textTheme.headline5,
                       textScaleFactor: 2,
                     ),
                   ],

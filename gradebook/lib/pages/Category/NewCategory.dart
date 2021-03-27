@@ -74,7 +74,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 Text(
                   "Add new Category",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 27.5,
                     color: Theme.of(context).dividerColor,
                     fontWeight: FontWeight.w300,
                   ),
@@ -127,6 +127,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13.0)),
                       onPressed: () async {
+
                         print(addedCategory);
                         //todo: -------------------------------------------------------------------------------
                         //todo: add GUI thing to switch category from equally weighted to point-based weight.

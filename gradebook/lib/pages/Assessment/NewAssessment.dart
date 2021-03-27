@@ -68,7 +68,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
 
 
     if(isChecked){
-      dialogueHeight = 395;
+      dialogueHeight = 340;
       col = Column(children: [
         Text(
           "Add new Item",
@@ -83,42 +83,6 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
             hintText: "ex Quiz 1",
             labelText: 'Assessment Title',
           ),
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: 175,
-              child: TextFormField(
-                enabled: false,
-                readOnly: true,
-                controller: date,
-                decoration: const InputDecoration(
-                    labelText: 'Due Date'
-                ),
-              ),
-            ),
-            IconButton(
-              iconSize: 40,
-              icon: Icon(Icons.date_range),
-              onPressed: (){
-                showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2025),
-                ).then((v) {
-                  if(v == null){
-                    return null;
-                  } else{
-                    d = v;
-                    setState(() {
-                      date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
-                    });
-                  }
-                });
-              },
-            )
-          ],
         ),
         TextFormField(
           controller: totalPoints,
@@ -169,8 +133,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                       yourPoints.text != ""){//When assignment is completed
                     await assServ.addAssessment(
                       //TODO: add due date to the database
-                        name.text, totalPoints.text, yourPoints.text);
-                    //await CategoryService(termID, courseID).calculateGrade(categoryID);
+                        name.text, totalPoints.text, yourPoints.text, d);
                     Navigator.pop(context);
                   } else if(name.text == ""){
                   } else{ //When assignment is not completed yet
@@ -192,7 +155,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
 
       ]);
     } else {
-      dialogueHeight = 260;
+      dialogueHeight = 265;
       col = Column(children: [
         Text(
           "Add new Item",

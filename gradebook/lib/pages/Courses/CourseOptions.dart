@@ -59,11 +59,7 @@ class _CourseOptionsState extends State<CourseOptions> {
                 child: Column(children: [
                   Text(
                     "Course Options",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Theme.of(context).dividerColor,
-                      fontWeight: FontWeight.w300,
-                    ),
+                    style: Theme.of(context).textTheme.headline4
                   ),
                   Divider(color: Theme.of(context).dividerColor),
                   TextFormField(
@@ -152,9 +148,6 @@ class _CourseOptionsState extends State<CourseOptions> {
                                   initialCredits = null;
                                 }
                                 //TODO: Update the changes to the course
-                                print(course.id);
-                                print(courseTitleController.text);
-                                print(creditHoursController.text);
                                 // Get updated title with courseTitleController.text
                                 // Get updated credits with creditHoursController.text
                                 // Get Pass/fail updated value with checked1

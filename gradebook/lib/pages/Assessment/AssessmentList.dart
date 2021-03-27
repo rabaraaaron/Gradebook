@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/Assessment.dart';
+import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
@@ -54,45 +55,54 @@ class _AssessmentListState extends State<AssessmentList> {
         } else{
           isDroppedText = Text("");
         }
-        entries.add(Card( ///this card is to add transparent background to the assessment tile
-          color: Colors.brown[50].withOpacity(.2),
-          child: Slidable(
-            controller: slidableController,
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: .2,
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(
-                  Icons.add_alert,
-                  color: Theme.of(context).dividerColor,
-                  size: 35,
-                ),
-                onTap: () => scheduleNotification(courseID, element.name),
+        entries.add(Slidable(
+          controller: slidableController,
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: .2,
+          secondaryActions: <Widget>[
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.add_alert,
+                color: Theme.of(context).dividerColor,
+                size: 35,
               ),
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).dividerColor,
-                  size: 35,
-                ),
+              onTap: () => scheduleNotification(courseID, element.name),
+            ),
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.settings,
+                color: Theme.of(context).dividerColor,
+                size: 35,
               ),
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(
-                  Icons.delete,
-                  color: Theme.of(context).dividerColor,
-                  size: 35,
-                ),
-                onTap: ()async {
-                  await assServ.deleteAssessment(element.id);
-                },
-              )
-            ],
+              onTap: () async {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AssessmentOptions(context, termID,
+                          courseID, categoryID, element);
+                    });
+              },
+            ),
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.delete,
+                color: Theme.of(context).dividerColor,
+                size: 35,
+              ),
+              onTap: ()async {
+                await assServ.deleteAssessment(element.id);
+              },
+            )
+          ],
+          child: Card(
+            color: Colors.brown[50].withOpacity(.2),
+
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [

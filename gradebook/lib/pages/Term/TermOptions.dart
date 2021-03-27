@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/term_service.dart';
 
 
 // ignore: must_be_immutable
-class NewTerm extends StatefulWidget {
-  var c;
+class TermOptions extends StatefulWidget {
   var termsList;
 
-  NewTerm(context, terms) {
-    c = context;
-    termsList = terms;
+  TermOptions(t) {
+    termsList = t;
   }
   @override
-  _NewTermState createState() => _NewTermState(c, termsList);
+  _TermOptionsState createState() => _TermOptionsState(termsList);
 }
 
-class _NewTermState extends State<NewTerm> {
-  var thisContext;
-  var thisTerms;
+class _TermOptionsState extends State<TermOptions> {
+  Term term;
   var termYear;
   var addedTerm;
-  var checked = false;
+  var isHypothetical = false;
 
-  _NewTermState(context, terms) {
-    thisContext = context;
-    thisTerms = terms;
+  _TermOptionsState(t) {
+    term = t;
+    addedTerm = term.name;
+    termYear = term.year;
+    //TODO: add hypothetical field?
+    // this.isHypothetical = term.isHypothetical;
   }
 
   @override
@@ -57,7 +58,7 @@ class _NewTermState extends State<NewTerm> {
               child: Column(
                   children: [
                     Text(
-                      "Add new Term",
+                      "Term Options",
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     Divider(color: Theme.of(context).dividerColor),
@@ -93,10 +94,10 @@ class _NewTermState extends State<NewTerm> {
                         children: [
                           Switch(
                             activeColor: Theme.of(context).accentColor,
-                            value: checked,
-                            onChanged: (updateChecked) {
+                            value: isHypothetical,
+                            onChanged: (updateisHypothetical) {
                               setState(() {
-                                checked = updateChecked;
+                                isHypothetical = updateisHypothetical;
                               });
                             },
                           ),
@@ -115,10 +116,14 @@ class _NewTermState extends State<NewTerm> {
                             color: Theme.of(context).primaryColor,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
                             onPressed: () async {
-                              await term.addTerm(addedTerm, termYear);
-                              Navigator.pop(context);
+                              //TODO: send update to database
+                              // print(addedTerm); To get the term name
+                              // print(termYear); To get the term year
+                              // print(isHypothetical); Bool for if this is a hypothetical term
+                              // await term.addTerm(addedTerm, termYear);
+                              // Navigator.pop(context);
                             },
-                            child: Text("Add",  style: Theme.of(context).textTheme.headline2,)
+                            child: Text("Confirm",  style: Theme.of(context).textTheme.headline2,)
                         ),
                       ),
                     ),
