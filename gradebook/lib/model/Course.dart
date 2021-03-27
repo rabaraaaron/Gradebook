@@ -16,6 +16,7 @@ class Course with ChangeNotifier {
   final String id;
   double _sumOfCategoriesWeights = 0.0;
   String gradePercent;
+  String letterGrade;
 
 
 
@@ -28,7 +29,7 @@ class Course with ChangeNotifier {
   //
   // }
 
-  Course({this.name, this.categories, this.term, this.year, this.credits, this.id, this.gradePercent});
+  Course({this.name, this.categories, this.term, this.year, this.credits, this.id, this.gradePercent, this.letterGrade});
 
   @override
   String toString() {
@@ -76,13 +77,7 @@ class Course with ChangeNotifier {
   //
   // }
 
-  String getLetterGrade(){
-    var gPercent = double.parse(gradePercent);
-    if(gPercent > 90){ return"A"; }
-    if(gPercent > 80){ return"B"; }
-    if(gPercent > 70){ return"C"; }
-    if(gPercent > 60){ return"D"; } else {return "F";}
-  }
+
 
 
 }

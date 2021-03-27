@@ -163,7 +163,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                     height: 50,
                                     child: Center(
                                       child: Text(
-                                        "${classes[index].getLetterGrade()}",
+                                        "${classes[index].letterGrade}",
                                         // "${classes[index].getGradeLetter}",
                                         textScaleFactor: 2,
                                         style: TextStyle(

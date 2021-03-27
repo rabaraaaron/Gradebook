@@ -40,6 +40,7 @@ class CourseService {
             'name': name,
             'credits': int.parse(credits),
             'gradePercent': 0,
+        'letterGrade' : "",
         'passFail':passFail
           })
           .then((value) => print("Course Added"))
@@ -63,6 +64,7 @@ class CourseService {
           credits: doc.get('credits').toString() ?? "0",
           id: doc.id,
           gradePercent: doc.get('gradePercent').toString() ?? "0",
+          letterGrade: doc.get('letterGrade'),
         );
       }).toList();
       return v;
@@ -103,11 +105,30 @@ class CourseService {
       courseGradeDecimal += category.get('gradePercentAsDecimal');
     }
     double gradePercent = courseGradeDecimal;
+
+       String letterGrade = getLetterGrade(gradePercent);
+
     print(courseGradeDecimal);
     courseRef.doc(courseID).update({
-      'gradePercent' : gradePercent
+      'gradePercent' : gradePercent,
+      'letterGrade' : letterGrade
     });
 
+  }
+
+  String getLetterGrade(gradePercent){
+    var gPercent = gradePercent;
+    if(gPercent > 93){ return"A"; }
+    if(gPercent > 90){ return"A-"; }
+    if(gPercent > 87){ return"B+"; }
+    if(gPercent > 83){ return"B"; }
+    if(gPercent > 80){ return"B-"; }
+    if(gPercent > 77){ return"C+"; }
+    if(gPercent > 73){ return"C"; }
+    if(gPercent > 70){ return"C-"; }
+    if(gPercent > 67){ return"D+"; }
+    if(gPercent > 63){ return"D"; }
+    if(gPercent > 60){ return"D-"; } else {return "F";}
   }
 
 }
