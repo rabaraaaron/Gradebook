@@ -74,7 +74,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 Text(
                   "Add new Category",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 27.5,
                     color: Theme.of(context).dividerColor,
                     fontWeight: FontWeight.w300,
                   ),

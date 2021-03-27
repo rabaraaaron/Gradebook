@@ -84,13 +84,17 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     new AssessmentService(termID, courseID, categoryID);
 
     if(assignmentIsCompleted){
-      dialogueHeight = 395;
+      dialogueHeight = 325;
       col = Column(children: [
         Text(
-          "Add new Item",
-          style: Theme.of(context).textTheme.headline4,
+          "Assessment Options",
+          style: TextStyle(
+            fontSize: 25,
+            color: Theme.of(context).dividerColor,
+            fontWeight: FontWeight.w300,
+          ),
         ),
-        Divider(color: Theme.of(context).dividerColor,),
+        Divider(color: Theme.of(context).dividerColor,thickness: .2,),
         TextFormField(
           initialValue: initialName,
           controller: nameController,
@@ -109,45 +113,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             labelText: 'Assessment Title',
           ),
         ),
-        Row(
-          children: [
-            SizedBox(
-              width: 175,
-              child: TextFormField(
-                //TODO: add initialDate to assessment database
-                // initialValue: initialDate,
-                enabled: false,
-                readOnly: true,
-                controller: dateController,
-                decoration: const InputDecoration(
-                    labelText: 'Due Date'
-                ),
-              ),
-            ),
-            IconButton(
-              iconSize: 40,
-              icon: Icon(Icons.date_range),
-              onPressed: (){
-                showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2025),
-                ).then((v) {
-                  if(v == null){
-                    return null;
-                  } else{
-                    d = v;
-                    dateController = TextEditingController();
-                    setState(() {
-                      dateController.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
-                    });
-                  }
-                });
-              },
-            )
-          ],
-        ),
+
         TextFormField(
           initialValue: initialTotalPoints,
           controller: totalPointsController,
@@ -186,9 +152,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             labelText: 'Points Earned',
           ),
         ),
-        SizedBox(
-          height: 15,
-        ),
+
         Row(
           children: [
             Switch(
@@ -252,7 +216,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
                 },
                 child: Text(
-                  "Add",
+                  "Confirm",
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 color: Theme.of(context).primaryColor,
@@ -262,11 +226,15 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
       ]);
     } else {
-      dialogueHeight = 260;
+      dialogueHeight = 265;
       col = Column(children: [
         Text(
-          "Add new Item",
-          style: Theme.of(context).textTheme.headline4,
+          "Assessment Options",
+          style: TextStyle(
+            fontSize: 25,
+            color: Theme.of(context).dividerColor,
+            fontWeight: FontWeight.w300,
+          ),
         ),
         Divider(color: Theme.of(context).dividerColor,),
         TextFormField(
@@ -375,7 +343,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   }
                 },
                 child: Text(
-                  "Add",
+                  "Confirm",
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 color: Theme.of(context).primaryColor,

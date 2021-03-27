@@ -59,11 +59,7 @@ class _CourseOptionsState extends State<CourseOptions> {
                 child: Column(children: [
                   Text(
                     "Course Options",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Theme.of(context).dividerColor,
-                      fontWeight: FontWeight.w300,
-                    ),
+                    style: Theme.of(context).textTheme.headline4
                   ),
                   Divider(color: Theme.of(context).dividerColor),
                   TextFormField(

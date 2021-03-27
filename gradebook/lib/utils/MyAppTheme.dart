@@ -208,7 +208,7 @@ class MyAppTheme with ChangeNotifier{
             fontWeight: FontWeight.w300),
         //For text in the body of the Scaffold. Changes via light or dark mode.
         headline3: TextStyle(
-            fontSize: 15.0,
+            fontSize: 17.5,
             color: Colors.black,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
@@ -238,7 +238,7 @@ class MyAppTheme with ChangeNotifier{
             fontWeight: FontWeight.w300),
         //For text in the body of the Scaffold. Changes via light or dark mode.
         headline3: TextStyle(
-            fontSize: 15.0,
+            fontSize: 25.0,
             color: Colors.white,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
