@@ -50,17 +50,6 @@ class _AssessmentTileState extends State<AssessmentTile> {
         catFromProvider = category;
       }
     }
-
-    if(assessments != null) {
-      // for (int i = 0; i < assessments.length; i++) {
-      //   totalPoints += assessments[i].totalPoints;
-      //   yourPoints += assessments[i].yourPoints;
-      // }
-
-    }
-    // print(cat.categoryName);
-    // print(cat.earned);
-    // print(cat.total);
     return Container(
       child: ExpansionTile(
         title: Row(

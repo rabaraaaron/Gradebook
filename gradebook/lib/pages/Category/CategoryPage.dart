@@ -70,6 +70,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 endIndent: 25.0,
               ),
           itemCount: categories.length,
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             return Container(
               child: StreamProvider.value(
@@ -169,7 +170,72 @@ class _CategoriesPageState extends State<CategoriesPage> {
               })
         ],
       ),
-      body: listView,
+      body: Column(
+        children: [
+    //       Card( color: Colors.brown[200].withOpacity(.8),
+    //
+    //         child: Table(
+    //           border:TableBorder.all(width: 1.0,color: Colors.black87),
+    //           children: [
+    //             TableRow(
+    //         children: [
+    //           Text(" Grade: A",textScaleFactor: 1.3,),
+    //           Text("Used Weight",textScaleFactor: 1.5),
+    //           Text("University",textScaleFactor: 1.5),
+    //           ]),
+    //       TableRow(
+    //           children: [
+    //             Text("test",textScaleFactor: 1.5),
+    //             Text("test",textScaleFactor: 1.5),
+    //             Text("test",textScaleFactor: 1.5),
+    //           ]
+    //       )
+    //     ],
+    //   ),
+    // ),
+
+
+//todo:------------------------=======================================
+
+          Card(
+          color: Colors.grey[400],
+          child: Column(
+            children: [
+              Container( height: 40,
+                child: Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    Text( "Grade: A",
+                      style: TextStyle(fontSize: 20)
+                    ),
+                    Expanded(child: Container(), flex: 2,),
+                    Text("Uncompleted \nAssesssments: 4",
+                        style: TextStyle(fontSize: 18)),
+                    SizedBox(width: 10,)
+                  ],
+                ),
+              ),
+              Container( height: 40,
+                child: Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    Text( "percent: ${course.gradePercent}%",
+                        style: TextStyle(fontSize: 20)
+                    ),
+                    Expanded(child: Container(), flex: 2,),
+                    Text('Allocated Weight: 55%',
+                        style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 10,)
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+          //todo:-------------------------=======================================
+          Expanded(flex: 1,child: listView),
+        ],
+      )
     );
   }
 }
