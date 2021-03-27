@@ -178,9 +178,15 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                 SizedBox(
                                   height: 20,
                                   width: 60,
-                                  child: Text("${classes[index].gradePercent}"),
+                                  child: Text(
+                                      "${classes[index].gradePercent}%",
+                                      style: TextStyle(
+                                        color: Theme.of(context).dividerColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 20.0,
+                                        ),
                                 ),
-                              ],
+                                )],
                             ),
                           ),
                         ],

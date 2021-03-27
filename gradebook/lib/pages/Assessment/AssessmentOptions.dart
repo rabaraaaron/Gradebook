@@ -84,7 +84,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     new AssessmentService(termID, courseID, categoryID);
 
     if(assignmentIsCompleted){
-      dialogueHeight = 325;
+      dialogueHeight = 345;
       col = Column(children: [
         Text(
           "Assessment Options",
@@ -226,7 +226,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
       ]);
     } else {
-      dialogueHeight = 265;
+      dialogueHeight = 285;
       col = Column(children: [
         Text(
           "Assessment Options",

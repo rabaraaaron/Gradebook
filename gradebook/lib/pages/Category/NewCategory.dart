@@ -147,7 +147,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 )
               ])),
           width: 100,
-          height: 245,
+          height: 285,
         ));
   }
 }
