@@ -38,7 +38,6 @@ class Category{
   //   totalPoints = 0;
   // }
   // void dropLowest() {
-  //   //print(categoryItems);
   //   for(Assessment a in categoryItems){
   //     a.dropped = false;
   //   }

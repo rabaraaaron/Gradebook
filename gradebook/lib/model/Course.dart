@@ -36,7 +36,6 @@ class Course with ChangeNotifier {
   }
 
   // void updateGrade( double grade){
-  //   //print("update course " + this.name + " grade from " + this.grade.toString() + " to " + grade.toString());
   //   this.grade = (grade * 100).roundToDouble()/100;
   //   notifyListeners();
   // }

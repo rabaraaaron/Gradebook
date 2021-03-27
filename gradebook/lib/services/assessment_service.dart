@@ -34,7 +34,7 @@ class AssessmentService {
         'yourPoints' : yourPoints,
         'isDropped' : false,
         'createDate' : getFormattedDate(),
-        'dueDate' : dueDate ?? null
+        // 'dueDate' : dueDate ?? null
 
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
@@ -57,6 +57,12 @@ class AssessmentService {
       // print(" ---->" + test);
       //DateTime myDateTime = (doc.get('createDate')).toDate();
 
+
+      // DateTime dueDate;
+      // try{
+      //   dueDate = doc.get('dueDate').toDate();
+      // }catch(e) {dueDate = null; }
+
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",
@@ -67,7 +73,7 @@ class AssessmentService {
           catID: catID,
           courseID: courseID,
           termID: termID,
-          dueDate:  doc.get('dueDate').toDate()
+          // dueDate: dueDate
       );
     }).toList();
 
@@ -87,13 +93,13 @@ class AssessmentService {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'name': name});
-    await CategoryService(termID, courseID).calculateGrade(catID);
+    // await CategoryService(termID, courseID).calculateGrade(catID);
   }
   Future<void> updateDropState(id, bool drop) async {
     // print(id);
     // print(name);
     await assessmentRef.doc(id).update({'isDropped': drop});
-    await CategoryService(termID, courseID).calculateGrade(catID);
+    // await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
   /// Convert current date to a string of numbers so we can

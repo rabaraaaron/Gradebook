@@ -127,7 +127,6 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13.0)),
                       onPressed: () async {
-                        print(addedCategory);
                         await categoryService.addCategory(
                             addedCategory, categoryWeightController.text, dropLowest_isChecked);
                         Navigator.pop(context);

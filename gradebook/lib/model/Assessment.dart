@@ -15,7 +15,7 @@ class Assessment with ChangeNotifier{
   final int createDate;
   bool isDropped = false;
 
-  DateTime dueDate;
+  // DateTime dueDate;
 
 
   Assessment({
@@ -27,7 +27,8 @@ class Assessment with ChangeNotifier{
     this.courseID,
     this.termID,
     this.isDropped,
-    this.createDate, this.dueDate,
+    this.createDate,
+    // this.dueDate,
   });
 
   // bool LowestScoreCompare(Assessment a1, Assessment a2) {

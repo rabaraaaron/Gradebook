@@ -147,9 +147,6 @@ class _CategoryOptions extends State<CategoryOptions> {
                   categoryWeightController.text = initialWeight;
                   initialWeight = null;
                 }
-                print(addedCategory);
-                print(categoryWeightController.text);
-                print(dropLowest);
                 //TODO: Update the category info in the database
                 // Get updated category name with addedCategory
                 // Get updated weight with categoryWeightController.text

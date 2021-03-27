@@ -111,6 +111,7 @@ class CategoryService {
 
   Future<void> setDropLowest(catID, value) async {
     await categoryRef.doc(catID).update({'dropLowest': value});
+    // await CourseService(termID).calculateGrade(courseID);
   }
 
   List<Category> getCategoryData() {
@@ -125,7 +126,7 @@ class CategoryService {
         'weight': double.parse(weight),
         'dropLowest': dropLowest,
       });
-      await calculateGrade(catID);
+      // await calculateGrade(catID);
   }
 
 
@@ -213,10 +214,7 @@ class CategoryService {
     String courseID = categoryRef.parent.id;
     String termID = categoryRef.parent.parent.parent.id;
 
-    print(courseID);
-    print(termID);
-
-    CourseService(termID).calculateGrade(courseID);
+    await CourseService(termID).calculateGrade(courseID);
   }
 }
 
