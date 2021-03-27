@@ -28,27 +28,29 @@ class DeleteTermConfirmation extends StatelessWidget{
               "Are you sure you want to delete the ${terms[index].name} ${terms[index].year} term?",
               style: Theme.of(context).textTheme.headline3,
             ),
+            SizedBox(
+              height: 20,
+            ),
+            FlatButton(
+              color: Colors.red,
+              height: 40,
+              onPressed: () {
+                TermService().deleteTerm("${terms[index].name}", terms[index].year);
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Delete",
+                textScaleFactor: 1.25,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
           ]
       ),
-      actions: <Widget>[
-        FlatButton(
-          color: Colors.red,
-          height: 40,
-          onPressed: () {
-            TermService().deleteTerm("${terms[index].name}", terms[index].year);
-            Navigator.pop(context);
-          },
-          child: Text(
-            "Delete",
-            textScaleFactor: 1.25,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ),
-      ],
+
     );
   }
 

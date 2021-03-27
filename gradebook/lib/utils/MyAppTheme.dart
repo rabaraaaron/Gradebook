@@ -208,7 +208,7 @@ class MyAppTheme with ChangeNotifier{
             fontWeight: FontWeight.w300),
         //For text in the body of the Scaffold. Changes via light or dark mode.
         headline3: TextStyle(
-            fontSize: 17.5,
+            fontSize: 16.5,
             color: Colors.black,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
@@ -224,6 +224,10 @@ class MyAppTheme with ChangeNotifier{
             color: Colors.black,
             fontWeight: FontWeight.w300
         ),
+        bodyText1: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+            fontWeight: FontWeight.w300),
       );
     } else{
       return TextTheme(
@@ -238,7 +242,7 @@ class MyAppTheme with ChangeNotifier{
             fontWeight: FontWeight.w300),
         //For text in the body of the Scaffold. Changes via light or dark mode.
         headline3: TextStyle(
-            fontSize: 25.0,
+            fontSize: 16.5,
             color: Colors.white,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
@@ -254,6 +258,10 @@ class MyAppTheme with ChangeNotifier{
             color: Colors.white,
             fontWeight: FontWeight.w300
         ),
+        bodyText1: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+            fontWeight: FontWeight.w300),
       );
     }
   }

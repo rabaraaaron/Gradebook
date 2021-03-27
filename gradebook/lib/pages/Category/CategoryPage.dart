@@ -98,7 +98,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
                                   categories[index], term, course);
                             });
                       },
-                      //TODO: Add alert box for the category settings
                     ),
                     IconSlideAction(
                       color: Colors.transparent,
@@ -132,6 +131,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
     } else {
       listView = Container();
     }
+
+    Color cardColor = Theme.of(context).primaryColor;
+    String percent = double.parse((course.gradePercent)).toStringAsFixed(2);
+    TextStyle styleInCard = Theme.of(context).textTheme.bodyText1;
 
     return Scaffold(
       key: scaffoldKey,
@@ -196,42 +199,38 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
 
 //todo:------------------------=======================================
-
+          SizedBox(height: 5,),
           Card(
-          color: Colors.grey[400],
+          color: cardColor,
           child: Column(
             children: [
-              Container( height: 40,
-                child: Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    Text( "Grade: A",
-                      style: TextStyle(fontSize: 20)
-                    ),
-                    Expanded(child: Container(), flex: 2,),
-                    Text("Uncompleted \nAssesssments: 4",
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(width: 10,)
-                  ],
-                ),
+              SizedBox(height: 5,),
+              Row(
+                children: [
+                  SizedBox(width: 10,),
+                  Text( "Grade: A",
+                    style: styleInCard,
+                  ),
+                  Expanded(child: Container(), flex: 2,),
+                ],
               ),
-              Container( height: 40,
-                child: Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    Text( "percent: ${course.gradePercent}%",
-                        style: TextStyle(fontSize: 20)
-                    ),
-                    Expanded(child: Container(), flex: 2,),
-                    Text('Allocated Weight: 55%',
-                        style: TextStyle(fontSize: 20)),
-                    SizedBox(width: 10,)
-                  ],
-                ),
+              Text("Uncompleted Assessments: 4",
+                  style: styleInCard),
+              Row(
+                children: [
+                  SizedBox(width: 10,),
+                  Text( "percent: $percent%",
+                      style: styleInCard
+                  ),
+                ],
               ),
+              Text('Allocated Weight: 55%',
+                  style: styleInCard),
+              SizedBox(height: 5,),
             ],
           ),
         ),
+          SizedBox(height: 5,),
           //todo:-------------------------=======================================
           Expanded(flex: 1,child: listView),
         ],

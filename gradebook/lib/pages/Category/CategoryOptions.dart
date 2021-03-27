@@ -148,7 +148,7 @@ class _CategoryOptions extends State<CategoryOptions> {
                     });
                   },
                 ),
-                Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
+                Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
               ],
             ),
         Expanded(
@@ -182,7 +182,7 @@ class _CategoryOptions extends State<CategoryOptions> {
         )
       ])),
       width: 100,
-      height: 315,
+      height: 300,
     ));
   }
 }

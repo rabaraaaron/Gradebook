@@ -126,7 +126,8 @@ class _CourseOptionsState extends State<CourseOptions> {
                           });
                         },
                       ),
-                      Text("Equally weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
+                      Text("Equally weighed \nAssignments",
+                          style: Theme.of(context).textTheme.headline3),
                     ],
                   ),
                   Expanded(
