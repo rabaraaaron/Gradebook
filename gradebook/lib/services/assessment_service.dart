@@ -25,6 +25,7 @@ class AssessmentService {
         .collection("assessments");
   }
 
+
   Future<void> addAssessment(name, totalPoints, yourPoints, isCompleted, [dueDate]) async {
 
      try{
@@ -36,7 +37,7 @@ class AssessmentService {
          'isDropped' : false,
          'createDate' : getFormattedDate(),
          'isCompleted' : isCompleted,
-         // 'dueDate' : dueDate ?? null
+         'dueDate' : dueDate ?? null
 
        })
            .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
@@ -56,7 +57,9 @@ class AssessmentService {
     var list = snapshot.docs.map<Assessment>((doc) {
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
-
+      DateTime dueDate;
+      if(doc.get('dueDate') != null)
+        dueDate = doc.get('dueDate').toDate();
       return Assessment(
         name: doc.get('name'),
         totalPoints: tp ?? "",
@@ -68,7 +71,7 @@ class AssessmentService {
         catID: catID,
         courseID: courseID,
         termID: termID,
-        // dueDate: dueDate
+        dueDate: dueDate ?? DateTime.now()
       );
     }).toList();
 
@@ -88,7 +91,9 @@ class AssessmentService {
     var v = snapshot.docs.map<Assessment>((doc) {
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
-
+      DateTime dueDate;
+      if(doc.get('dueDate') != null)
+         dueDate = doc.get('dueDate').toDate();
       return Assessment(
           name: doc.get('name'),
           totalPoints: tp ?? "",
@@ -100,7 +105,7 @@ class AssessmentService {
           catID: catID,
           courseID: courseID,
           termID: termID,
-          // dueDate: dueDate
+          dueDate: dueDate ?? DateTime.now()
       );
     }).toList();
 

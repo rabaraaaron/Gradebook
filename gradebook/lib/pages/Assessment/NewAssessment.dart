@@ -50,13 +50,13 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
   final totalPoints = TextEditingController();
   final yourPoints = TextEditingController();
   final date = TextEditingController();
-  DateTime dateTime = DateTime.now();
+  DateTime dueDate = DateTime.now();
+
 
   bool isCompleted = false;
   Form form;
   double dialogueHeight = 325;
   double dialogueWidth = 150;
-
 
 
   @override
@@ -144,15 +144,16 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                   onPressed: () async {
                     if(name.text != "" && totalPoints.text != "" &&
                         yourPoints.text != ""){//When assignment is completed
+
                       await assServ.addAssessment(
                         //TODO: add due date to the database
-                          name.text, totalPoints.text, yourPoints.text, isCompleted, dateTime);
+                          name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate);
                       Navigator.pop(context);
                     } else if(name.text == ""){
                     } else{ //When assignment is not completed yet
 
                       await assServ.addAssessment(
-                          name.text, "0", "0", isCompleted);
+                          name.text, "0", "0", isCompleted, dueDate);
                       Navigator.pop(context);
                     }
 
@@ -215,14 +216,14 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 onPressed: (){
                   showDatePicker(
                     context: context,
-                    initialDate: dateTime,
+                    initialDate: dueDate,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2025),
                   ).then((v) {
                     if(v == null){
                       return null;
                     } else{
-                      dateTime = v;
+                      dueDate = v;
                       setState(() {
                         date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
                       });
@@ -265,17 +266,17 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                     //   //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     //   Navigator.pop(context);
                     // }
-
+                    print("DATEEE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + dueDate.toString());
                     if(name.text != "" && totalPoints.text != "" &&
                         yourPoints.text != ""){
+
                       await assServ.addAssessment(
-                          name.text, totalPoints.text, yourPoints.text, isCompleted);
-                      //await CategoryService(termID, courseID).calculateGrade(categoryID);
+                          name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate ) ;
                       Navigator.pop(context);
                     } else if(name.text == ""){
                     } else{
                       await assServ.addAssessment(
-                          name.text, "0", "0", isCompleted);
+                          name.text, "0", "0", isCompleted, dueDate);
                       Navigator.pop(context);
                     }
                   },

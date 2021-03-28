@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../../main.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class AssessmentList extends StatefulWidget {
@@ -58,7 +59,8 @@ class _AssessmentListState extends State<AssessmentList> {
         } else{
           //TODO: display due date instead of grade if assessment is not completed
           //todo: what if the due date is not entered? ------(by Mohammad)
-          dateOrGrade = "Due 3/28/2021";
+          dateOrGrade =
+          DateFormat('yyyy-MM-dd').format(element.dueDate);
           // element.dueDate,
 
         }
