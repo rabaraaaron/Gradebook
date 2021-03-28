@@ -46,15 +46,29 @@ class _AssessmentListState extends State<AssessmentList> {
         if(element.isDropped == true){
           isDroppedText = Text(
               "<-- Dropped",
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold,
-                decorationStyle: TextDecorationStyle.wavy,
-              ));
+              style: Theme.of(context).textTheme.bodyText1);
         } else{
-          isDroppedText = Text("");
+          isDroppedText = Text("",);
         }
+
+        Text dateOrGrade;
+        if(element.isCompleted){
+          dateOrGrade = Text(
+            "${element.yourPoints} / ${element.totalPoints}",
+            style: Theme.of(context).textTheme.bodyText1,
+          );
+        } else{
+          //TODO: display due date instead of grade if assessment is not completed
+          // dateOrGrade = Text(
+          //   element.dueDate,
+          //   style: Theme.of(context).textTheme.bodyText1,
+          // );
+          dateOrGrade = Text(
+            "${element.yourPoints} / ${element.totalPoints}",
+            style: Theme.of(context).textTheme.bodyText1,
+          );
+        }
+
         entries.add(Slidable(
           controller: slidableController,
           actionPane: SlidableDrawerActionPane(),
@@ -101,7 +115,7 @@ class _AssessmentListState extends State<AssessmentList> {
             )
           ],
           child: Card(
-            color: Colors.brown[50].withOpacity(.2),
+            color: Theme.of(context).accentColor,
 
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.center,
@@ -109,14 +123,14 @@ class _AssessmentListState extends State<AssessmentList> {
                 SizedBox(width: 10,),
                 Text(
                   element.name,
-                  style: Theme.of(context).textTheme.headline6,),
+                  style: Theme.of(context).textTheme.bodyText1,),
                 SizedBox(width: 10,),
                 isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
                 //Text(element.createDate.toString()),
                 Expanded(child: Container(),),
                 Text(
                   "${element.yourPoints} / ${element.totalPoints}",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(width: 10, height: 60,)
               ],

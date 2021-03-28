@@ -57,7 +57,7 @@ class _NewTermState extends State<NewTerm> {
               child: Column(
                   children: [
                     Text(
-                      "Add new Term",
+                      "Add Term",
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     Divider(color: Theme.of(context).dividerColor),

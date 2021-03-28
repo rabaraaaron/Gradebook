@@ -86,7 +86,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     new AssessmentService(termID, courseID, categoryID);
 
     if(assignmentIsCompleted){
-      dialogueHeight = 345;
+      dialogueHeight = 320;
       col = Column(children: [
         Text(
           "Assessment Options",
@@ -166,7 +166,13 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                 });
               },
             ),
-            Expanded(flex:10, child: Text("Assignment Completed")),
+            Expanded(
+                flex:10,
+                child: Text(
+                    "Assignment Completed",
+                  style: Theme.of(context).textTheme.headline3,
+                )
+            ),
           ],
         ),
         Expanded(
@@ -228,7 +234,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
       ]);
     } else {
-      dialogueHeight = 285;
+      dialogueHeight = 260;
       col = Column(children: [
         Text(
           "Assessment Options",
@@ -308,7 +314,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
               },
             ),
             Expanded(flex: 10,
-                child: Text("Assignment Completed")),
+                child: Text(
+                    "Assignment Completed",
+                  style: Theme.of(context).textTheme.headline3,
+                )
+            ),
           ],
         ),
         Expanded(

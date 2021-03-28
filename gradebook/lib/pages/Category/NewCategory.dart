@@ -73,7 +73,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
           child: Form(
               child: Column(children: [
                 Text(
-                  "Add new Category",
+                  "Add Category",
                   style: TextStyle(
                     fontSize: 27.5,
                     color: Theme.of(context).dividerColor,
@@ -132,7 +132,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                         });
                       },
                     ),
-                    Text("Equally Weighed \nAssignments", style: Theme.of(context).textTheme.headline3),
+                    Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
                   ],
                 ),
                 Expanded(
@@ -158,7 +158,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 )
               ])),
           width: 100,
-          height: 335,
+          height: 300,
         ));
   }
 }

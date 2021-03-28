@@ -60,7 +60,7 @@ class _NewCourseState extends State<NewCourse> {
             child: Form(
                 child: Column(children: [
                   Text(
-                    "Add new Class",
+                    "Add Course",
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   Divider(color: Theme.of(context).dividerColor),
@@ -68,7 +68,7 @@ class _NewCourseState extends State<NewCourse> {
                     controller: classTitleController,
                     decoration: const InputDecoration(
                       hintText: "ex CS 101",
-                      labelText: 'Class Title',
+                      labelText: 'Course Title',
                     ),
                     onEditingComplete: handleSubmitted,
                   ),

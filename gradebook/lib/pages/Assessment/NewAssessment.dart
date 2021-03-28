@@ -71,7 +71,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
       dialogueHeight = 340;
       col = Column(children: [
         Text(
-          "Add new Item",
+          "Add Assessment",
           style: Theme.of(context).textTheme.headline4,
         ),
         Divider(color: Theme.of(context).dividerColor,),
@@ -118,7 +118,11 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 });
               },
             ),
-            Expanded(flex:10, child: Text("Assignment Completed")),
+            Expanded(flex: 10,
+                child: Text(
+                  "Assignment Completed",
+                  style: Theme.of(context).textTheme.headline3,
+                )),
           ],
         ),
         Expanded(
@@ -137,6 +141,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                     Navigator.pop(context);
                   } else if(name.text == ""){
                   } else{ //When assignment is not completed yet
+
                     await assServ.addAssessment(
                         name.text, isCompleted, "0", "0");
                     Navigator.pop(context);
@@ -158,7 +163,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
       dialogueHeight = 265;
       col = Column(children: [
         Text(
-          "Add new Item",
+          "Add Assessment",
           style: Theme.of(context).textTheme.headline4,
         ),
         Divider(color: Theme.of(context).dividerColor,),
@@ -219,7 +224,10 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
               },
             ),
             Expanded(flex: 10,
-                child: Text("Assignment Completed")),
+                child: Text(
+                    "Assignment Completed",
+                  style: Theme.of(context).textTheme.headline3,
+                )),
           ],
         ),
         Expanded(
