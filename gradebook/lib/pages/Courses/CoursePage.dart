@@ -18,6 +18,7 @@ import 'package:gradebook/model/Assessment.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'NewCourse.dart';
+import 'UpdateIcon.dart';
 
 class TermClassesPageWrap extends StatelessWidget {
   Term term;
@@ -55,13 +56,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
   @override
   Widget build(BuildContext context) {
 
-    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    Future<int> _counter;
-    Icon icon;
-
-    Future<void> changeIcon() async {
-      final SharedPreferences prefs = await _prefs;
-    }
+    Icon courseIcon;
 
     final classes = Provider.of<List<Course>>(context);
     Widget listView;
@@ -76,6 +71,9 @@ class _TermCoursePageState extends State<TermCoursePage> {
               ),
           itemCount: classes.length,
           itemBuilder: (context, index) {
+
+            courseIcon = IconOptions(term.termID, classes[index].id)
+                .getIconFromString(classes[index].iconName);
 
             return Column(
               children: [
@@ -129,9 +127,20 @@ class _TermCoursePageState extends State<TermCoursePage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            child: Icon(
-                              Icons.computer,
-                              size: 50,
+                            child: IconButton(
+                              iconSize: 45,
+                              icon: courseIcon,
+                              onPressed: (){
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return UpdateIcon(
+                                          term.termID,
+                                          classes[index].id
+                                      );
+                                  },
+                                );
+                              },
                             ),
                             padding: EdgeInsets.all(10.0),
                           ),

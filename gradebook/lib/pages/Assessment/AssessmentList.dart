@@ -51,22 +51,15 @@ class _AssessmentListState extends State<AssessmentList> {
           isDroppedText = Text("",);
         }
 
-        Text dateOrGrade;
+        String dateOrGrade;
         if(element.isCompleted){
-          dateOrGrade = Text(
-            "${element.yourPoints} / ${element.totalPoints}",
-            style: Theme.of(context).textTheme.bodyText1,
-          );
+          dateOrGrade = "${element.yourPoints} / ${element.totalPoints}";
+
         } else{
           //TODO: display due date instead of grade if assessment is not completed
-          // dateOrGrade = Text(
-          //   element.dueDate,
-          //   style: Theme.of(context).textTheme.bodyText1,
-          // );
-          dateOrGrade = Text(
-            "${element.yourPoints} / ${element.totalPoints}",
-            style: Theme.of(context).textTheme.bodyText1,
-          );
+          dateOrGrade = "Due 3/28/2021";
+          // element.dueDate,
+
         }
 
         entries.add(Slidable(
@@ -129,7 +122,7 @@ class _AssessmentListState extends State<AssessmentList> {
                 //Text(element.createDate.toString()),
                 Expanded(child: Container(),),
                 Text(
-                  "${element.yourPoints} / ${element.totalPoints}",
+                  dateOrGrade,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(width: 10, height: 60,)

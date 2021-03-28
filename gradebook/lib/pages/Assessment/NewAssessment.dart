@@ -82,11 +82,11 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
             validator: (text) {
               if (text == null || text.isEmpty) {
                 //print("text is empty");
-                return 'Text is emptyfff';
+                return 'Text is empty';
               }
               return null;
             },
-            inputFormatters: [LengthLimitingTextInputFormatter(20)],
+            inputFormatters: [LengthLimitingTextInputFormatter(15)],
             onEditingComplete: handleSubmitted,
             decoration: const InputDecoration(
               hintText: "ex Quiz 1",
