@@ -47,7 +47,7 @@ class _AssessmentListState extends State<AssessmentList> {
         if(element.isDropped == true){
           isDroppedText = Text(
               "<-- Dropped",
-              style: Theme.of(context).textTheme.bodyText1);
+              style: Theme.of(context).textTheme.bodyText2);
         } else{
           isDroppedText = Text("",);
         }

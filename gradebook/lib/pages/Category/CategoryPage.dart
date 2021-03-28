@@ -233,7 +233,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           TableRow(
               children: [
                 Text(" Percent:",),
-                Center(child: Text(course.gradePercent, style: TextStyle(fontWeight: FontWeight.bold),)),
+                Center(child: Text(percent, style: TextStyle(fontWeight: FontWeight.bold),)),
                 Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items:')])),
 
                 //todo: count the number of incomplete assessment and display them here.
