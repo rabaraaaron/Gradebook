@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/services/category_service.dart';
+
 
 class AssessmentService {
   CollectionReference assessmentRef;
@@ -9,39 +11,73 @@ class AssessmentService {
   String courseID;
   String termID;
 
+
   AssessmentService(String termID, courseID, categoryID) {
     this.catID = categoryID;
     this.courseID = courseID;
     this.termID = termID;
 
     assessmentRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('terms')
-        .doc(termID)
+        .collection('users').doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('terms').doc(termID)
         .collection('courses').doc(courseID)
-        .collection("categories")
-        .doc(categoryID)
-        .collection('assessments');
+        .collection("categories").doc(categoryID)
+        .collection("assessments");
   }
 
   Future<void> addAssessment(name, totalPoints, yourPoints, isCompleted, [dueDate]) async {
 
-      await assessmentRef
-          .add({
-        'name': name,
-        'totalPoints': totalPoints,
-        'yourPoints' : yourPoints,
-        'isDropped' : false,
-        'createDate' : getFormattedDate(),
-        'isCompleted' : isCompleted,
-        // 'dueDate' : dueDate ?? null
+     try{
+       await assessmentRef
+           .add({
+         'name': name,
+         'totalPoints': totalPoints,
+         'yourPoints' : yourPoints,
+         'isDropped' : false,
+         'createDate' : getFormattedDate(),
+         'isCompleted' : isCompleted,
+         // 'dueDate' : dueDate ?? null
 
-      })
-          .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
-          .catchError((error) => print("Failed to add assessment: $error"));
-      await CategoryService(termID, courseID).calculateGrade(catID);
+       })
+           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
+           .catchError((error) => print("Failed to add assessment: $error"));
+       await CategoryService(termID, courseID).calculateGrade(catID);
+     } catch (e){
+       print('Error in adding assessment: ' + e.toString());
+    }
   }
+//todo: ========================================================
+  Stream<List<Assessment>> get pendingAssessments {
+
+    return assessmentRef.snapshots().map(_incompleteFromSnap);
+  }
+  List<Assessment> _incompleteFromSnap(QuerySnapshot snapshot) {
+
+    var list = snapshot.docs.map<Assessment>((doc) {
+      var tp = double.parse(doc.get('totalPoints'));
+      var yp = double.parse(doc.get('yourPoints'));
+
+      return Assessment(
+        name: doc.get('name'),
+        totalPoints: tp ?? "",
+        yourPoints: yp ?? "",
+        isDropped: doc.get('isDropped') ?? false,
+        isCompleted: doc.get('isCompleted') ?? false,
+        createDate: doc.get('createDate') ?? 000000000,
+        id: doc.id,
+        catID: catID,
+        courseID: courseID,
+        termID: termID,
+        // dueDate: dueDate
+      );
+    }).toList();
+
+
+    var incompleteAssessments = list.where((element) => !element.isCompleted).toList();
+
+    return incompleteAssessments;
+  }
+  //todo: ========================================================
 
   Stream<List<Assessment>> get assessments {
     return assessmentRef.snapshots().map(_assessmentFromSnap);
@@ -50,19 +86,8 @@ class AssessmentService {
   List<Assessment> _assessmentFromSnap(QuerySnapshot snapshot) {
     
     var v = snapshot.docs.map<Assessment>((doc) {
-
       var tp = double.parse(doc.get('totalPoints'));
       var yp = double.parse(doc.get('yourPoints'));
-      var perc = yp/tp;
-      // var test = doc.get('createDate');
-      // print(" ---->" + test);
-      //DateTime myDateTime = (doc.get('createDate')).toDate();
-
-
-      // DateTime dueDate;
-      // try{
-      //   dueDate = doc.get('dueDate').toDate();
-      // }catch(e) {dueDate = null; }
 
       return Assessment(
           name: doc.get('name'),
@@ -70,7 +95,7 @@ class AssessmentService {
           yourPoints: yp ?? "",
           isDropped: doc.get('isDropped') ?? false,
           isCompleted: doc.get('isCompleted') ?? false,
-          createDate: int.parse(doc.get('createDate')) ?? 0000000,
+          createDate: doc.get('createDate') ?? 000000000,
           id: doc.id,
           catID: catID,
           courseID: courseID,
@@ -79,7 +104,7 @@ class AssessmentService {
       );
     }).toList();
 
-    ///sort by date before here.
+    ///sort by date here.
     v.sort((a, b) => b.createDate.compareTo(a.createDate));
 
     return v;
@@ -107,11 +132,17 @@ class AssessmentService {
   /// Convert current date to a string of numbers so we can
   /// use it for sorting the assessments by creation date.
   /// @return Date in the following format "2021325182346"
-  String getFormattedDate(){
+  int getFormattedDate(){
     DateTime now = DateTime.now();
-    String convertedDateTime = "${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}";
-    print(convertedDateTime);
-    return convertedDateTime;
+    String convertedDateTime = "${now.year}" +
+        "${now.month.toString().padLeft(2,'0')}" +
+        "${now.day.toString().padLeft(2,'0')}" +
+        "${now.hour.toString().padLeft(2,'0')}" +
+        "${now.minute.toString().padLeft(2,'0')}" +
+        "${now.second.toString().padLeft(2,'0')}";
+    //print(convertedDateTime);
+    int createDate = int.parse(convertedDateTime);
+    return createDate;
 
   }
 
@@ -119,6 +150,17 @@ class AssessmentService {
     assessmentRef.doc(assessmentID).update({
       'dueDate' : date
     });
+  }
+
+  void displayMessage(context, String msg, String title){
+    Flushbar(
+      title: title,
+      message: msg,
+      duration: Duration(seconds: 6),
+      flushbarPosition: FlushbarPosition.BOTTOM,
+
+    ).show(context);
+
   }
 
 

@@ -57,6 +57,7 @@ class _AssessmentListState extends State<AssessmentList> {
 
         } else{
           //TODO: display due date instead of grade if assessment is not completed
+          //todo: what if the due date is not entered? ------(by Mohammad)
           dateOrGrade = "Due 3/28/2021";
           // element.dueDate,
 
