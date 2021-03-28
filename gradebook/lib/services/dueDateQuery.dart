@@ -61,6 +61,8 @@ class DueDateQuery {
       }
     }
 
+    upcomingAssessments.sort((a,b)=> a.dueDate.compareTo(b.dueDate));
+
     return upcomingAssessments;
   }
 }
