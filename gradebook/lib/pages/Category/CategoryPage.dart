@@ -134,6 +134,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     Color cardColor = Theme.of(context).primaryColor;
     String percent = double.parse((course.gradePercent)).toStringAsFixed(2);
+    String letterGrade = course.letterGrade;
     TextStyle styleInCard = Theme.of(context).textTheme.bodyText1;
 
     return Scaffold(
@@ -208,13 +209,13 @@ class _CategoriesPageState extends State<CategoriesPage> {
               Row(
                 children: [
                   SizedBox(width: 10,),
-                  Text( "Grade: A",
+                  Text( "Course Grade: $letterGrade",
                     style: styleInCard,
                   ),
                   Expanded(child: Container(), flex: 2,),
                 ],
               ),
-              Text("Uncompleted Assessments: 4",
+              Text("Incomplete Assessments: 4",
                   style: styleInCard),
               Row(
                 children: [
