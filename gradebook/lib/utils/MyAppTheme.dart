@@ -190,7 +190,41 @@ class MyAppTheme with ChangeNotifier{
           )
       ),
     );
+    _themeList.add(
+      AppTheme(
+          id: "test",
+          description: 'test, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.brown[400],
+            accentColor: Colors.brown[200],
+            dividerColor: Colors.brown,
+            brightness: Brightness.light,
+            backgroundColor: Colors.brown[100],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+          id: "grey",
+          description: 'grey, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.grey[600],
+            accentColor: Colors.grey[700],
+            dividerColor: Colors.black,
+            brightness: Brightness.light,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
   }
+
 
 
   TextTheme getTextTheme(bool lightMode){
@@ -228,6 +262,10 @@ class MyAppTheme with ChangeNotifier{
             fontSize: 20.0,
             color: Colors.white,
             fontWeight: FontWeight.w300),
+        bodyText2: TextStyle(
+            //fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 18),
       );
     } else{
       return TextTheme(
@@ -262,6 +300,10 @@ class MyAppTheme with ChangeNotifier{
             fontSize: 20.0,
             color: Colors.white,
             fontWeight: FontWeight.w300),
+        bodyText2: TextStyle(
+            //fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 18),
       );
     }
   }

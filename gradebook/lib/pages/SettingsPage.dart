@@ -43,36 +43,38 @@ class _SettingsPageState extends State<SettingsPage> {
           brightness = Colors.white;
         }
 
-        return GestureDetector(
-          onTap: (){
-            ThemeProvider.controllerOf(context).setTheme(themeList[index].id);
-          },
-          child: SizedBox(
-            child: Center(
-              child: Column(
-                children: [
-                  Container(
-                    height: primaryHeight,
-                    width: width,
-                    color: themeList[index].data.primaryColor,
-                  ),
-                  Container(
-                    height: secondaryHeight,
-                    width: width,
-                    color: themeList[index].data.accentColor,
-                  ),
-                  Container(
-                    height: 5,
-                  ),
-                  Container(
-                    height: secondaryHeight,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: brightness,
-                      border: Border.all(),
+        return SingleChildScrollView(
+          child: GestureDetector(
+            onTap: (){
+              ThemeProvider.controllerOf(context).setTheme(themeList[index].id);
+            },
+            child: SizedBox(
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      height: primaryHeight,
+                      width: width,
+                      color: themeList[index].data.primaryColor,
                     ),
-                  ),
-                ],
+                    Container(
+                      height: secondaryHeight,
+                      width: width,
+                      color: themeList[index].data.accentColor,
+                    ),
+                    Container(
+                      height: 5,
+                    ),
+                    Container(
+                      height: secondaryHeight,
+                      width: width,
+                      decoration: BoxDecoration(
+                        color: brightness,
+                        border: Border.all(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -62,6 +62,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     final List categories = Provider.of<List<Category>>(context);
     Widget listView;
 
+
     if (Provider.of<List<Category>>(context) != null) {
       listView = ListView.separated(
           separatorBuilder: (context, index) => Divider(
@@ -132,10 +133,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
       listView = Container();
     }
 
-    Color cardColor = Theme.of(context).primaryColor;
+    Color color = Theme.of(context).primaryColor.withOpacity(.4);
+    //color = color - 200;
+
+    Color cardColor = Theme.of(context).primaryColor.withOpacity(.6);
     String percent = double.parse((course.gradePercent)).toStringAsFixed(2);
     String letterGrade = course.letterGrade;
-    TextStyle styleInCard = Theme.of(context).textTheme.bodyText1;
+    //TextStyle styleInCard = Theme.of(context).textTheme.bodyText2;
+
 
     return Scaffold(
       key: scaffoldKey,
@@ -176,62 +181,84 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       body: Column(
         children: [
-    //       Card( color: Colors.brown[200].withOpacity(.8),
-    //
-    //         child: Table(
-    //           border:TableBorder.all(width: 1.0,color: Colors.black87),
-    //           children: [
-    //             TableRow(
-    //         children: [
-    //           Text(" Grade: A",textScaleFactor: 1.3,),
-    //           Text("Used Weight",textScaleFactor: 1.5),
-    //           Text("University",textScaleFactor: 1.5),
-    //           ]),
-    //       TableRow(
-    //           children: [
-    //             Text("test",textScaleFactor: 1.5),
-    //             Text("test",textScaleFactor: 1.5),
-    //             Text("test",textScaleFactor: 1.5),
-    //           ]
-    //       )
-    //     ],
-    //   ),
-    // ),
-
-
-//todo:------------------------=======================================
-          SizedBox(height: 5,),
           Card(
-          color: cardColor,
-          child: Column(
-            children: [
-              SizedBox(height: 5,),
-              Row(
-                children: [
-                  SizedBox(width: 10,),
-                  Text( "Course Grade: $letterGrade",
-                    style: styleInCard,
-                  ),
-                  Expanded(child: Container(), flex: 2,),
-                ],
-              ),
-              Text("Incomplete Assessments: 4",
-                  style: styleInCard),
-              Row(
-                children: [
-                  SizedBox(width: 10,),
-                  Text( "percent: $percent%",
-                      style: styleInCard
-                  ),
-                ],
-              ),
-              Text('Allocated Weight: 55%',
-                  style: styleInCard),
-              SizedBox(height: 5,),
-            ],
-          ),
-        ),
-          SizedBox(height: 5,),
+            //color: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7.0),
+            ),
+
+
+            child: Table(
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              // border: TableBorder.symmetric(
+              //     inside: BorderSide(width: 1, color: Colors.blue),
+              //     outside: BorderSide(width: 1)),
+              columnWidths: {
+                0: FractionColumnWidth(0.2),
+                1: FractionColumnWidth(0.2),
+                2: FractionColumnWidth(0.45),
+                3: FractionColumnWidth(0.15),
+              },
+              children: [
+                TableRow(
+                    children: [
+                  Text(" Grade:",),
+              Center(child: Text(course.gradePercent, style: TextStyle(fontWeight: FontWeight.bold),)),
+              Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Allocated Weight: ')])),
+              Center(child: Text("54%",style: TextStyle(fontWeight: FontWeight.bold))),
+              ]),
+          TableRow(
+              children: [
+                Text(" Percent:",),
+                Center(child: Text(letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
+                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items: ')])),
+                Center(child: Text("5", style: TextStyle(fontWeight: FontWeight.bold),)),
+              ]
+          )
+        ],
+      ),
+    ),
+
+
+          ///=========================================
+//todo:------------------------=======================================
+//           SizedBox(height: 5,),
+//           Card(
+//           color: cardColor,
+//           child: Column(
+//             children: [
+//               SizedBox(height: 5,),
+//
+//               Row(
+//                 children: [
+//                   SizedBox(width: 10, height: 30,),
+//                   Text("Incomplete Asignments:",
+//                       style: styleInCard,),
+//                   Text("4",  style: styleInCard),
+//                   Expanded(child: Container(), flex: 1,),
+//                   Text( "Grade: $letterGrade",
+//                     style: styleInCard,
+//                   ),
+//                   SizedBox(width: 10,),
+//                 ],
+//               ),
+//               Row(
+//                 children: [
+//                   SizedBox(width: 10,),
+//                   Text('Allocated Weight: 55%',
+//                       style: styleInCard),
+//                   Expanded(child: Container(), flex: 1,),
+//                   Text( "Percent:$percent%",
+//                       style: styleInCard
+//                   ),
+//                   SizedBox(width: 10,),
+//                 ],
+//               ),
+//               SizedBox(height: 5,),
+//             ],
+//           ),
+//         ),
+//           SizedBox(height: 5,),
           //todo:-------------------------=======================================
           Expanded(flex: 1,child: listView),
         ],
