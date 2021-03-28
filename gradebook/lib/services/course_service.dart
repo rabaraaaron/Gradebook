@@ -6,6 +6,7 @@ import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
+import 'package:gradebook/services/term_service.dart';
 import 'package:provider/provider.dart';
 import '../model/Category.dart';
 import 'assessment_service.dart';
@@ -85,7 +86,8 @@ class CourseService {
   }
 
   Future<void> deleteCourse(id) async {
-    courseRef.doc(id).delete();
+    await courseRef.doc(id).delete();
+    await TermService().calculateGPA(courseRef.parent.id);
   }
 
   Future<void> updateCourse(name, credits, courseID, passFail) async {
@@ -109,26 +111,28 @@ class CourseService {
        String letterGrade = getLetterGrade(gradePercent);
 
     print(courseGradeDecimal);
-    courseRef.doc(courseID).update({
+    await courseRef.doc(courseID).update({
       'gradePercent' : gradePercent,
       'letterGrade' : letterGrade
     });
+
+    await TermService().calculateGPA(courseRef.parent.id);
 
   }
 
   String getLetterGrade(gradePercent){
     var gPercent = gradePercent;
-    if(gPercent > 93){ return"A"; }
-    if(gPercent > 90){ return"A-"; }
-    if(gPercent > 87){ return"B+"; }
-    if(gPercent > 83){ return"B"; }
-    if(gPercent > 80){ return"B-"; }
-    if(gPercent > 77){ return"C+"; }
-    if(gPercent > 73){ return"C"; }
-    if(gPercent > 70){ return"C-"; }
-    if(gPercent > 67){ return"D+"; }
-    if(gPercent > 63){ return"D"; }
-    if(gPercent > 60){ return"D-"; } else {return "F";}
+    if(gPercent >= 93){ return"A"; }
+    if(gPercent >=90){ return"A-"; }
+    if(gPercent >= 87){ return"B+"; }
+    if(gPercent >= 83){ return"B"; }
+    if(gPercent >= 80){ return"B-"; }
+    if(gPercent >= 77){ return"C+"; }
+    if(gPercent >= 73){ return"C"; }
+    if(gPercent >= 70){ return"C-"; }
+    if(gPercent >= 67){ return"D+"; }
+    if(gPercent >= 63){ return"D"; }
+    if(gPercent >= 60){ return"D-"; } else {return "F";}
   }
 
 }

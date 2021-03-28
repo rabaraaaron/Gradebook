@@ -126,7 +126,7 @@ class _TermsListState extends State<TermsList> {
                       ),
                     ),
                     Text(
-                      "${terms[index].gpa}",
+                      "${terms[index].gpa.toStringAsFixed(2)}",
                       style: Theme.of(context).textTheme.headline5,
                       textScaleFactor: 2,
                     ),
