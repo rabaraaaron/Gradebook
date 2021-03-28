@@ -37,19 +37,19 @@ class _AssessmentTileState extends State<AssessmentTile> {
   @override
   Widget build(BuildContext context) {
     Category cat = Provider.of<List<Category>>(context)[index];
-    AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
-    final name = TextEditingController();
-    final assessments = Provider.of<List<Assessment>>(context);
+    //AssessmentService assServ = new AssessmentService(termID, courseID, cat.id);
+    //final name = TextEditingController();
+    //final assessments = Provider.of<List<Assessment>>(context);
     // double totalPoints = cat.total;
     // double yourPoints = cat.earned;
 
-    var categoryList = Provider.of<List<Category>>(context);
-    Category catFromProvider;
-    for(Category category in categoryList){
-      if (category.id == cat.id){
-        catFromProvider = category;
-      }
-    }
+    //var categoryList = Provider.of<List<Category>>(context);
+    //Category catFromProvider;
+    // for(Category category in categoryList){
+    //   if (category.id == cat.id){
+    //     catFromProvider = category;
+    //   }
+    // }
     return Container(
       child: ExpansionTile(
         title: Row(
@@ -69,26 +69,33 @@ class _AssessmentTileState extends State<AssessmentTile> {
         ),
         children: [
           Center(
-            child: Text(
-              "${cat.earned}" + "/" + "${cat.total}",
-              style: Theme.of(context).textTheme.headline4,
+            child: Row(
+              children: [
+                Expanded(child: Container(),flex: 3,),
+                Text(
+                  "${cat.earned}" + "/" + "${cat.total}",
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                Expanded(child: Container(),flex: 1,),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                  color: Theme.of(context).primaryColor,
+                  child: Icon(Icons.add, color: Colors.white, ),
+                  //Text("Add Assessment", style: Theme.of(context).textTheme.headline2,),
+                  onPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return   AssessmentPopUp(context, termID, courseID, cat.id);}
+                    );
+                    setState(() { });
+                  },
+                ),
+                SizedBox(width: 5,),
+              ],
             ),
           ),
-          Center(
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-              color: Theme.of(context).primaryColor,
-              child: Text("Add Assessment", style: Theme.of(context).textTheme.headline2,),
-              onPressed: () async {
-                await showDialog(
-                    context: context,
-                    builder: (BuildContext context){
-                      return   AssessmentPopUp(context, termID, courseID, cat.id);}
-                );
-                setState(() { });
-              },
-            ),
-          ),
+
           AssessmentList(
             termID: termID,
             courseID: courseID,

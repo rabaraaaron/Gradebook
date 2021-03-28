@@ -108,7 +108,7 @@ class _AssessmentListState extends State<AssessmentList> {
             )
           ],
           child: Card(
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).accentColor.withOpacity(.2),
 
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.center,
@@ -116,14 +116,14 @@ class _AssessmentListState extends State<AssessmentList> {
                 SizedBox(width: 10,),
                 Text(
                   element.name,
-                  style: Theme.of(context).textTheme.bodyText1,),
+                  style: Theme.of(context).textTheme.bodyText2,),
                 SizedBox(width: 10,),
                 isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
                 //Text(element.createDate.toString()),
                 Expanded(child: Container(),),
                 Text(
                   dateOrGrade,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(width: 10, height: 60,)
               ],

@@ -6,6 +6,7 @@ import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'CategoryOptions.dart';
@@ -23,10 +24,22 @@ class CategoryPageWrap extends StatelessWidget {
 
   @override
   // ignore: non_constant_identifier_names
-  Widget build(BuildContext) {
-    return StreamProvider<List<Category>>.value(
-      value: CategoryService(term.termID, course.id).categories,
-      child: CategoriesPage(term: term, course: course),
+   Widget build(BuildContext) {
+  //   return (
+  //       providers: [
+  //         Provider<Stream<List<Category>>>(create: (_) => CategoryService(term.termID, course.id).categories),
+  //         Provider<Stream<List<Course>>>(create: (_) => CourseService(term.termID).courses),
+  //   ],
+  //     child: CategoriesPage(term: term, course: course),
+  //   );
+
+    //-=================================================
+    return StreamProvider<List<Course>>.value(
+      value: CourseService(term.termID).courses,
+      child: StreamProvider<List<Category>>.value(
+        value: CategoryService(term.termID, course.id).categories,
+        child: CategoriesPage(term: term, course: course),
+      )
     );
   }
 }
@@ -60,6 +73,23 @@ class _CategoriesPageState extends State<CategoriesPage> {
     CategoryService catServ = new CategoryService(term.termID, course.id);
 
     final List categories = Provider.of<List<Category>>(context);
+    final List courses = Provider.of<List<Course>>(context);
+
+    //Course courseFromStream;
+    if(courses != null) {
+      for (Course c in courses) {
+        if (c.id == course.id) {
+          course = c;
+        }
+      }
+    }
+    double allocatedWeight = 0;
+    if(categories != null){
+      for(Category c in categories){
+        allocatedWeight += double.parse(c.categoryWeight);
+      }
+    }
+
     Widget listView;
 
 
@@ -181,6 +211,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       body: Column(
         children: [
+          //todo:------------------------=======================================
           Card(
             //color: color,
             shape: RoundedRectangleBorder(
@@ -203,15 +234,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 TableRow(
                     children: [
                   Text(" Grade:",),
-              Center(child: Text(course.gradePercent, style: TextStyle(fontWeight: FontWeight.bold),)),
-              Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Allocated Weight: ')])),
-              Center(child: Text("54%",style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text(course.letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
+              Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Unallocated: ')])),
+              Center(child: Text(allocatedWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
               ]),
           TableRow(
               children: [
-                Text(" Percent:",),
-                Center(child: Text(letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
-                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items: ')])),
+                Text(" Percent:",)
+                Center(child: Text(course.gradePercent, style: TextStyle(fontWeight: FontWeight.bold),)),
+                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete\nassessments: ')])),
                 Center(child: Text("5", style: TextStyle(fontWeight: FontWeight.bold),)),
               ]
           )

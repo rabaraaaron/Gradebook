@@ -196,7 +196,7 @@ class MyAppTheme with ChangeNotifier{
           description: 'test, lightMode',
           data: ThemeData(
             primaryColor: Colors.brown[400],
-            accentColor: Colors.brown[200],
+            accentColor: Colors.brown[300],
             dividerColor: Colors.brown,
             brightness: Brightness.light,
             backgroundColor: Colors.brown[100],
@@ -223,6 +223,24 @@ class MyAppTheme with ChangeNotifier{
           )
       ),
     );
+
+    // _themeList.add(
+    //   AppTheme(
+    //       id: "grey",
+    //       description: 'grey, lightMode',
+    //
+    //       data: ThemeData(
+    //         primaryColor: Colors.grey[600],
+    //         accentColor: Colors.grey[700],
+    //         dividerColor: Colors.black,
+    //         brightness: Brightness.light,
+    //         backgroundColor: Colors.grey[400],
+    //         fontFamily: GoogleFonts.quicksand().toStringShort(),
+    //         textTheme: getTextTheme(light),
+    //         buttonColor: _appBarIconColor,
+    //       )
+    //   ),
+    // );
   }
 
 
