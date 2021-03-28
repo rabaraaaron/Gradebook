@@ -14,6 +14,7 @@ import 'DeleteCategoryConfirmation.dart';
 import 'NewCategory.dart';
 import '../Assessment/AssessmentTile.dart';
 
+
 // ignore: must_be_immutable
 class CategoryPageWrap extends StatelessWidget {
   Term term;
@@ -25,15 +26,7 @@ class CategoryPageWrap extends StatelessWidget {
   @override
   // ignore: non_constant_identifier_names
    Widget build(BuildContext) {
-  //   return (
-  //       providers: [
-  //         Provider<Stream<List<Category>>>(create: (_) => CategoryService(term.termID, course.id).categories),
-  //         Provider<Stream<List<Course>>>(create: (_) => CourseService(term.termID).courses),
-  //   ],
-  //     child: CategoriesPage(term: term, course: course),
-  //   );
 
-    //-=================================================
     return StreamProvider<List<Course>>.value(
       value: CourseService(term.termID).courses,
       child: StreamProvider<List<Category>>.value(
@@ -75,12 +68,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
     final List categories = Provider.of<List<Category>>(context);
     final List courses = Provider.of<List<Course>>(context);
 
-    //Course courseFromStream;
+    //to get the width of the screen
+    //final double width = MediaQuery.of(context).size.width;
+
     if(courses != null) {
       for (Course c in courses) {
-        if (c.id == course.id) {
-          course = c;
-        }
+        if (c.id == course.id) {course = c;}
       }
     }
     double allocatedWeight = 100;
@@ -211,7 +204,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       body: Column(
         children: [
-          //todo:------------------------=======================================
           Card(
             //color: color,
             shape: RoundedRectangleBorder(
@@ -243,54 +235,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 Text(" Percent:",),
                 Center(child: Text(percent, style: TextStyle(fontWeight: FontWeight.bold),)),
                 Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items:')])),
+
+                //todo: count the number of incomplete assessment and display them here.
                 Center(child: Text("5", style: TextStyle(fontWeight: FontWeight.bold),)),
               ]
           )
         ],
       ),
     ),
-
-
-          ///=========================================
-//todo:------------------------=======================================
-//           SizedBox(height: 5,),
-//           Card(
-//           color: cardColor,
-//           child: Column(
-//             children: [
-//               SizedBox(height: 5,),
-//
-//               Row(
-//                 children: [
-//                   SizedBox(width: 10, height: 30,),
-//                   Text("Incomplete Asignments:",
-//                       style: styleInCard,),
-//                   Text("4",  style: styleInCard),
-//                   Expanded(child: Container(), flex: 1,),
-//                   Text( "Grade: $letterGrade",
-//                     style: styleInCard,
-//                   ),
-//                   SizedBox(width: 10,),
-//                 ],
-//               ),
-//               Row(
-//                 children: [
-//                   SizedBox(width: 10,),
-//                   Text('Allocated Weight: 55%',
-//                       style: styleInCard),
-//                   Expanded(child: Container(), flex: 1,),
-//                   Text( "Percent:$percent%",
-//                       style: styleInCard
-//                   ),
-//                   SizedBox(width: 10,),
-//                 ],
-//               ),
-//               SizedBox(height: 5,),
-//             ],
-//           ),
-//         ),
-//           SizedBox(height: 5,),
-          //todo:-------------------------=======================================
           Expanded(flex: 1,child: listView),
         ],
       )
