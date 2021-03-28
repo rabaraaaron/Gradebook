@@ -83,10 +83,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
         }
       }
     }
-    double allocatedWeight = 0;
+    double allocatedWeight = 100;
     if(categories != null){
       for(Category c in categories){
-        allocatedWeight += double.parse(c.categoryWeight);
+        allocatedWeight -= double.parse(c.categoryWeight);
       }
     }
 
@@ -240,9 +240,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
               ]),
           TableRow(
               children: [
-                Text(" Percent:",)
+                Text(" Percent:",),
                 Center(child: Text(course.gradePercent, style: TextStyle(fontWeight: FontWeight.bold),)),
-                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete\nassessments: ')])),
+                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items:')])),
                 Center(child: Text("5", style: TextStyle(fontWeight: FontWeight.bold),)),
               ]
           )
