@@ -42,7 +42,8 @@ class CourseService {
             'credits': int.parse(credits),
             'gradePercent': 0,
         'letterGrade' : "",
-        'passFail':passFail
+        'passFail':passFail,
+        'iconName': "default",
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
@@ -66,6 +67,7 @@ class CourseService {
           id: doc.id,
           gradePercent: doc.get('gradePercent').toString() ?? "0",
           letterGrade: doc.get('letterGrade'),
+          iconName: doc.get('iconName') ?? 'default',
         );
       }).toList();
       return v;
@@ -79,7 +81,8 @@ class CourseService {
             name: doc.get('name'),
             credits: doc.get('credits') ?? "",
             id: doc.id,
-            gradePercent: "0");
+            gradePercent: "0",
+            iconName: doc.get('iconName') ?? 'default');
       }).toList();
       return v2;
     }
@@ -94,7 +97,12 @@ class CourseService {
     await courseRef.doc(courseID).update({
       'name': name,
       'credits': int.parse(credits),
-      'passFail': passFail
+      'passFail': passFail,
+    });
+  }
+  Future<void> updateCourseIcon(courseID, iconName) async {
+    await courseRef.doc(courseID).update({
+      'iconName': iconName,
     });
   }
 

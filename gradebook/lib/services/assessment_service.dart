@@ -39,7 +39,7 @@ class AssessmentService {
 
       })
           .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
-          .catchError((error) => print("Failed to add course: $error"));
+          .catchError((error) => print("Failed to add assessment: $error"));
       await CategoryService(termID, courseID).calculateGrade(catID);
   }
 
