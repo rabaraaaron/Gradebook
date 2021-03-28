@@ -60,7 +60,7 @@ class _AssessmentListState extends State<AssessmentList> {
           //TODO: display due date instead of grade if assessment is not completed
           //todo: what if the due date is not entered? ------(by Mohammad)
           dateOrGrade =
-          DateFormat('yyyy-MM-dd').format(element.dueDate);
+          DateFormat('yyyy-MM-dd').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
           // element.dueDate,
 
         }

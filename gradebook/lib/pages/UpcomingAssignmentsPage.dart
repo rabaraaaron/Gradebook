@@ -7,7 +7,9 @@ import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
+import 'package:gradebook/services/dueDateQuery.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UpcomingTerms extends StatelessWidget {
@@ -88,7 +90,21 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
         ),
         title: Text("Upcoming", style: Theme.of(context).textTheme.headline1,),
       ),
-      // body: TODO: add list of upcoming assignments,
+      body: FutureBuilder(
+        future: DueDateQuery().getAssesmentsDue(),
+          builder: (context, snapshot){
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index){
+              return ListTile(
+                leading: Icon(Icons.album_sharp),
+                title: Text(snapshot.data[index].name),
+                subtitle: Text(DateFormat('yyyy-MM-dd').format(snapshot.data[index].dueDate)),
+
+              );
+            },
+          );
+          })
     );
   }
 }

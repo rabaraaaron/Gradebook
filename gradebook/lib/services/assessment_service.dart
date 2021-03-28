@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/services/dueDateQuery.dart';
 
 
 class AssessmentService {
@@ -46,6 +47,11 @@ class AssessmentService {
      } catch (e){
        print('Error in adding assessment: ' + e.toString());
     }
+
+    List dueAssessments = await DueDateQuery().getAssesmentsDue();
+
+     print(dueAssessments);
+
   }
 //todo: ========================================================
   Stream<List<Assessment>> get pendingAssessments {
@@ -71,7 +77,7 @@ class AssessmentService {
         catID: catID,
         courseID: courseID,
         termID: termID,
-        dueDate: dueDate ?? DateTime.now()
+        dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1))
       );
     }).toList();
 
@@ -105,7 +111,7 @@ class AssessmentService {
           catID: catID,
           courseID: courseID,
           termID: termID,
-          dueDate: dueDate ?? DateTime.now()
+          dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1))
       );
     }).toList();
 
