@@ -139,7 +139,7 @@ class CategoryService {
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
     QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
     SplayTreeMap map = new SplayTreeMap<String, double>();
-    double gradePercentAsDecimal,
+    double gradePercentAsDecimal = 0,
         totalOfTotalPoints = 0,
         totalofEarnedPoints = 0,
         totalEarnedWeights = 0;
@@ -152,11 +152,12 @@ class CategoryService {
       //reset all assessment so that none is dropped
       aServ.updateDropState(assessment.id, false);
 
-      double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
-      double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
-      bool isCompleted = assessment.get('isCompleted') ?? false;
-        totalOfTotalPoints += totalPoints;
-        totalofEarnedPoints += yourPoints;
+      double totalPoints = double.parse(assessment.get('totalPoints'));
+      double yourPoints = double.parse(assessment.get('yourPoints'));
+      bool isCompleted = assessment.get('isCompleted');
+
+      totalOfTotalPoints += totalPoints;
+      totalofEarnedPoints += yourPoints;
 
         if (isCompleted && totalPoints > 0 ) {
           map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
@@ -182,26 +183,29 @@ class CategoryService {
       totalofEarnedPoints -= lowestEP;
       totalOfTotalPoints -= lowestTP;
 
-      //for equally weighted categroy,
-      double lowestEW = (lowestEP / lowestTP) * ( categoryWeight / assessmentsSnap.size);
-      totalEarnedWeights -= lowestEW;
-      //Add the full weight for that assessment to total earned weight
-      totalEarnedWeights += categoryWeight/ assessmentsSnap.size;
+        //for equally weighted categroy,
+      double lowestEW = (lowestEP / lowestTP) * (categoryWeight / assessmentsSnap.size);
+        totalEarnedWeights -= lowestEW;
+        //Add the full weight for that assessment to total earned weight
+        totalEarnedWeights += categoryWeight / assessmentsSnap.size;
 
     }
 
+
     if(await categorySnap.get('equalWeights')){
       gradePercentAsDecimal = totalEarnedWeights;
-    } else {
+    } else if( totalOfTotalPoints>0){
       gradePercentAsDecimal =
           categoryWeight * (totalofEarnedPoints / totalOfTotalPoints);
     }
 
-    categoryRef.doc(catID).update({
-      'gradePercentAsDecimal': gradePercentAsDecimal,
-      'total': totalOfTotalPoints,
-      'earned': totalofEarnedPoints
-    });
+    categoryRef.doc(catID).update(
+        {
+          'gradePercentAsDecimal': gradePercentAsDecimal,
+          'total': totalOfTotalPoints,
+          'earned': totalofEarnedPoints
+        }
+    );
 
     await CourseService(termID).calculateGrade(courseID);
   }

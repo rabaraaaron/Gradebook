@@ -219,8 +219,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               columnWidths: {
                 0: FractionColumnWidth(0.2),
                 1: FractionColumnWidth(0.2),
-                2: FractionColumnWidth(0.45),
-                3: FractionColumnWidth(0.15),
+                2: FractionColumnWidth(0.43),
+                3: FractionColumnWidth(0.17),
               },
               children: [
                 TableRow(

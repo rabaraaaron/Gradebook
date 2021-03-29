@@ -107,7 +107,7 @@ class CourseService {
   }
 
   Future<void> calculateGrade(courseID) async {
-    DocumentSnapshot course = await courseRef.doc(courseID).get();
+    //DocumentSnapshot course = await courseRef.doc(courseID).get();
     QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
     double courseGradeDecimal = 0.0;
 

@@ -50,7 +50,7 @@ class AssessmentService {
 
     List dueAssessments = await DueDateQuery().getAssesmentsDue();
 
-     print(dueAssessments);
+     //print(dueAssessments);
 
   }
 //todo: ========================================================
