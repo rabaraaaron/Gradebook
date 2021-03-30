@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/pages/Assessment/NewAssessment.dart';
-import 'package:gradebook/services/assessment_service.dart';
 import 'package:provider/provider.dart';
 import '../../model/Category.dart';
 import 'AssessmentList.dart';

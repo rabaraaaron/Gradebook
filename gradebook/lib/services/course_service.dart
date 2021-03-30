@@ -41,9 +41,10 @@ class CourseService {
             'name': name,
             'credits': int.parse(credits),
             'gradePercent': 0,
-        'letterGrade' : "",
-        'passFail':passFail,
-        'iconName': "default",
+            'letterGrade' : "",
+            'passFail':passFail,
+            'iconName': "default",
+            'countOfIncompleteItems' : 0,
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
@@ -68,6 +69,7 @@ class CourseService {
           gradePercent: doc.get('gradePercent').toString() ?? "0",
           letterGrade: doc.get('letterGrade'),
           iconName: doc.get('iconName') ?? 'default',
+          countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
         );
       }).toList();
       return v;
@@ -82,7 +84,9 @@ class CourseService {
             credits: doc.get('credits') ?? "",
             id: doc.id,
             gradePercent: "0",
-            iconName: doc.get('iconName') ?? 'default');
+            iconName: doc.get('iconName') ?? 'default',
+            countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
+        );
       }).toList();
       return v2;
     }
@@ -110,9 +114,11 @@ class CourseService {
     //DocumentSnapshot course = await courseRef.doc(courseID).get();
     QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
     double courseGradeDecimal = 0.0;
+    int counter = 0;
 
     for ( DocumentSnapshot category in categories.docs){
       courseGradeDecimal += category.get('gradePercentAsDecimal');
+      counter += category.get('countOfIncompleteItems');
     }
     double gradePercent = courseGradeDecimal;
 
@@ -121,7 +127,8 @@ class CourseService {
     print(courseGradeDecimal);
     await courseRef.doc(courseID).update({
       'gradePercent' : gradePercent,
-      'letterGrade' : letterGrade
+      'letterGrade' : letterGrade,
+      'countOfIncompleteItems': counter,
     });
 
     await TermService().calculateGPA(courseRef.parent.id);

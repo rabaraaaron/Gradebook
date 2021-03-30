@@ -43,6 +43,7 @@ class AssessmentService {
        })
            .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
            .catchError((error) => print("Failed to add assessment: $error"));
+
        await CategoryService(termID, courseID).calculateGrade(catID);
      } catch (e){
        print('Error in adding assessment: ' + e.toString());
@@ -53,40 +54,40 @@ class AssessmentService {
      //print(dueAssessments);
 
   }
-//todo: ========================================================
-  Stream<List<Assessment>> get pendingAssessments {
-
-    return assessmentRef.snapshots().map(_incompleteFromSnap);
-  }
-  List<Assessment> _incompleteFromSnap(QuerySnapshot snapshot) {
-
-    var list = snapshot.docs.map<Assessment>((doc) {
-      var tp = double.parse(doc.get('totalPoints'));
-      var yp = double.parse(doc.get('yourPoints'));
-      DateTime dueDate;
-      if(doc.get('dueDate') != null)
-        dueDate = doc.get('dueDate').toDate();
-      return Assessment(
-        name: doc.get('name'),
-        totalPoints: tp ?? "",
-        yourPoints: yp ?? "",
-        isDropped: doc.get('isDropped') ?? false,
-        isCompleted: doc.get('isCompleted') ?? false,
-        createDate: doc.get('createDate') ?? 000000000,
-        id: doc.id,
-        catID: catID,
-        courseID: courseID,
-        termID: termID,
-        dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1))
-      );
-    }).toList();
-
-
-    var incompleteAssessments = list.where((element) => !element.isCompleted).toList();
-
-    return incompleteAssessments;
-  }
-  //todo: ========================================================
+// //todo: ========================================================
+//   Stream<List<Assessment>> get pendingAssessments {
+//
+//     return assessmentRef.snapshots().map(_incompleteFromSnap);
+//   }
+//   List<Assessment> _incompleteFromSnap(QuerySnapshot snapshot) {
+//
+//     var list = snapshot.docs.map<Assessment>((doc) {
+//       var tp = double.parse(doc.get('totalPoints'));
+//       var yp = double.parse(doc.get('yourPoints'));
+//       DateTime dueDate;
+//       if(doc.get('dueDate') != null)
+//         dueDate = doc.get('dueDate').toDate();
+//       return Assessment(
+//         name: doc.get('name'),
+//         totalPoints: tp ?? "",
+//         yourPoints: yp ?? "",
+//         isDropped: doc.get('isDropped') ?? false,
+//         isCompleted: doc.get('isCompleted') ?? false,
+//         createDate: doc.get('createDate') ?? 000000000,
+//         id: doc.id,
+//         catID: catID,
+//         courseID: courseID,
+//         termID: termID,
+//         dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1))
+//       );
+//     }).toList();
+//
+//
+//     var incompleteAssessments = list.where((element) => !element.isCompleted).toList();
+//
+//     return incompleteAssessments;
+//   }
+//   //todo: ========================================================
 
   Stream<List<Assessment>> get assessments {
     return assessmentRef.snapshots().map(_assessmentFromSnap);
@@ -161,6 +162,23 @@ class AssessmentService {
     assessmentRef.doc(assessmentID).update({
       'dueDate' : date
     });
+    return null;
+  }
+  Future<void> updateAssessmentData (
+      Assessment a,
+      String name,
+      String tp,
+      String yp,
+      bool isCompleted) async {
+
+    await assessmentRef.doc(a.id).update({
+      'name' :name,
+      'totalPoints' : tp,
+      'yourPoints' : yp,
+      'isCompleted' : isCompleted,
+    });
+    await CategoryService(termID, courseID).calculateGrade(catID);
+
   }
 
   void displayMessage(context, String msg, String title){

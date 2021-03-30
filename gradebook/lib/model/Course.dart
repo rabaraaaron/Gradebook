@@ -14,21 +14,11 @@ class Course with ChangeNotifier {
   final String term;
   final int year;
   final String id;
-  double _sumOfCategoriesWeights = 0.0;
   String gradePercent;
   String letterGrade;
   String   iconName;
+  int countOfIncompleteItems = 0;
 
-
-
-  // double get sumOfCategoriesWeights {
-  //   for(var category in categories){
-  //     _sumOfCategoriesWeights += category.categoryWeight;
-  //   }
-  //
-  //   return _sumOfCategoriesWeights;
-  //
-  // }
 
   Course({
     this.name,
@@ -39,7 +29,8 @@ class Course with ChangeNotifier {
     this.id,
     this.gradePercent,
     this.letterGrade,
-    this.iconName
+    this.iconName,
+    this.countOfIncompleteItems,
   });
 
   @override
@@ -54,42 +45,6 @@ class Course with ChangeNotifier {
   String get getGradeLetter {
     return _gradeLetter;
   }
-
-
-  // void updateGradeLetter(double grade) {
-  //
-  //
-  //   if(grade > 90){
-  //     print("this print is from course.dart line 52 : updating grade to A");
-  //     _gradeLetter = "A";
-  //     //notifyListeners();
-  //     return;
-  //   }
-  //   if(grade > 80){
-  //     print("this print is from course.dart line 58 :updating grade to B");
-  //     _gradeLetter = "B";
-  //     //notifyListeners();
-  //     return;
-  //   }
-  //   if(grade > 70){
-  //     _gradeLetter = "C";
-  //     //notifyListeners();
-  //     return;
-  //   }
-  //   if(grade > 60){
-  //     _gradeLetter = "D";
-  //     //notifyListeners();
-  //     return;
-  //   } else {
-  //     _gradeLetter = "F";
-  //     //notifyListeners();
-  //     return;
-  //   }
-  //
-  // }
-
-
-
 
 }
 
