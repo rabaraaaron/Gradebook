@@ -2,17 +2,9 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:gradebook/model/Assessment.dart';
-import 'package:gradebook/model/Course.dart';
-import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/model/User.dart';
 import 'package:gradebook/services/assessment_service.dart';
-import 'package:provider/provider.dart';
 import 'assessment_service.dart';
 import 'course_service.dart';
-import 'course_service.dart';
-import 'user_service.dart';
 import 'package:gradebook/model/Category.dart';
 
 class CategoryService {
@@ -26,10 +18,8 @@ class CategoryService {
     categoryRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('terms')
-        .doc(termID)
-        .collection('courses')
-        .doc(courseID)
+        .collection('terms').doc(termID)
+        .collection('courses').doc(courseID)
         .collection("categories");
   }
 
@@ -54,6 +44,7 @@ class CategoryService {
             'earned': 0.0,
             'gradePercentAsDecimal': 0.0,
             'equalWeights' : equalWeights,
+            'countOfIncompleteItems' : 0,
           })
           .then((value) => print("Category Added"))
           .catchError((error) => print("Failed to add category: $error"));
@@ -64,15 +55,6 @@ class CategoryService {
   }
 
   List<Category> _categoriesFromSnap(QuerySnapshot snapshot) {
-
-    // var v = snapshot.docs.map<Category>((doc) {
-    //   if(doc.get('weight') is String){
-    //     print("weight is double");
-    //   }
-    //
-    // });
-    // print(v);
-
     try {
       var v = snapshot.docs.map<Category>((doc) {
 
@@ -84,6 +66,7 @@ class CategoryService {
             total: doc.get('total').toString() ?? "0",
             earned: doc.get('earned').toString() ?? "0",
             equalWeights: doc.get('equalWeights') ?? false,
+            countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
         );
       }).toList();
       listOfCategories = v;
@@ -139,10 +122,11 @@ class CategoryService {
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
     QuerySnapshot assessmentsSnap = await categoryRef.doc(catID).collection('assessments').get();
     SplayTreeMap map = new SplayTreeMap<String, double>();
-    double gradePercentAsDecimal,
+    double gradePercentAsDecimal = 0,
         totalOfTotalPoints = 0,
         totalofEarnedPoints = 0,
         totalEarnedWeights = 0;
+    int counter = 0;
     double categoryWeight = categorySnap.get('weight');
     bool dropLowest = categorySnap.get('dropLowest');
 
@@ -150,20 +134,28 @@ class CategoryService {
     //calculate Totals
     for (DocumentSnapshot assessment in assessmentsSnap.docs) {
       //reset all assessment so that none is dropped
-      aServ.updateDropState(assessment.id, false);
+      if(assessment.get('isDropped')){
+        aServ.updateDropState(assessment.id, false);
+      }
 
-      double totalPoints = double.parse(assessment.get('totalPoints') ?? 0.0);
-      double yourPoints = double.parse(assessment.get('yourPoints') ?? 0.0);
-      bool isCompleted = assessment.get('isCompleted') ?? false;
-        totalOfTotalPoints += totalPoints;
-        totalofEarnedPoints += yourPoints;
+      double totalPoints = double.parse(assessment.get('totalPoints'));
+      double yourPoints = double.parse(assessment.get('yourPoints'));
+      bool isCompleted = assessment.get('isCompleted');
 
-        if (isCompleted && totalPoints > 0 ) {
+      totalOfTotalPoints += totalPoints;
+      totalofEarnedPoints += yourPoints;
+
+      if(isCompleted) {
+        if (totalPoints > 0) {
           map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
           //this will be used only for equally wighted calc
-          double earnedWeight = (yourPoints / totalPoints) * ( categoryWeight / assessmentsSnap.size);
+          double earnedWeight = (yourPoints / totalPoints) *
+              (categoryWeight / assessmentsSnap.size);
           totalEarnedWeights += earnedWeight;
         }
+      }else{
+        counter++;
+      }
     }
 
     //findLowest
@@ -182,26 +174,30 @@ class CategoryService {
       totalofEarnedPoints -= lowestEP;
       totalOfTotalPoints -= lowestTP;
 
-      //for equally weighted categroy,
-      double lowestEW = (lowestEP / lowestTP) * ( categoryWeight / assessmentsSnap.size);
-      totalEarnedWeights -= lowestEW;
-      //Add the full weight for that assessment to total earned weight
-      totalEarnedWeights += categoryWeight/ assessmentsSnap.size;
+        //for equally weighted categroy,
+      double lowestEW = (lowestEP / lowestTP) * (categoryWeight / assessmentsSnap.size);
+        totalEarnedWeights -= lowestEW;
+        //Add the full weight for that assessment to total earned weight
+        totalEarnedWeights += categoryWeight / assessmentsSnap.size;
 
     }
 
+
     if(await categorySnap.get('equalWeights')){
       gradePercentAsDecimal = totalEarnedWeights;
-    } else {
+    } else if( totalOfTotalPoints>0){
       gradePercentAsDecimal =
           categoryWeight * (totalofEarnedPoints / totalOfTotalPoints);
     }
 
-    categoryRef.doc(catID).update({
-      'gradePercentAsDecimal': gradePercentAsDecimal,
-      'total': totalOfTotalPoints,
-      'earned': totalofEarnedPoints
-    });
+    categoryRef.doc(catID).update(
+        {
+          'gradePercentAsDecimal': gradePercentAsDecimal,
+          'total': totalOfTotalPoints,
+          'earned': totalofEarnedPoints,
+          'countOfIncompleteItems': counter,
+        }
+    );
 
     await CourseService(termID).calculateGrade(courseID);
   }

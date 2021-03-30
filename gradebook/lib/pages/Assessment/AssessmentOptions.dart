@@ -88,7 +88,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     new AssessmentService(termID, courseID, categoryID);
 
     if(assignmentIsCompleted){
-      dialogueHeight = 320;
+      dialogueHeight = 345;
       col = Column(children: [
         Text(
           "Assessment Options",
@@ -213,13 +213,18 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     print(yourPointsController.text);
                     // await assServ.addAssessment(
                     //   TODO: Send update to firebase
+                    await assServ.updateAssessmentData(
+                        assessment,
+                        nameController.text,
+                        totalPointsController.text,
+                        yourPointsController.text,
+                        assignmentIsCompleted);
                     //     nameController.text, totalPointsController.text, yourPointsController.text);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(nameController.text == ""){
-                  } else{ //When assignment is not completed yet
-                    await assServ.addAssessment(
-                        nameController.text, assignmentIsCompleted, "0", "0");
+                  } else{
+                    await assServ.addAssessment(nameController.text, assignmentIsCompleted, "0", "0");
                     Navigator.pop(context);
                   }
 
@@ -235,8 +240,8 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
         ),
 
       ]);
-    } else {
-      dialogueHeight = 260;
+    } else { //When assignment is not completed yet
+      dialogueHeight = 290;
       col = Column(children: [
         Text(
           "Assessment Options",
@@ -330,7 +335,6 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   borderRadius: BorderRadius.circular(13.0),
                 ),
                 onPressed: () async {
-
                   if(nameController == null){
                     nameController = TextEditingController();
                     nameController.text = initialName;
@@ -357,8 +361,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     Navigator.pop(context);
                   } else if(nameController.text == ""){
                   } else{
-                    await assServ.addAssessment(
-                        nameController.text, "0", "0", assignmentIsCompleted);
+                    print('print from assessmentOptions.dart line 356---------- about to update assessment ) ' + assessment.name);
+                    //await assServ.updateAssessmentData(assessment, nameController.text, totalPointsController.text, yourPointsController.text);
+                    await assServ.addAssessment(nameController.text, "0", "0", assignmentIsCompleted);
                     Navigator.pop(context);
                   }
                 },
