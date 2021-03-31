@@ -54,7 +54,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     this.assessment = a;
     this.initialName = a.name;
     this.assignmentIsCompleted = a.isCompleted;
-    // TODO: add initialDate = a.date;
+    initialDate = a.dueDate.year.toString()
+        +'-'+a.dueDate.month.toString()
+        +'-'+a.dueDate.day.toString();
     initialYourPoints = a.yourPoints.toString();
     initialTotalPoints = a.totalPoints.toString();
 
@@ -273,8 +275,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             SizedBox(
               width: 175,
               child: TextFormField(
-                //TODO: add initialDate to assessment database
-                // initialValue: initialDate,
+                initialValue: initialDate,
                 enabled: false,
                 readOnly: true,
                 controller: dateController,
@@ -322,7 +323,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                 child: Text(
                     "Assignment Completed",
                   style: Theme.of(context).textTheme.headline3,
-                )
+                ),
             ),
           ],
         ),
@@ -338,6 +339,13 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     nameController = TextEditingController();
                     nameController.text = initialName;
                     initialName = null;
+                    setState(() { });
+                  }
+
+                  if(dateController == null){
+                    dateController = TextEditingController();
+                    dateController.text = initialDate;
+                    initialDate = null;
                     setState(() { });
                   }
 
