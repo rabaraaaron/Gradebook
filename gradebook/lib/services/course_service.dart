@@ -97,6 +97,14 @@ class CourseService {
     await TermService().calculateGPA(courseRef.parent.id);
   }
 
+  Future<String> getCourseName(id) async {
+    DocumentSnapshot courseSnap = await courseRef.doc(id).get();
+    //print("----" + courseSnap.get('name'));
+
+    //await TermService().calculateGPA(courseRef.parent.id);
+    return courseSnap.get('name');
+  }
+
   Future<void> updateCourse(name, credits, courseID, passFail) async {
     await courseRef.doc(courseID).update({
       'name': name,

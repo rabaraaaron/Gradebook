@@ -18,6 +18,7 @@ class MenuDrawer extends StatelessWidget {
           ListTile(
             title: Text("Settings", style: t,),
             onTap: (){
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/Settings');
             }
           ),
@@ -30,6 +31,7 @@ class MenuDrawer extends StatelessWidget {
                 style: t,
               ),
             onTap: (){
+                Navigator.pop(context);
                 Navigator.pushNamed(context, '/Upcoming');
             },
           ),
