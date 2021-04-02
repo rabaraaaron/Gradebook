@@ -54,9 +54,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     this.assessment = a;
     this.initialName = a.name;
     this.assignmentIsCompleted = a.isCompleted;
-    initialDate = a.dueDate.year.toString()
-        +'-'+a.dueDate.month.toString()
-        +'-'+a.dueDate.day.toString();
+    initialDate = a.dueDate.month.toString()
+        +'-'+a.dueDate.day.toString()
+        + '-'+a.dueDate.year.toString();
     initialYourPoints = a.yourPoints.toString();
     initialTotalPoints = a.totalPoints.toString();
 
@@ -211,16 +211,14 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     print(nameController.text);
                     print(totalPointsController.text);
                     print(yourPointsController.text);
-                    // await assServ.addAssessment(
-                    //   TODO: Send update to firebase
                     await assServ.updateAssessmentData(
                         assessment,
                         nameController.text,
                         totalPointsController.text,
                         yourPointsController.text,
-                        assignmentIsCompleted);
-                    //     nameController.text, totalPointsController.text, yourPointsController.text);
-                    //await CategoryService(termID, courseID).calculateGrade(categoryID);
+                        assignmentIsCompleted,
+                        d,
+                    );
                     Navigator.pop(context);
                   } else if(nameController.text == ""){
                   } else{
@@ -235,7 +233,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 color: Theme.of(context).primaryColor,
-              )
+              ),
           ),
         ),
 
@@ -288,6 +286,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
               iconSize: 40,
               icon: Icon(Icons.date_range),
               onPressed: (){
+                if(dateController == null){
+                  dateController = TextEditingController();
+                  dateController.text = initialDate;
+                  initialDate = null;
+                }
                 showDatePicker(
                   context: context,
                   initialDate: d,
@@ -300,7 +303,8 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     d = v;
                     dateController = TextEditingController();
                     setState(() {
-                      dateController.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
+                      dateController.text = v.month.toString()+'-'+
+                          v.day.toString()+'-'+v.year.toString();
                     });
                   }
                 });
@@ -349,12 +353,32 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     setState(() { });
                   }
 
-                  //TODO: once due date is added to firebase, add check for dateController
+                  if(totalPointsController == null){
+                    totalPointsController = TextEditingController();
+                    totalPointsController.text = initialTotalPoints;
+                    initialTotalPoints = null;
+                    setState(() {});
+                  }
+
+                  if(yourPointsController == null){
+                    yourPointsController = TextEditingController();
+                    yourPointsController.text = initialYourPoints;
+                    initialYourPoints = null;
+                    setState(() {});
+                  }
+
                   if(nameController.text != ""){
 
                     print(nameController.text);
 
-                    //TODO: Send update to firebase
+                    await assServ.updateAssessmentData(
+                        assessment,
+                        nameController.text,
+                        totalPointsController.text,
+                        yourPointsController.text,
+                        assignmentIsCompleted,
+                        d
+                    );
                     // await assServ.addAssessment(
                     //     nameController.text, totalPointsController.text, yourPointsController.text, assignmentIsCompleted);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);

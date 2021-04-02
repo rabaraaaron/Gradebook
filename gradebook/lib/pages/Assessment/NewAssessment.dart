@@ -146,7 +146,6 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                         yourPoints.text != ""){//When assignment is completed
 
                       await assServ.addAssessment(
-                        //TODO: add due date to the database
                           name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate);
                       Navigator.pop(context);
                     } else if(name.text == ""){
@@ -225,7 +224,8 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                     } else{
                       dueDate = v;
                       setState(() {
-                        date.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
+                        date.text = v.month.toString()+'-'+v.day.toString()+
+                            '-'+v.year.toString();
                       });
                     }
                   });

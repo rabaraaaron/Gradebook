@@ -169,13 +169,16 @@ class AssessmentService {
       String name,
       String tp,
       String yp,
-      bool isCompleted) async {
+      bool isCompleted,
+      DateTime dateTime
+      ) async {
 
     await assessmentRef.doc(a.id).update({
       'name' :name,
       'totalPoints' : tp,
       'yourPoints' : yp,
       'isCompleted' : isCompleted,
+      'dueDate': dateTime ?? null
     });
     await CategoryService(termID, courseID).calculateGrade(catID);
 
