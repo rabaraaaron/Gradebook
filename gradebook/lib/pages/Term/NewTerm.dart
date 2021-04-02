@@ -51,16 +51,32 @@ class _NewTermState extends State<NewTerm> {
           ));
     }
 
+    SizedBox addButton = SizedBox(
+      height: 50,
+      width: 300,
+      child: RaisedButton(
+          color: Theme.of(context).primaryColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+          onPressed: () async {
+            await term.addTerm(addedTerm, termYear);
+            Navigator.pop(context);
+          },
+          child: Text("Add",  style: Theme.of(context).textTheme.headline2,)
+      ),
+    );
+
     return AlertDialog(
+      title: Column(children: [
+        Text(
+          "Add Term",
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Divider(color: Theme.of(context).dividerColor),
+      ],),
         content: SizedBox(
           child: Form(
               child: Column(
                   children: [
-                    Text(
-                      "Add Term",
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    Divider(color: Theme.of(context).dividerColor),
                     DropdownButton(
                       hint: Text(
                         "Term",
@@ -107,27 +123,13 @@ class _NewTermState extends State<NewTerm> {
                           SizedBox(height: 20,),
                         ]
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 30,
-                        width: 300,
-                        child: RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-                            onPressed: () async {
-                              await term.addTerm(addedTerm, termYear);
-                              Navigator.pop(context);
-                            },
-                            child: Text("Add",  style: Theme.of(context).textTheme.headline2,)
-                        ),
-                      ),
-                    ),
                   ]
               )
           ),
           width: 100,
-          height: 240,
-        )
+          height: 145,
+        ),
+      actions: [addButton],
     );
   }
 }

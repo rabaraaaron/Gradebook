@@ -53,77 +53,83 @@ class _NewCourseState extends State<NewCourse> {
       listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
     }
 
+    SizedBox addButton = SizedBox(
+        height: 50,
+        width: 300,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Theme.of(context).primaryColor),
+                shape: MaterialStateProperty.resolveWith((states) =>
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(13.0)))),
+            onPressed: () async {
+              await CourseService(termID).addCourse(classTitleController.text,
+                  creditHoursController.text, checked1);
+              if (int.parse(creditHoursController.text) is int) {
+                print(creditHoursController.text);
+              }
+              Navigator.pop(context);
+              setState(() {});
+            },
+            child: Text(
+              "Add",
+              style: Theme.of(context).textTheme.headline2,
+            )));
+
     return AlertDialog(
+      title: Column(children: [
+        Text(
+          "Add Course",
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Divider(color: Theme.of(context).dividerColor),
+      ],),
         content: SizedBox(
           child: FocusScope(
             node: focusScopeNode,
             child: Form(
-                child: Column(children: [
-                  Text(
-                    "Add Course",
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  Divider(color: Theme.of(context).dividerColor),
-                  TextFormField(
-                    controller: classTitleController,
-                    decoration: const InputDecoration(
-                      hintText: "ex CS 101",
-                      labelText: 'Course Title',
-                    ),
-                    onEditingComplete: handleSubmitted,
-                  ),
-                  TextFormField(
-                    controller: creditHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: "ex 4",
-                      labelText: 'Credit Hours',
-                    ),
-                    onEditingComplete: handleSubmitted,
-                  ),
-                  Row(
-                    children: [
-                      Switch(
-                        value: checked1,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: (updateChecked) {
-                          setState(() {
-                            checked1 = updateChecked;
-                          });
-                        },
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    TextFormField(
+                      controller: classTitleController,
+                      decoration: const InputDecoration(
+                        hintText: "ex CS 101",
+                        labelText: 'Course Title',
                       ),
-                      Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-                    ],
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                        width: 300,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.resolveWith(
-                                        (states) => Theme.of(context).primaryColor),
-                                shape: MaterialStateProperty.resolveWith((states) =>
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(13.0)))),
-                            onPressed: () async {
-                              await CourseService(termID).addCourse(classTitleController.text,
-                                  creditHoursController.text, checked1);
-                              if (int.parse(creditHoursController.text) is int) {
-                                print(creditHoursController.text);
-                              }
-                              Navigator.pop(context);
-                              setState(() {});
-                            },
-                            child: Text(
-                              "Add",
-                              style: Theme.of(context).textTheme.headline2,
-                            ))),
-                  ),
-                ])),
+                      onEditingComplete: handleSubmitted,
+                    ),
+                    TextFormField(
+                      controller: creditHoursController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: "ex 4",
+                        labelText: 'Credit Hours',
+                      ),
+                      onEditingComplete: handleSubmitted,
+                    ),
+                    Row(
+                      children: [
+                        Switch(
+                          value: checked1,
+                          activeColor: Theme.of(context).accentColor,
+                          onChanged: (updateChecked) {
+                            setState(() {
+                              checked1 = updateChecked;
+                            });
+                          },
+                        ),
+                        Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                      ],
+                    ),
+                  ]),
+                )),
           ),
           width: 100,
-          height: 280,
-        ));
+          height: 155,
+        ),
+      actions: [addButton],
+    );
   }
 }
 

@@ -6,6 +6,8 @@ import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
+import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/services/assessment_service.dart';
@@ -103,7 +105,7 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back, size: 35,),
           color: Theme.of(context).buttonColor,
           iconSize: 25,
           onPressed: (){
@@ -130,13 +132,25 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
                       IconSlideAction(
                         color: Colors.transparent,
                         closeOnTap: true,
-                        iconWidget: Icon(
-                          Icons.check,
-                          color: Theme
-                              .of(context)
-
-                              .dividerColor,
-                          size: 35,
+                        iconWidget: IconButton(
+                          icon: Icon(
+                            Icons.check,
+                            color: Theme.of(context).dividerColor,
+                            size: 35,
+                          ),
+                          onPressed: ()async{
+                            //TODO: implement updating assessments from here
+                            // await showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context){
+                            //       return AssessmentCompleted(
+                            //           termID,
+                            //           snapshot.data[index].courseID,
+                            //           snapshot.data[index].catID,
+                            //           snapshot.data[index]);
+                            //     }
+                            // );
+                          },
                         ),
                         // onTap: () async {
                         //   showDialog(

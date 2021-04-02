@@ -69,96 +69,100 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
     }
 
     return AlertDialog(
+      title: Column(children: [
+        Text(
+          "Add Category",
+          style: TextStyle(
+            fontSize: 27.5,
+            color: Theme.of(context).dividerColor,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        Divider(color: Theme.of(context).dividerColor,),
+      ],),
         content: SizedBox(
           child: Form(
-              child: Column(children: [
-                Text(
-                  "Add Category",
-                  style: TextStyle(
-                    fontSize: 27.5,
-                    color: Theme.of(context).dividerColor,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Divider(color: Theme.of(context).dividerColor,),
-                DropdownButtonFormField(
-                  style: Theme.of(context).textTheme.headline3,
-                  hint: Text(
-                    "Select Category",
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  DropdownButtonFormField(
                     style: Theme.of(context).textTheme.headline3,
-                  ),
-                  value: addedCategory,
-                  items: listOfCategories,
-                  onChanged: (val) {
-                    setState(() {
-                      addedCategory = val;
-                    });
-                  },
-                  isExpanded: true,
-                ),
-                TextFormField(
-                  controller: categoryWeightController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: "ex 25",
-                    labelText: 'Weight',
-                  ),
-                ),
-                Row(
-                  children: [
-                    Switch(
-                      value: dropLowest_isChecked,
-                      activeColor: Theme.of(context).accentColor,
-                      onChanged: (updateChecked) {
-                        setState(() {
-                          dropLowest_isChecked = updateChecked;
-                        });
-                      },
-                    ),
-                    Text(
-                      "Drop Lowest Score?",
+                    hint: Text(
+                      "Select Category",
                       style: Theme.of(context).textTheme.headline3,
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Switch(
-                      value: equalWeights,
-                      activeColor: Theme.of(context).accentColor,
-                      onChanged: (updateChecked) {
-                        setState(() {
-                          equalWeights = updateChecked;
-                        });
-                      },
-                    ),
-                    Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
-                  ],
-                ),
-                Expanded(
-                  child: SizedBox(
-                    width: 300,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13.0)),
-                      onPressed: () async {
-
-                        print(addedCategory);
-                        await categoryService.addCategory(
-                            addedCategory, categoryWeightController.text, dropLowest_isChecked, equalWeights);
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Add",
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      color: Theme.of(context).primaryColor,
+                    value: addedCategory,
+                    items: listOfCategories,
+                    onChanged: (val) {
+                      setState(() {
+                        addedCategory = val;
+                      });
+                    },
+                    isExpanded: true,
+                  ),
+                  TextFormField(
+                    controller: categoryWeightController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 25",
+                      labelText: 'Weight',
                     ),
                   ),
-                )
-              ])),
+                  Row(
+                    children: [
+                      Switch(
+                        value: dropLowest_isChecked,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            dropLowest_isChecked = updateChecked;
+                          });
+                        },
+                      ),
+                      Text(
+                        "Drop Lowest Score?",
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: equalWeights,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            equalWeights = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                ]),
+              )),
           width: 100,
-          height: 300,
-        ));
+          height: 155,
+        ),
+      actions: [                SizedBox(
+        height: 50,
+        width: 300,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(13.0)),
+          onPressed: () async {
+
+            print(addedCategory);
+            await categoryService.addCategory(
+                addedCategory, categoryWeightController.text, dropLowest_isChecked, equalWeights);
+            Navigator.pop(context);
+          },
+          child: Text(
+            "Add",
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          color: Theme.of(context).primaryColor,
+        ),
+      )],
+    );
   }
 }

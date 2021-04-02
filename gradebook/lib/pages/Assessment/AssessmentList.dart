@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/model/Assessment.dart';
+import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
 import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
@@ -44,10 +45,11 @@ class _AssessmentListState extends State<AssessmentList> {
     if (assessments != null)
       assessments.forEach((element) {
 
+
         if(element.isDropped == true){
           isDroppedText = Text(
-              "<-- Dropped",
-              style: Theme.of(context).textTheme.bodyText2);
+              "(Dropped)",
+              style: Theme.of(context).textTheme.bodyText1);
         } else{
           isDroppedText = Text("",);
         }
@@ -57,19 +59,103 @@ class _AssessmentListState extends State<AssessmentList> {
           dateOrGrade = "${element.yourPoints} / ${element.totalPoints}";
 
         } else{
-          //TODO: display due date instead of grade if assessment is not completed
           //todo: what if the due date is not entered? ------(by Mohammad)
           dateOrGrade =
-          DateFormat('yyyy-MM-dd').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
+          DateFormat('MM-dd-yyyy').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
           // element.dueDate,
 
         }
+        Row r;
+        if(element.isCompleted){
+          r = Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 10,),
+              Text(
+                element.name,
+                style: Theme.of(context).textTheme.bodyText1,),
+              SizedBox(width: 10,),
+              isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
+              //Text(element.createDate.toString()),
+              Expanded(child: Container(),),
+              Text(
+                dateOrGrade,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(width: 10, height: 60,),
+            ],
+          );
+        } else{
+          r = Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 10,),
+              Text(
+                element.name,
+                style: Theme.of(context).textTheme.bodyText1,),
+              SizedBox(width: 10,),
+              isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
+              //Text(element.createDate.toString()),
+              Expanded(child: Container(),),
+              Text(
+                dateOrGrade,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(width: 10, height: 60,),
+              IconButton(
+                icon: Icon(Icons.check),
+                color: Colors.white,
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context){
+                        return AssessmentCompleted(
+                            termID,
+                            courseID,
+                            categoryID,
+                            element);// Here
+                      });
+                },
+              )
+            ],
+          );
+        }
 
-        entries.add(Slidable(
-          controller: slidableController,
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: .2,
-          secondaryActions: <Widget>[
+        List<Widget> slidableActions;
+        if(element.isCompleted){
+          slidableActions = [
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.settings,
+                color: Theme.of(context).dividerColor,
+                size: 35,
+              ),
+              onTap: () async {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AssessmentOptions(context, termID,
+                          courseID, categoryID, element);
+                    });
+              },
+            ),
+            IconSlideAction(
+              color: Colors.transparent,
+              closeOnTap: true,
+              iconWidget: Icon(
+                Icons.delete,
+                color: Theme.of(context).dividerColor,
+                size: 35,
+              ),
+              onTap: ()async {
+                await assServ.deleteAssessment(element.id);
+              },
+            )
+          ];
+        } else{
+          slidableActions = [
             IconSlideAction(
               color: Colors.transparent,
               closeOnTap: true,
@@ -109,28 +195,17 @@ class _AssessmentListState extends State<AssessmentList> {
                 await assServ.deleteAssessment(element.id);
               },
             )
-          ],
-          child: Card(
-            color: Theme.of(context).accentColor.withOpacity(.2),
+          ];
+        }
 
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(width: 10,),
-                Text(
-                  element.name,
-                  style: Theme.of(context).textTheme.bodyText2,),
-                SizedBox(width: 10,),
-                isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
-                //Text(element.createDate.toString()),
-                Expanded(child: Container(),),
-                Text(
-                  dateOrGrade,
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-                SizedBox(width: 10, height: 60,)
-              ],
-            ),
+        entries.add(Slidable(
+          controller: slidableController,
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: .2,
+          secondaryActions: slidableActions,
+          child: Card(
+            color: Theme.of(context).accentColor.withOpacity(.7),
+            child: r,
           ),
         ));
       });
