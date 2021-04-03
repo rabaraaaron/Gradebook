@@ -36,7 +36,7 @@ class DeleteCategoryConfirmation extends StatelessWidget{
               color: Colors.red,
               height: 40,
               onPressed: () {
-                catServ.deleteCategory(categories[index].id);
+                catServ.deleteCategory(categories[index].id, categories[index].categoryWeight);
                 Navigator.pop(context);
               },
               child: Text(

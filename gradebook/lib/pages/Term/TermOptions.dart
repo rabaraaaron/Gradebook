@@ -52,16 +52,36 @@ class _TermOptionsState extends State<TermOptions> {
           ));
     }
 
+    SizedBox confirmButton = SizedBox(
+      height: 50,
+      width: 300,
+      child: RaisedButton(
+          color: Theme.of(context).primaryColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+          onPressed: () async {
+            //TODO: send update to database
+            // print(addedTerm); To get the term name
+            // print(termYear); To get the term year
+            // print(isHypothetical); Bool for if this is a hypothetical term
+            // await term.addTerm(addedTerm, termYear);
+            // Navigator.pop(context);
+          },
+          child: Text("Confirm",  style: Theme.of(context).textTheme.headline2,)
+      ),
+    );
+
     return AlertDialog(
+        title: Column(children: [
+          Text(
+            "Term Options",
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          Divider(color: Theme.of(context).dividerColor),
+        ],),
         content: SizedBox(
           child: Form(
               child: Column(
                   children: [
-                    Text(
-                      "Term Options",
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    Divider(color: Theme.of(context).dividerColor),
                     DropdownButton(
                       hint: Text(
                         "Term",
@@ -108,31 +128,13 @@ class _TermOptionsState extends State<TermOptions> {
                           SizedBox(height: 20,),
                         ]
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 30,
-                        width: 300,
-                        child: RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-                            onPressed: () async {
-                              //TODO: send update to database
-                              // print(addedTerm); To get the term name
-                              // print(termYear); To get the term year
-                              // print(isHypothetical); Bool for if this is a hypothetical term
-                              // await term.addTerm(addedTerm, termYear);
-                              // Navigator.pop(context);
-                            },
-                            child: Text("Confirm",  style: Theme.of(context).textTheme.headline2,)
-                        ),
-                      ),
-                    ),
                   ]
               )
           ),
           width: 100,
-          height: 240,
-        )
+          height: 145,
+        ),
+      actions: [confirmButton],
     );
   }
 }

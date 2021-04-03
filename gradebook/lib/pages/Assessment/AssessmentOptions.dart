@@ -54,7 +54,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     this.assessment = a;
     this.initialName = a.name;
     this.assignmentIsCompleted = a.isCompleted;
-    // TODO: add initialDate = a.date;
+    initialDate = a.dueDate.month.toString()
+        +'-'+a.dueDate.day.toString()
+        + '-'+a.dueDate.year.toString();
     initialYourPoints = a.yourPoints.toString();
     initialTotalPoints = a.totalPoints.toString();
 
@@ -74,7 +76,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
   bool assignmentIsCompleted = false;
   Column col;
-  double dialogueHeight = 325;
+  double dialogueHeight;
   double dialogueWidth = 150;
 
 
@@ -85,18 +87,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     AssessmentService assServ =
     new AssessmentService(termID, courseID, categoryID);
 
+    SizedBox confirmButton;
+
     if(assignmentIsCompleted){
-      dialogueHeight = 320;
+      dialogueHeight = 155;
       col = Column(children: [
-        Text(
-          "Assessment Options",
-          style: TextStyle(
-            fontSize: 25,
-            color: Theme.of(context).dividerColor,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        Divider(color: Theme.of(context).dividerColor,thickness: .2,),
         TextFormField(
           initialValue: initialName,
           controller: nameController,
@@ -175,75 +170,70 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             ),
           ],
         ),
-        Expanded(
-          child: SizedBox(
-              width: 300,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(13.0),
-                ),
-                onPressed: () async {
-
-                  if(nameController == null){
-                    nameController = TextEditingController();
-                    nameController.text = initialName;
-                    initialName = null;
-                    setState(() { });
-                  }
-                  if(totalPointsController == null){
-                    totalPointsController = TextEditingController();
-                    totalPointsController.text = initialTotalPoints;
-                    initialTotalPoints = null;
-                    setState(() { });
-                  }
-                  if(yourPointsController == null){
-                    yourPointsController = TextEditingController();
-                    yourPointsController.text = initialYourPoints;
-                    initialYourPoints = null;
-                    setState(() { });
-                  }
-
-                  if(nameController.text != "" && totalPointsController.text != "" &&
-                      yourPointsController.text != ""){//When assignment is completed
-
-                    print(nameController.text);
-                    print(totalPointsController.text);
-                    print(yourPointsController.text);
-                    // await assServ.addAssessment(
-                    //     nameController.text, totalPointsController.text, yourPointsController.text);
-                    //await CategoryService(termID, courseID).calculateGrade(categoryID);
-                    Navigator.pop(context);
-                  } else if(nameController.text == ""){
-                  } else{ //When assignment is not completed yet
-                    await assServ.addAssessment(
-                        nameController.text, assignmentIsCompleted, "0", "0");
-                    Navigator.pop(context);
-                  }
-
-
-                },
-                child: Text(
-                  "Confirm",
-                  style: Theme.of(context).textTheme.headline2,
-                ),
-                color: Theme.of(context).primaryColor,
-              )
-          ),
-        ),
-
       ]);
-    } else {
-      dialogueHeight = 260;
-      col = Column(children: [
-        Text(
-          "Assessment Options",
-          style: TextStyle(
-            fontSize: 25,
-            color: Theme.of(context).dividerColor,
-            fontWeight: FontWeight.w300,
+
+      confirmButton = SizedBox(
+        height: 50,
+        width: 300,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13.0),
           ),
+          onPressed: () async {
+
+            if(nameController == null){
+              nameController = TextEditingController();
+              nameController.text = initialName;
+              initialName = null;
+              setState(() { });
+            }
+            if(totalPointsController == null){
+              totalPointsController = TextEditingController();
+              totalPointsController.text = initialTotalPoints;
+              initialTotalPoints = null;
+              setState(() { });
+            }
+            if(yourPointsController == null){
+              yourPointsController = TextEditingController();
+              yourPointsController.text = initialYourPoints;
+              initialYourPoints = null;
+              setState(() { });
+            }
+
+            if(nameController.text != "" && totalPointsController.text != "" &&
+                yourPointsController.text != ""){//When assignment is completed
+
+              print(nameController.text);
+              print(totalPointsController.text);
+              print(yourPointsController.text);
+              await assServ.updateAssessmentData(
+                assessment,
+                nameController.text,
+                totalPointsController.text,
+                yourPointsController.text,
+                assignmentIsCompleted,
+                d,
+              );
+              Navigator.pop(context);
+            } else if(nameController.text == ""){
+            } else{
+              await assServ.addAssessment(nameController.text, assignmentIsCompleted, "0", "0");
+              Navigator.pop(context);
+            }
+
+
+          },
+          child: Text(
+            "Confirm",
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          color: Theme.of(context).primaryColor,
         ),
-        Divider(color: Theme.of(context).dividerColor,),
+      );
+
+    } else { //When assignment is not completed yet
+      dialogueHeight = 155;
+      col = Column(children: [
         TextFormField(
           initialValue: initialName,
           controller: nameController,
@@ -267,8 +257,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             SizedBox(
               width: 175,
               child: TextFormField(
-                //TODO: add initialDate to assessment database
-                // initialValue: initialDate,
+                initialValue: initialDate,
                 enabled: false,
                 readOnly: true,
                 controller: dateController,
@@ -281,6 +270,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
               iconSize: 40,
               icon: Icon(Icons.date_range),
               onPressed: (){
+                if(dateController == null){
+                  dateController = TextEditingController();
+                  dateController.text = initialDate;
+                  initialDate = null;
+                }
                 showDatePicker(
                   context: context,
                   initialDate: d,
@@ -293,7 +287,8 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     d = v;
                     dateController = TextEditingController();
                     setState(() {
-                      dateController.text = v.year.toString()+'/'+v.month.toString()+'/'+v.day.toString();
+                      dateController.text = v.month.toString()+'-'+
+                          v.day.toString()+'-'+v.year.toString();
                     });
                   }
                 });
@@ -316,62 +311,104 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                 child: Text(
                     "Assignment Completed",
                   style: Theme.of(context).textTheme.headline3,
-                )
+                ),
             ),
           ],
         ),
-        Expanded(
-          child: SizedBox(
-              width: 295,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(13.0),
-                ),
-                onPressed: () async {
-
-                  if(nameController == null){
-                    nameController = TextEditingController();
-                    nameController.text = initialName;
-                    initialName = null;
-                    setState(() { });
-                  }
-
-                  //TODO: once due date is added to firebase, add check for dateController
-                  if(nameController.text != ""){
-
-                    print(nameController.text);
-
-                    //TODO: Send update to firebase
-                    // await assServ.addAssessment(
-                    //     nameController.text, totalPointsController.text, yourPointsController.text, assignmentIsCompleted);
-                    Navigator.pop(context);
-                  } else if(nameController.text == ""){
-                  } else{
-                    await assServ.addAssessment(
-                        nameController.text, "0", "0", assignmentIsCompleted);
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(
-                  "Confirm",
-                  style: Theme.of(context).textTheme.headline2,
-                ),
-                color: Theme.of(context).primaryColor,
-              )
-          ),
-        ),
       ]);
+
+      confirmButton = SizedBox(
+          height: 50,
+          width: 295,
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(13.0),
+            ),
+            onPressed: () async {
+              if(nameController == null){
+                nameController = TextEditingController();
+                nameController.text = initialName;
+                initialName = null;
+                setState(() { });
+              }
+
+              if(dateController == null){
+                dateController = TextEditingController();
+                dateController.text = initialDate;
+                initialDate = null;
+                setState(() { });
+              }
+
+              if(totalPointsController == null){
+                totalPointsController = TextEditingController();
+                totalPointsController.text = initialTotalPoints;
+                initialTotalPoints = null;
+                setState(() {});
+              }
+
+              if(yourPointsController == null){
+                yourPointsController = TextEditingController();
+                yourPointsController.text = initialYourPoints;
+                initialYourPoints = null;
+                setState(() {});
+              }
+
+              if(nameController.text != ""){
+
+                print(nameController.text);
+
+                await assServ.updateAssessmentData(
+                    assessment,
+                    nameController.text,
+                    totalPointsController.text,
+                    yourPointsController.text,
+                    assignmentIsCompleted,
+                    d
+                );
+                // await assServ.addAssessment(
+                //     nameController.text, totalPointsController.text, yourPointsController.text, assignmentIsCompleted);
+                //await CategoryService(termID, courseID).calculateGrade(categoryID);
+                Navigator.pop(context);
+              } else if(nameController.text == ""){
+              } else{
+                print('print from assessmentOptions.dart line 356---------- about to update assessment ) ' + assessment.name);
+                //await assServ.updateAssessmentData(assessment, nameController.text, totalPointsController.text, yourPointsController.text);
+                await assServ.addAssessment(nameController.text, "0", "0", assignmentIsCompleted);
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              "Confirm",
+              style: Theme.of(context).textTheme.headline2,
+            ),
+            color: Theme.of(context).primaryColor,
+          )
+      );
     }
 
     return AlertDialog(
+        title: Column(
+          children: [Text(
+            "Assessment Options",
+            style: TextStyle(
+              fontSize: 25,
+              color: Theme.of(context).dividerColor,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+            Divider(color: Theme.of(context).dividerColor,),
+          ]),
         content: SizedBox(
           child: FocusScope(
             node: focusScopeNode,
-            child: col,
+            child: SingleChildScrollView(
+                child: col,
+            ),
           ),
           width: dialogueWidth,
           height: dialogueHeight,
-        )
+        ),
+      actions: [confirmButton],
     );
   }
 

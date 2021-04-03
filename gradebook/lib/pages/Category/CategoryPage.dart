@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
@@ -16,11 +17,12 @@ import '../Assessment/AssessmentTile.dart';
 
 
 // ignore: must_be_immutable
-class CategoryPageWrap extends StatelessWidget {
+class CategoryPageWrap extends StatelessWidget{
   Term term;
   Course course;
+  Category category;
 
-  CategoryPageWrap({Key key, @required this.term, this.course})
+  CategoryPageWrap({Key key, @required this.term, this.course, this.category})
       : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class CategoryPageWrap extends StatelessWidget {
       child: StreamProvider<List<Category>>.value(
         value: CategoryService(term.termID, course.id).categories,
         child: CategoriesPage(term: term, course: course),
-      )
+        )
     );
   }
 }
@@ -42,6 +44,7 @@ class CategoriesPage extends StatefulWidget {
   Term term;
   Course course;
   CategoriesPage({Key key, @required this.term, this.course}) : super(key: key);
+
 
   @override
   _CategoriesPageState createState() => _CategoriesPageState(term, course);
@@ -54,6 +57,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   int weight;
   Term term;
   Course course;
+
 
   @override
   _CategoriesPageState(Term term, Course course) {
@@ -68,22 +72,25 @@ class _CategoriesPageState extends State<CategoriesPage> {
     final List categories = Provider.of<List<Category>>(context);
     final List courses = Provider.of<List<Course>>(context);
 
-    //to get the width of the screen
-    //final double width = MediaQuery.of(context).size.width;
+    //int countOfIncompleteItems = 0;
 
     if(courses != null) {
+      // for(Category category in categories){
+      //   countOfIncompleteItems += category.countOfIncompleteItems;
+      // }
       for (Course c in courses) {
         if (c.id == course.id) {course = c;}
       }
     }
-    double allocatedWeight = 100;
-    if(categories != null){
-      for(Category c in categories){
-        allocatedWeight -= double.parse(c.categoryWeight);
-      }
-    }
+    // double allocatedWeight = 100;
+    // if(categories != null){
+    //   for(Category c in categories){
+    //     allocatedWeight -= double.parse(c.categoryWeight);
+    //   }
+    // }
 
     Widget listView;
+
 
 
     if (Provider.of<List<Category>>(context) != null) {
@@ -118,8 +125,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CategoryOptions(
-                                  categories[index], term, course);
+                              return CategoryOptions( categories[index], term, course);
                             });
                       },
                     ),
@@ -146,7 +152,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     termID: term.termID,
                     courseID: course.id,
                     index: index,
-                    courseName: course.name,
+                    courseName: course.name
                   ),
                 ),
               ),
@@ -156,10 +162,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
       listView = Container();
     }
 
-    Color color = Theme.of(context).primaryColor.withOpacity(.4);
-    //color = color - 200;
-
-    Color cardColor = Theme.of(context).primaryColor.withOpacity(.6);
     String percent = double.parse((course.gradePercent)).toStringAsFixed(2);
     String letterGrade = course.letterGrade;
     //TextStyle styleInCard = Theme.of(context).textTheme.bodyText2;
@@ -197,7 +199,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) =>
-                      NewCategoriesPopUp(categories, term, course),
+                      NewCategoriesPopUp(c: categories, course: course, term: term,),
                 );
                 setState(() {});
               })
@@ -214,14 +216,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
             child: Table(
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              // border: TableBorder.symmetric(
-              //     inside: BorderSide(width: 1, color: Colors.blue),
-              //     outside: BorderSide(width: 1)),
               columnWidths: {
                 0: FractionColumnWidth(0.2),
                 1: FractionColumnWidth(0.2),
-                2: FractionColumnWidth(0.45),
-                3: FractionColumnWidth(0.15),
+                2: FractionColumnWidth(0.43),
+                3: FractionColumnWidth(0.17),
               },
               children: [
                 TableRow(
@@ -229,7 +228,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   Text(" Grade:",),
               Center(child: Text(course.letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
               Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Unallocated: ')])),
-              Center(child: Text(allocatedWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text(course.remainingWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
               ]),
           TableRow(
               children: [
@@ -238,7 +237,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items:')])),
 
                 //todo: count the number of incomplete assessment and display them here.
-                Center(child: Text("5", style: TextStyle(fontWeight: FontWeight.bold),)),
+                Center(child: Text(course.countOfIncompleteItems.toString(), style: TextStyle(fontWeight: FontWeight.bold),)),
               ]
           )
         ],

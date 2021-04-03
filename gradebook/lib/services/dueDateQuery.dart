@@ -1,9 +1,13 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/services/term_service.dart';
 
 class DueDateQuery {
+  Map dueAssessmentsMap = new HashMap<String, DocumentSnapshot>();
+
   Future<List<Assessment>> getAssesmentsDue([int days]) async {
     DateTime futureDateCutOff;
 
@@ -36,6 +40,8 @@ class DueDateQuery {
             DateTime dueDate;
             if(assessment.get('dueDate') != null)
               dueDate = assessment.get('dueDate').toDate();
+
+              dueAssessmentsMap.putIfAbsent(assessment.id, () => assessment);
 
             if (dueDate.compareTo(futureDateCutOff) <= 0 &&
                 dueDate.compareTo(DateTime.now().subtract(Duration(days: 1))) >= 0 &&

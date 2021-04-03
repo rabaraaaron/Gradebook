@@ -6,6 +6,7 @@ import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Grade.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
+import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:provider/provider.dart';
 import '../model/Category.dart';
@@ -14,6 +15,7 @@ import 'user_service.dart';
 
 class CourseService {
   CollectionReference courseRef;
+  String termID;
 
   CourseService(String termID) {
     courseRef = FirebaseFirestore.instance
@@ -22,9 +24,11 @@ class CourseService {
         .collection('terms')
         .doc(termID)
         .collection('courses');
+
+    this.termID = termID;
   }
 
-  Future<void> addCourse(name, credits, passFail) async {
+  Future<void> addCourse(name, credits, passFail, equalWeights) async {
     bool duplicate;
     await courseRef
         .where('name', isEqualTo: name)
@@ -41,9 +45,12 @@ class CourseService {
             'name': name,
             'credits': int.parse(credits),
             'gradePercent': 0,
-        'letterGrade' : "",
-        'passFail':passFail,
-        'iconName': "default",
+            'letterGrade' : "",
+            'passFail':passFail,
+            'iconName': "default",
+            'countOfIncompleteItems' : 0,
+            'remainingWeight' : 100.0,
+            'equalWeights': equalWeights,
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
@@ -68,6 +75,10 @@ class CourseService {
           gradePercent: doc.get('gradePercent').toString() ?? "0",
           letterGrade: doc.get('letterGrade'),
           iconName: doc.get('iconName') ?? 'default',
+          countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
+          remainingWeight: doc.get('remainingWeight').toDouble() ?? 100.0,
+          equalWeights: doc.get('equalWeights') ?? false,
+          passFail: doc.get('passFail') ?? false,
         );
       }).toList();
       return v;
@@ -82,7 +93,12 @@ class CourseService {
             credits: doc.get('credits') ?? "",
             id: doc.id,
             gradePercent: "0",
-            iconName: doc.get('iconName') ?? 'default');
+            iconName: doc.get('iconName') ?? 'default',
+            countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
+            remainingWeight: doc.get('remainingWeight').toDouble() ?? 100.0,
+            equalWeights: doc.get('equalWeights') ?? false,
+            passFail: doc.get('passFail') ?? false,
+        );
       }).toList();
       return v2;
     }
@@ -93,11 +109,30 @@ class CourseService {
     await TermService().calculateGPA(courseRef.parent.id);
   }
 
-  Future<void> updateCourse(name, credits, courseID, passFail) async {
+  Future<String> getCourseName(id) async {
+    DocumentSnapshot courseSnap = await courseRef.doc(id).get();
+    //print("----" + courseSnap.get('name'));
+
+    //await TermService().calculateGPA(courseRef.parent.id);
+    return courseSnap.get('name');
+  }
+
+  Future<void> updateCourse(name, credits, courseID, passFail, equalWeights) async {
+    DocumentSnapshot courseSnap = await courseRef.doc(courseID).get();
+    bool ew = courseSnap.get('equalWeights');
+
+    if(ew != equalWeights){
+      QuerySnapshot categoriesSnap = await courseRef.doc(courseID).collection('categories').get();
+      for(DocumentSnapshot category in categoriesSnap.docs){
+        await CategoryService(termID, courseID).setEqualWeightsState(category.id, equalWeights);
+      }
+    }
+
     await courseRef.doc(courseID).update({
       'name': name,
       'credits': int.parse(credits),
       'passFail': passFail,
+      'equalWeights': equalWeights,
     });
   }
   Future<void> updateCourseIcon(courseID, iconName) async {
@@ -105,14 +140,32 @@ class CourseService {
       'iconName': iconName,
     });
   }
+  Future<void> decreaseRemainingWeight(courseID, weight) async {
+    var courseSnap = await courseRef.doc(courseID).get();
+    var remaining = courseSnap.get('remainingWeight');
+
+    await courseRef.doc(courseID).update({
+      'remainingWeight': remaining - weight,
+    });
+  }
+  Future<void> increaseRemainingWeight(courseID, weight) async {
+    var courseSnap = await courseRef.doc(courseID).get();
+    var remaining = courseSnap.get('remainingWeight');
+
+    await courseRef.doc(courseID).update({
+      'remainingWeight': remaining + weight,
+    });
+  }
 
   Future<void> calculateGrade(courseID) async {
-    DocumentSnapshot course = await courseRef.doc(courseID).get();
+    //DocumentSnapshot course = await courseRef.doc(courseID).get();
     QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
     double courseGradeDecimal = 0.0;
+    int counter = 0;
 
     for ( DocumentSnapshot category in categories.docs){
       courseGradeDecimal += category.get('gradePercentAsDecimal');
+      counter += category.get('countOfIncompleteItems');
     }
     double gradePercent = courseGradeDecimal;
 
@@ -121,7 +174,8 @@ class CourseService {
     print(courseGradeDecimal);
     await courseRef.doc(courseID).update({
       'gradePercent' : gradePercent,
-      'letterGrade' : letterGrade
+      'letterGrade' : letterGrade,
+      'countOfIncompleteItems': counter,
     });
 
     await TermService().calculateGPA(courseRef.parent.id);

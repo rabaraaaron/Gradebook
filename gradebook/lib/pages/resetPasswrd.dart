@@ -26,11 +26,11 @@ class _resetPageState extends State<ResetPassword> {
     var emailField = TextFormField(
 
       obscureText: false,
-      style: Theme.of(context).textTheme.headline2,
+      style: Theme.of(context).textTheme.headline6,
       validator: (val) => ValidatorService().validateEmail(val),
       decoration: InputDecoration(
           hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
       onChanged: (val) {
         setState(() => email = val);
       },

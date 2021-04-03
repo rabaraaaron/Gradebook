@@ -30,6 +30,8 @@ class _CourseOptionsState extends State<CourseOptions> {
   final FocusScopeNode focusScopeNode = FocusScopeNode();
   String initialTitle;
   String initialCredits;
+  bool checked1 = false;
+  bool checked2 = false;
 
 
   _CourseOptionsState(String tID, Course course) {
@@ -37,6 +39,9 @@ class _CourseOptionsState extends State<CourseOptions> {
     this.course = course;
     initialTitle = course.name;
     initialCredits = course.credits;
+
+    checked1 = course.passFail;
+    checked2 = course.equalWeights;
   }
 
 
@@ -44,135 +49,141 @@ class _CourseOptionsState extends State<CourseOptions> {
     focusScopeNode.nextFocus();
   }
 
-  bool checked1 = false;
-  bool checked2 = false;
+
 
   @override
   Widget build(BuildContext context) {
 
 
+    SizedBox confirmButton = SizedBox(
+      height: 50,
+      width: 300,
+      child: RaisedButton(
+        color: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13.0)),
+        onPressed: () async {
+          if(courseTitleController == null){
+            courseTitleController = TextEditingController();
+            courseTitleController.text = initialTitle;
+            initialTitle = null;
+          }
+          if(creditHoursController == null){
+            creditHoursController = TextEditingController();
+            creditHoursController.text = initialCredits;
+            initialCredits = null;
+          }
+
+          await CourseService(termID).updateCourse(
+            courseTitleController.text,
+            creditHoursController.text,
+            course.id,
+            checked1,
+            checked2,);
+          if (int.parse(creditHoursController.text) is int) {
+            // print(creditHoursController.text);
+          }
+          Navigator.pop(context);
+          setState(() {});
+        },
+        child: Text(
+          "Confirm",
+          style: Theme.of(context).textTheme.headline2,
+        ),
+      ),
+    );
+
     return AlertDialog(
+      title: Column(children: [
+        Text(
+            "Course Options",
+            style: Theme.of(context).textTheme.headline4
+        ),
+        Divider(color: Theme.of(context).dividerColor),
+      ],),
         content: SizedBox(
           child: FocusScope(
             node: focusScopeNode,
             child: Form(
-                child: Column(children: [
-                  Text(
-                    "Course Options",
-                    style: Theme.of(context).textTheme.headline4
-                  ),
-                  Divider(color: Theme.of(context).dividerColor),
-                  TextFormField(
-                    initialValue: initialTitle,
-                    controller: courseTitleController,
-                    decoration: const InputDecoration(
-                      hintText: "ex CS 101",
-                      labelText: 'Course Title',
-                    ),
-                    onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(courseTitleController == null){
-                        courseTitleController = TextEditingController();
-                        courseTitleController.text = initialTitle;
-                        initialTitle = null;
-                        setState(() {
-
-                        });
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    initialValue: initialCredits,
-                    controller: creditHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: "ex 4",
-                      labelText: 'Credit Hours',
-                    ),
-                    onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(creditHoursController == null){
-                        creditHoursController = TextEditingController();
-                        creditHoursController.text = initialCredits;
-                        initialCredits = null;
-                        setState(() {
-
-                        });
-                      }
-                    },
-                  ),
-                  Row(
-                    children: [
-                      Switch(
-                        value: checked1,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: (updateChecked) {
-                          setState(() {
-                            checked1 = updateChecked;
-                          });
-                        },
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    TextFormField(
+                      initialValue: initialTitle,
+                      controller: courseTitleController,
+                      decoration: const InputDecoration(
+                        hintText: "ex CS 101",
+                        labelText: 'Course Title',
                       ),
-                      Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Switch(
-                        value: checked2,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: (updateChecked) {
+                      onEditingComplete: handleSubmitted,
+                      onTap: (){
+                        if(courseTitleController == null){
+                          courseTitleController = TextEditingController();
+                          courseTitleController.text = initialTitle;
+                          initialTitle = null;
                           setState(() {
-                            checked2 = updateChecked;
+
                           });
-                        },
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: initialCredits,
+                      controller: creditHoursController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: "ex 4",
+                        labelText: 'Credit Hours',
                       ),
-                      Text("Equally weighed \nAssignments",
-                          style: Theme.of(context).textTheme.headline3),
-                    ],
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                        width: 300,
-                        child: RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13.0)),
-                              onPressed: () async {
-                                if(courseTitleController == null){
-                                  courseTitleController = TextEditingController();
-                                  courseTitleController.text = initialTitle;
-                                  initialTitle = null;
-                                }
-                                if(creditHoursController == null){
-                                  creditHoursController = TextEditingController();
-                                  creditHoursController.text = initialCredits;
-                                  initialCredits = null;
-                                }
-                                //TODO: Update the changes to the course
-                                // Get updated title with courseTitleController.text
-                                // Get updated credits with creditHoursController.text
-                                // Get Pass/fail updated value with checked1
-                                // Get equally weighed assignments with checked2
-                                await CourseService(termID).updateCourse(courseTitleController.text, creditHoursController.text, course.id, checked1,);
-                                  if (int.parse(creditHoursController.text) is int) {
-                                    // print(creditHoursController.text);
-                                  }
-                                  Navigator.pop(context);
-                                  setState(() {});
-                                  },
-                              child: Text(
-                                "Confirm",
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                          ),
+                      onEditingComplete: handleSubmitted,
+                      onTap: (){
+                        if(creditHoursController == null){
+                          creditHoursController = TextEditingController();
+                          creditHoursController.text = initialCredits;
+                          initialCredits = null;
+                          setState(() {
+
+                          });
+                        }
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Switch(
+                          value: checked1,
+                          activeColor: Theme.of(context).accentColor,
+                          onChanged: (updateChecked) {
+                            setState(() {
+                              checked1 = updateChecked;
+                            });
+                          },
                         ),
+                        Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                      ],
                     ),
-                ]),
+                    Row(
+                      children: [
+                        Switch(
+                          value: checked2,
+                          activeColor: Theme.of(context).accentColor,
+                          onChanged: (updateChecked) {
+                            setState(() {
+                              checked2 = updateChecked;
+                            });
+                          },
+                        ),
+                        Text("Equally weighed \nAssignments",
+                            style: Theme.of(context).textTheme.headline3),
+                      ],
+                    ),
+                  ]),
+                ),
             ),
           ),
           width: 100,
-          height: 310,
-        ));
+          height: 155,
+        ),
+      actions: [confirmButton],
+    );
   }
 }
 

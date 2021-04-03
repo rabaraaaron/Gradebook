@@ -165,8 +165,8 @@ class MyAppTheme with ChangeNotifier{
           id: "teal_lm",
           description: 'Teal appbar, lightMode',
           data: ThemeData(
-            primaryColor: Colors.teal,
-            accentColor: Colors.tealAccent,
+            primaryColor: Colors.teal[300],
+            accentColor: Colors.tealAccent[400],
             dividerColor: Colors.black,
             brightness: Brightness.light,
             fontFamily: GoogleFonts.quicksand().toStringShort(),
@@ -180,8 +180,8 @@ class MyAppTheme with ChangeNotifier{
           id: "teal_dm",
           description: 'Teal appbar, darkMode',
           data: ThemeData(
-            primaryColor: Colors.teal,
-            accentColor: Colors.tealAccent,
+            primaryColor: Colors.teal[300],
+            accentColor: Colors.tealAccent[400],
             dividerColor: Colors.white,
             brightness: Brightness.dark,
             fontFamily: GoogleFonts.quicksand().toStringShort(),
@@ -192,13 +192,29 @@ class MyAppTheme with ChangeNotifier{
     );
     _themeList.add(
       AppTheme(
-          id: "test",
-          description: 'test, lightMode',
+          id: "brown_light",
+          description: 'brown_light, lightMode',
           data: ThemeData(
             primaryColor: Colors.brown[400],
             accentColor: Colors.brown[300],
             dividerColor: Colors.brown,
             brightness: Brightness.light,
+            backgroundColor: Colors.brown[100],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+    _themeList.add(
+      AppTheme(
+          id: "brown_dark",
+          description: 'brown_dark, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.brown[400],
+            accentColor: Colors.brown[300],
+            dividerColor: Colors.brown,
+            brightness: Brightness.dark,
             backgroundColor: Colors.brown[100],
             fontFamily: GoogleFonts.quicksand().toStringShort(),
             textTheme: getTextTheme(light),
@@ -219,6 +235,57 @@ class MyAppTheme with ChangeNotifier{
             backgroundColor: Colors.grey[400],
             fontFamily: GoogleFonts.quicksand().toStringShort(),
             textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+          id: "grey_dark",
+          description: 'grey, darkMode',
+          data: ThemeData(
+            primaryColor: Colors.grey[600],
+            accentColor: Colors.grey[700],
+            dividerColor: Colors.white,
+            brightness: Brightness.dark,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(dark),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+          id: "deep_orange_light",
+          description: 'deep_orange, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.deepOrange[200],
+            accentColor: Colors.deepOrange[400],
+            dividerColor: Colors.black,
+            brightness: Brightness.light,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+          id: "deep_orange_dark",
+          description: 'deepOrange, darkMode',
+          data: ThemeData(
+            primaryColor: Colors.deepOrange[200],
+            accentColor: Colors.deepOrange[400],
+            dividerColor: Colors.white,
+            brightness: Brightness.dark,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(dark),
             buttonColor: _appBarIconColor,
           )
       ),

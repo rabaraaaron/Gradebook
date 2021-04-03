@@ -3,11 +3,12 @@ import 'package:gradebook/model/Assessment.dart';
 class Category{
 
   String categoryName;
-  String categoryWeight = '0';
-  // List<Assessment> categoryItems;
+  double categoryWeight = 0;
+  List<Assessment> categoryItems;
   bool dropLowestScore = false;
   bool equalWeights = false;
   String id;
+  int countOfIncompleteItems = 0;
   //double totalPoints = 0.0;
   //double totalEarnedPoints = 0.0;
   Assessment lowest;
@@ -22,7 +23,8 @@ class Category{
     this.dropLowestScore,
     this.total,
     this.earned,
-    this.equalWeights
+    this.equalWeights,
+    this.countOfIncompleteItems
   });
 
 
@@ -30,9 +32,9 @@ class Category{
   //   categoryItems.remove(itemName);
   // }
 
-  void changeDropLowest(bool currentDropLowest){
-    dropLowestScore = !currentDropLowest;
-  }
+  // void changeDropLowest(bool currentDropLowest){
+  //   dropLowestScore = !currentDropLowest;
+  // }
   // void addToTotalPoints(double points){
   //   totalPoints += points;
   // }

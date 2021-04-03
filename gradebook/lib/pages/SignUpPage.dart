@@ -151,7 +151,14 @@ class _SignUpPageState extends State<SignUpPage> {
           style: Theme.of(context).textTheme.headline1,
         ),
         centerTitle: true,
-      ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Theme.of(context).dividerColor,
+          iconSize: 35,
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),      ),
       body: _register(context)
     );
 
