@@ -66,7 +66,7 @@ class _AssessmentCompletedState extends State<AssessmentCompleted> {
 
   bool assignmentIsCompleted = false;
   Column col;
-  double dialogueHeight = 290;
+  double dialogueHeight = 293;
   double dialogueWidth = 150;
 
 

@@ -17,7 +17,7 @@ import '../Assessment/AssessmentTile.dart';
 
 
 // ignore: must_be_immutable
-class CategoryPageWrap extends StatelessWidget {
+class CategoryPageWrap extends StatelessWidget{
   Term term;
   Course course;
   Category category;
@@ -82,12 +82,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
         if (c.id == course.id) {course = c;}
       }
     }
-    double allocatedWeight = 100;
-    if(categories != null){
-      for(Category c in categories){
-        allocatedWeight -= double.parse(c.categoryWeight);
-      }
-    }
+    // double allocatedWeight = 100;
+    // if(categories != null){
+    //   for(Category c in categories){
+    //     allocatedWeight -= double.parse(c.categoryWeight);
+    //   }
+    // }
 
     Widget listView;
 
@@ -125,8 +125,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CategoryOptions(
-                                  categories[index], term, course);
+                              return CategoryOptions( categories[index], term, course);
                             });
                       },
                     ),
@@ -199,7 +198,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) =>
-                      NewCategoriesPopUp(categories, term, course),
+                      NewCategoriesPopUp(c: categories, course: course, term: term,),
                 );
                 setState(() {});
               })
@@ -228,7 +227,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   Text(" Grade:",),
               Center(child: Text(course.letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
               Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Unallocated: ')])),
-              Center(child: Text(allocatedWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text(course.remainingWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
               ]),
           TableRow(
               children: [

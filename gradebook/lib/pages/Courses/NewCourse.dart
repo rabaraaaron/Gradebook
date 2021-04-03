@@ -27,7 +27,7 @@ class _NewCourseState extends State<NewCourse> {
     this.termID = tID;
   }
 
-
+  //var equalWeights = false;
   final classTitleController = TextEditingController();
   final creditHoursController = TextEditingController();
   final FocusScopeNode focusScopeNode = FocusScopeNode();
@@ -65,7 +65,7 @@ class _NewCourseState extends State<NewCourse> {
                         borderRadius: BorderRadius.circular(13.0)))),
             onPressed: () async {
               await CourseService(termID).addCourse(classTitleController.text,
-                  creditHoursController.text, checked1);
+                  creditHoursController.text, checked1, checked2);
               if (int.parse(creditHoursController.text) is int) {
                 print(creditHoursController.text);
               }
@@ -86,47 +86,68 @@ class _NewCourseState extends State<NewCourse> {
         Divider(color: Theme.of(context).dividerColor),
       ],),
         content: SizedBox(
-          child: FocusScope(
-            node: focusScopeNode,
-            child: Form(
-                child: SingleChildScrollView(
-                  child: Column(children: [
-                    TextFormField(
-                      controller: classTitleController,
-                      decoration: const InputDecoration(
-                        hintText: "ex CS 101",
-                        labelText: 'Course Title',
-                      ),
-                      onEditingComplete: handleSubmitted,
-                    ),
-                    TextFormField(
-                      controller: creditHoursController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "ex 4",
-                        labelText: 'Credit Hours',
-                      ),
-                      onEditingComplete: handleSubmitted,
-                    ),
-                    Row(
-                      children: [
-                        Switch(
-                          value: checked1,
-                          activeColor: Theme.of(context).accentColor,
-                          onChanged: (updateChecked) {
-                            setState(() {
-                              checked1 = updateChecked;
-                            });
-                          },
+          child: Scrollbar(
+
+            child: FocusScope(
+              node: focusScopeNode,
+              child: Form(
+                  child: SingleChildScrollView(
+                    child: Column(children: [
+                      TextFormField(
+                        controller: classTitleController,
+                        decoration: const InputDecoration(
+                          hintText: "ex CS 101",
+                          labelText: 'Course Title',
                         ),
-                        Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-                      ],
-                    ),
-                  ]),
-                )),
+                        onEditingComplete: handleSubmitted,
+                      ),
+                      TextFormField(
+                        controller: creditHoursController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: "ex 4",
+                          labelText: 'Credit Hours',
+                        ),
+                        onEditingComplete: handleSubmitted,
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Switch(
+                                value: checked1,
+                                activeColor: Theme.of(context).accentColor,
+                                onChanged: (updateChecked) {
+                                  setState(() {
+                                    checked1 = updateChecked;
+                                  });
+                                },
+                              ),
+                              Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Switch(
+                                value: checked2,
+                                activeColor: Theme.of(context).accentColor,
+                                onChanged: (updateChecked) {
+                                  setState(() {
+                                    checked2 = updateChecked;
+                                  });
+                                },
+                              ),
+                              Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ]),
+                  )),
+            ),
           ),
           width: 100,
-          height: 155,
+          height: 200,
         ),
       actions: [addButton],
     );

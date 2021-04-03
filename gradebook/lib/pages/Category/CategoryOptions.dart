@@ -1,8 +1,10 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 // ignore: must_be_immutable
 class CategoryOptions extends StatefulWidget {
@@ -12,9 +14,10 @@ class CategoryOptions extends StatefulWidget {
 
   CategoryOptions(Category c, Term term, Course course) {
     this.c = c;
-    this.course = course;
     this.term = term;
+    this.course = course;
   }
+
   @override
   _CategoryOptions createState() => _CategoryOptions(c, term, course);
 }
@@ -26,14 +29,18 @@ class _CategoryOptions extends State<CategoryOptions> {
   String addedCategory;
   String initialWeight;
   bool equalWeights;
+  Course course;
 
   CategoryService categoryService;
 
   _CategoryOptions(Category c, Term term, Course course) {
+
+
+    this.course = course;
     this.c = c;
     categoryService = new CategoryService(term.termID, course.id);
     addedCategory = c.categoryName;
-    initialWeight = c.categoryWeight;
+    initialWeight = c.categoryWeight.toString();
     equalWeights = c.equalWeights;
     if (c.dropLowestScore == null) {
       dropLowest = false;
@@ -44,8 +51,10 @@ class _CategoryOptions extends State<CategoryOptions> {
 
   TextEditingController categoryWeightController;
 
+
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     List<String> categoriesStrings = [
       "Other",
       "Extra Credit",
@@ -89,10 +98,13 @@ class _CategoryOptions extends State<CategoryOptions> {
           // Get updated category name with addedCategory
           // Get updated weight with categoryWeightController.text
           // Get updated drop lowest bool with dropLowest
-          await categoryService.updateCategory(addedCategory,
-              categoryWeightController.text, dropLowest, equalWeights, c.id);
-          await categoryService.calculateGrade(c.id);
-          Navigator.pop(context);
+          if(_formKey.currentState.validate()) {
+            await categoryService.updateCategory(addedCategory,
+                categoryWeightController.text, c.categoryWeight, dropLowest,
+                equalWeights, c.id);
+            await categoryService.calculateGrade(c.id);
+            Navigator.pop(context);
+          }
         },
         child: Text(
           "Confirm",
@@ -116,9 +128,18 @@ class _CategoryOptions extends State<CategoryOptions> {
       ],),
         content: SizedBox(
       child: Form(
+        key: _formKey,
           child: SingleChildScrollView(
             child: Column(children: [
         DropdownButtonFormField(
+          validator: (value){
+            if(value == null) {
+              MessageBar(context: context,
+                  msg: "Please select one form the list of categories.",
+                  title: "Missing selection").show();
+              return 'field required';
+            } else {return null;}
+          },
             style: Theme.of(context).textTheme.headline3,
             hint: Text(
               "Select Category",
@@ -134,6 +155,24 @@ class _CategoryOptions extends State<CategoryOptions> {
             isExpanded: true,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              MessageBar(
+                  context: context,
+                  title: 'Missing field value',
+                  msg: 'Please enter a weight value',
+              ).show();
+              return 'Please enter weight value';
+            } else if(double.parse(value) > course.remainingWeight + c.categoryWeight){
+              MessageBar(
+                title: "invalid weight value",
+                msg: 'Weight cannot be grater than ' + (course.remainingWeight + c.categoryWeight).toString(),
+                context: context).show();
+              return 'Weight cannot be grater than ' + (course.remainingWeight + c.categoryWeight).toString();
+            } else {
+              return null;
+            }
+          },
             controller: categoryWeightController,
             initialValue: initialWeight,
             keyboardType: TextInputType.number,
@@ -167,20 +206,6 @@ class _CategoryOptions extends State<CategoryOptions> {
               ),
             ],
         ),
-              Row(
-                children: [
-                  Switch(
-                    value: equalWeights,
-                    activeColor: Theme.of(context).accentColor,
-                    onChanged: (updateChecked) {
-                      setState(() {
-                        equalWeights = updateChecked;
-                      });
-                    },
-                  ),
-                  Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
-                ],
-              ),
             ]),
           )
       ),
@@ -190,4 +215,5 @@ class _CategoryOptions extends State<CategoryOptions> {
       actions: [confirmButton],
     );
   }
+
 }

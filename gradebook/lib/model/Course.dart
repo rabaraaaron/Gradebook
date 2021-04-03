@@ -16,8 +16,12 @@ class Course with ChangeNotifier {
   final String id;
   String gradePercent;
   String letterGrade;
-  String   iconName;
+  String iconName;
   int countOfIncompleteItems = 0;
+  bool equalWeights = false;
+  bool passFail = false;
+
+  double remainingWeight;
 
 
   Course({
@@ -31,6 +35,9 @@ class Course with ChangeNotifier {
     this.letterGrade,
     this.iconName,
     this.countOfIncompleteItems,
+    this.remainingWeight,
+    this.equalWeights,
+    this.passFail,
   });
 
   @override

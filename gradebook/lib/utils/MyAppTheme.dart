@@ -247,7 +247,7 @@ class MyAppTheme with ChangeNotifier{
           data: ThemeData(
             primaryColor: Colors.grey[600],
             accentColor: Colors.grey[700],
-            dividerColor: Colors.black,
+            dividerColor: Colors.white,
             brightness: Brightness.dark,
             backgroundColor: Colors.grey[400],
             fontFamily: GoogleFonts.quicksand().toStringShort(),

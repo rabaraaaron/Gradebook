@@ -1,20 +1,22 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 // ignore: must_be_immutable
 class NewCategoriesPopUp extends StatefulWidget {
   List<Category> c = [];
   Term term;
-  Course course;
+  final Course course;
 
-  NewCategoriesPopUp(List<Category> categories, Term term, Course course) {
-    this.c = categories;
-    this.course = course;
-    this.term = term;
-  }
+  NewCategoriesPopUp({
+    this.c,
+    this.course,
+    this.term,
+  });
   @override
   _NewCategoriesPopUpState createState() =>
       _NewCategoriesPopUpState(c, term, course);
@@ -26,12 +28,16 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
   bool dropLowest_isChecked = false;
   var equalWeights = false;
   String addedCategory;
+  Course course;
 
   CategoryService categoryService;
+  final _formKey = GlobalKey<FormState>();
 
   _NewCategoriesPopUpState(
       List<Category> categories, Term term, Course course) {
+    this.course = course;
     c = categories;
+    //equalWeights = course.equalWeights;
     categoryService = new CategoryService(term.termID, course.id);
   }
 
@@ -82,6 +88,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
       ],),
         content: SizedBox(
           child: Form(
+            key: _formKey,
               child: SingleChildScrollView(
                 child: Column(children: [
                   DropdownButtonFormField(
@@ -92,6 +99,15 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     ),
                     value: addedCategory,
                     items: listOfCategories,
+                    validator: (value){
+                      if(value == null) {
+                        MessageBar(
+                            context: context,
+                            msg:"Please select one form the list of categories.",
+                            title: "Missing selection").show();
+                        return 'field required';
+                      } else {return null;}
+                    },
                     onChanged: (val) {
                       setState(() {
                         addedCategory = val;
@@ -102,6 +118,25 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                   TextFormField(
                     controller: categoryWeightController,
                     keyboardType: TextInputType.number,
+                    validator:
+                        (value) {
+                      if (value == null || value.isEmpty) {
+                        MessageBar(
+                          context: context,
+                          title: 'Missing field value',
+                          msg: 'Please enter weight value.',
+                        ).show();
+                        return 'Please enter weight value.';
+                      } else if(double.parse(value) > course.remainingWeight){
+                        MessageBar(
+                            context: context,
+                            msg: 'Weight cannot be grater than ' + course.remainingWeight.toString(),
+                            title: "invalid weight value.").show();
+                        return 'Weight cannot be grater than ' + course.remainingWeight.toString();
+                      } else {
+                        return null;
+                      }
+                    },
                     decoration: const InputDecoration(
                       hintText: "ex 25",
                       labelText: 'Weight',
@@ -124,38 +159,26 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Switch(
-                        value: equalWeights,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: (updateChecked) {
-                          setState(() {
-                            equalWeights = updateChecked;
-                          });
-                        },
-                      ),
-                      Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
-                    ],
-                  ),
                 ]),
               )),
           width: 100,
           height: 155,
         ),
-      actions: [                SizedBox(
+      actions: [ SizedBox(
         height: 50,
         width: 300,
         child: RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
-
-            print(addedCategory);
-            await categoryService.addCategory(
-                addedCategory, categoryWeightController.text, dropLowest_isChecked, equalWeights);
-            Navigator.pop(context);
-          },
+            if(_formKey.currentState.validate()) {
+              print(addedCategory);
+              await categoryService.addCategory(
+                  addedCategory, categoryWeightController.text,
+                  dropLowest_isChecked, course.equalWeights);
+              Navigator.pop(context);
+            }
+            },
           child: Text(
             "Add",
             style: Theme.of(context).textTheme.headline2,

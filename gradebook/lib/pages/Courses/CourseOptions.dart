@@ -30,6 +30,8 @@ class _CourseOptionsState extends State<CourseOptions> {
   final FocusScopeNode focusScopeNode = FocusScopeNode();
   String initialTitle;
   String initialCredits;
+  bool checked1 = false;
+  bool checked2 = false;
 
 
   _CourseOptionsState(String tID, Course course) {
@@ -37,6 +39,9 @@ class _CourseOptionsState extends State<CourseOptions> {
     this.course = course;
     initialTitle = course.name;
     initialCredits = course.credits;
+
+    checked1 = course.passFail;
+    checked2 = course.equalWeights;
   }
 
 
@@ -44,11 +49,11 @@ class _CourseOptionsState extends State<CourseOptions> {
     focusScopeNode.nextFocus();
   }
 
-  bool checked1 = false;
-  bool checked2 = false;
+
 
   @override
   Widget build(BuildContext context) {
+
 
     SizedBox confirmButton = SizedBox(
       height: 50,
@@ -69,7 +74,12 @@ class _CourseOptionsState extends State<CourseOptions> {
             initialCredits = null;
           }
 
-          await CourseService(termID).updateCourse(courseTitleController.text, creditHoursController.text, course.id, checked1,);
+          await CourseService(termID).updateCourse(
+            courseTitleController.text,
+            creditHoursController.text,
+            course.id,
+            checked1,
+            checked2,);
           if (int.parse(creditHoursController.text) is int) {
             // print(creditHoursController.text);
           }

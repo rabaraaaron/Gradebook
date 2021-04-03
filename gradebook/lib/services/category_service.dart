@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'assessment_service.dart';
 import 'course_service.dart';
@@ -24,6 +25,7 @@ class CategoryService {
   }
 
   Future<void> addCategory(name, weight, dropLowest, equalWeights) async {
+
     bool duplicate;
     await categoryRef
         .where('name', isEqualTo: name)
@@ -34,20 +36,26 @@ class CategoryService {
     });
     print("DUPE: " + duplicate.toString());
 
-    if (!duplicate)
+    if (!duplicate) {
       await categoryRef
           .add({
-            'name': name,
-            'weight': double.parse(weight),
-            'dropLowest': dropLowest,
-            'total': 0.0,
-            'earned': 0.0,
-            'gradePercentAsDecimal': 0.0,
-            'equalWeights' : equalWeights,
-            'countOfIncompleteItems' : 0,
-          })
+        'name': name,
+        'weight': double.parse(weight),
+        'dropLowest': dropLowest,
+        'total': 0.0,
+        'earned': 0.0,
+        'gradePercentAsDecimal': 0.0,
+        'equalWeights': equalWeights,
+        'countOfIncompleteItems': 0,
+      })
           .then((value) => print("Category Added"))
-          .catchError((error) => print("Failed to add category: $error"));
+          .catchError((error) {
+        //displayMessage(context, "Failed to add category :" + error.toString(), "Error");
+        print("Failed to add category: $error");
+      });
+      await CourseService(termID).decreaseRemainingWeight(
+          courseID, double.parse(weight));
+    }
   }
 
   Stream<List<Category>> get categories {
@@ -60,7 +68,7 @@ class CategoryService {
 
         return Category(
             categoryName: doc.get('name') ?? "",
-            categoryWeight: doc.get('weight').toString() ?? "0",
+            categoryWeight: doc.get('weight') ?? 0.0,
             id: doc.id,
             dropLowestScore: doc.get('dropLowest') ?? false,
             total: doc.get('total').toString() ?? "0",
@@ -77,7 +85,7 @@ class CategoryService {
       var v = snapshot.docs.map<Category>((doc) {
         return Category(
             categoryName: doc.get('name') ?? "",
-            categoryWeight: doc.get('weight') ?? '0',
+            categoryWeight: doc.get('weight') ?? 0.0,
             id: doc.id,
             dropLowestScore: false,
             total: doc.get('total') ?? "0",
@@ -90,14 +98,21 @@ class CategoryService {
     }
   }
 
-  Future<void> deleteCategory(id) async {
+  Future<void> deleteCategory(id, weight) async {
+   // int test = weight * -1;
     await categoryRef.doc(id).delete();
+    await CourseService(termID).increaseRemainingWeight(courseID, weight);
     await CourseService(termID).calculateGrade(courseID);
   }
 
   Future<void> setDropLowest(catID, value) async {
     await categoryRef.doc(catID).update({'dropLowest': value});
-    // await CourseService(termID).calculateGrade(courseID);
+    await CourseService(termID).calculateGrade(courseID);
+  }
+
+  Future<void> setEqualWeightsState(catID, value) async {
+    await categoryRef.doc(catID).update({'equalWeights': value});
+    await CourseService(termID).calculateGrade(courseID);
   }
 
   List<Category> getCategoryData() {
@@ -105,14 +120,22 @@ class CategoryService {
     return listOfCategories;
   }
 
-  Future<void> updateCategory(name, weight, dropLowest, equalWeights, catID) async {
+  Future<void> updateCategory(name, newWeight, oldWeight, dropLowest, equalWeights, catID) async {
+    var result = double.parse(newWeight) - oldWeight;
+
       await categoryRef.doc(catID)
           .update({
         'name': name,
-        'weight': double.parse(weight),
+        'weight': double.parse(newWeight),
         'dropLowest': dropLowest,
         'equalWeights' : equalWeights,
       });
+    if(result < 0) {
+      await CourseService(termID).increaseRemainingWeight(courseID, (result).abs());
+    } else if(result > 0) {
+      await CourseService(termID).decreaseRemainingWeight(courseID, (result).abs());
+    }
+
       // await calculateGrade(catID);
   }
 
