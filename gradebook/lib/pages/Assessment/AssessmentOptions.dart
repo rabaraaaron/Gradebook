@@ -210,7 +210,6 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     print(totalPointsController.text);
                     print(yourPointsController.text);
                     // await assServ.addAssessment(
-                    //   TODO: Send update to firebase
                     //     nameController.text, totalPointsController.text, yourPointsController.text);
                     //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
@@ -345,7 +344,6 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                     //TODO: Send update to firebase
                     // await assServ.addAssessment(
                     //     nameController.text, totalPointsController.text, yourPointsController.text, assignmentIsCompleted);
-                    //await CategoryService(termID, courseID).calculateGrade(categoryID);
                     Navigator.pop(context);
                   } else if(nameController.text == ""){
                   } else{

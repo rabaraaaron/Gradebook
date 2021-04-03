@@ -142,11 +142,12 @@ class CategoryService {
     double gradePercentAsDecimal,
         totalOfTotalPoints = 0,
         totalofEarnedPoints = 0,
-        totalEarnedWeights = 0;
+        totalEarnedDecimal = 0;
     double categoryWeight = categorySnap.get('weight');
     bool dropLowest = categorySnap.get('dropLowest');
 
-
+    List<double> earnedDecimalList;
+    int numberOfAssessments = assessmentsSnap.size;
     //calculate Totals
     for (DocumentSnapshot assessment in assessmentsSnap.docs) {
       //reset all assessment so that none is dropped
@@ -158,13 +159,28 @@ class CategoryService {
         totalOfTotalPoints += totalPoints;
         totalofEarnedPoints += yourPoints;
 
-        if (isCompleted && totalPoints > 0 ) {
+
+
+    if (isCompleted && totalPoints > 0 ) {
           map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
           //this will be used only for equally wighted calc
-          double earnedWeight = (yourPoints / totalPoints) * ( categoryWeight / assessmentsSnap.size);
-          totalEarnedWeights += earnedWeight;
+          double earnedDecimal = (yourPoints / totalPoints);
+          totalEarnedDecimal += earnedDecimal;
+          earnedDecimalList.add( earnedDecimal);
         }
     }
+    earnedDecimalList.sort();
+
+    if(dropLowest && categorySnap.get('equalWeights')) {
+      double lowest = earnedDecimalList.first;
+
+      totalEarnedDecimal = totalEarnedDecimal - lowest;
+
+      numberOfAssessments--;
+
+    }
+
+
 
     //findLowest
     if (dropLowest && map.length >1) {
@@ -184,14 +200,17 @@ class CategoryService {
 
       //for equally weighted categroy,
       double lowestEW = (lowestEP / lowestTP) * ( categoryWeight / assessmentsSnap.size);
-      totalEarnedWeights -= lowestEW;
+      totalEarnedDecimal -= lowestEW;
       //Add the full weight for that assessment to total earned weight
-      totalEarnedWeights += categoryWeight/ assessmentsSnap.size;
+      totalEarnedDecimal += categoryWeight/ assessmentsSnap.size;
 
     }
 
     if(await categorySnap.get('equalWeights')){
-      gradePercentAsDecimal = totalEarnedWeights;
+      if(numberOfAssessments==0)
+        gradePercentAsDecimal = 0;
+      else
+        gradePercentAsDecimal = (totalEarnedDecimal / numberOfAssessments) * categoryWeight;
     } else {
       gradePercentAsDecimal =
           categoryWeight * (totalofEarnedPoints / totalOfTotalPoints);
