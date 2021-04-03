@@ -37,7 +37,24 @@ class MyAppTheme with ChangeNotifier{
     bool light = true;
     _themeList.add(
       AppTheme(
-        id: "my_default",
+          id: "my_default",
+          description: 'white appbar, lightMode',
+          data: ThemeData(
+            accentColorBrightness: Brightness.dark,
+            accentColor: Colors.blueGrey[300],
+            primaryColor: Colors.blueGrey.shade600,
+            dividerColor: Colors.black,
+            brightness: Brightness.light,
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+        id: "dark_blue",
         description: 'Dark Blue appbar, lightMode',
         data: ThemeData(
           primaryColor: Colors.blue[900],

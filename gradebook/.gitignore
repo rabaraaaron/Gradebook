@@ -41,4 +41,6 @@ app.*.symbols
 app.*.map.json
 
 
-.properties
+local.properties
+android/local.properties
+.android/local.properties
