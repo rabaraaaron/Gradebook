@@ -395,7 +395,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       );
     }
 
-    return CustomDialog(form: form, button: confirmButton, context: context).show();
+    return CustomDialog(form: form, button: confirmButton, title: 'Assessment Options', context: context).show();
 
 
       AlertDialog(

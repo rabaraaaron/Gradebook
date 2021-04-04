@@ -322,7 +322,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
 
 
 
-    return CustomDialog(form: form, button: addButton, context: context).show();
+    return CustomDialog(form: form, button: addButton, title: "Add Assessment", context: context).show();
 
       AlertDialog(
             shape: RoundedRectangleBorder(

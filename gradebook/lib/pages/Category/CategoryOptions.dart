@@ -200,7 +200,7 @@ class _CategoryOptions extends State<CategoryOptions> {
       ),
     );
 
-    return CustomDialog(form: form, button: confirmButton, context: context).show();
+    return CustomDialog(form: form, button: confirmButton, title: "Category Options", context: context).show();
 
       AlertDialog(
       shape: RoundedRectangleBorder(

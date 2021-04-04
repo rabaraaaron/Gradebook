@@ -336,7 +336,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
       elevation: 0,
     );
 
-    return CustomDialog(form: form, button: button, context: context).show();
+    return CustomDialog(form: form, button: button, title: "Add Category" , context: context).show();
 
       AlertDialog(
       shape: RoundedRectangleBorder(

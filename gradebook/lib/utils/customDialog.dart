@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomDialog{
+  String title;
   Form form;
   Widget button;
   BuildContext context;
 
 
-  CustomDialog({this.button, this.form, this.context});
+  CustomDialog({this.button, this.form, this.title, this.context});
 
 
   Widget show(){
@@ -29,7 +30,7 @@ class CustomDialog{
                     topLeft: Radius.circular(32.0),
                     topRight: Radius.circular(32.0)),
               ),
-              child: Center(child: Text("Add Course", style: Theme.of(context).textTheme.bodyText1,),),
+              child: Center(child: Text(title, style: Theme.of(context).textTheme.bodyText1,),),
             ),
             Padding(
               padding: EdgeInsets.only(left: 20.0, right: 20.0),

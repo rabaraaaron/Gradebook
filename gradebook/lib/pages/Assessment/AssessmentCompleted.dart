@@ -211,7 +211,7 @@ class _AssessmentCompletedState extends State<AssessmentCompleted> {
 
 
 
-    return CustomDialog(form: form, button: button, context: context).show();
+    return CustomDialog(form: form, button: button, title:"Assessment Completion", context: context).show();
 
       AlertDialog(
       shape: RoundedRectangleBorder(

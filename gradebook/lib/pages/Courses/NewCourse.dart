@@ -154,7 +154,7 @@ class _NewCourseState extends State<NewCourse> {
             child: Text("Add", style: Theme.of(context).textTheme.headline3,
             )));
 
-    return CustomDialog(form: form, button: addButton, context: context).show();
+    return CustomDialog(form: form, button: addButton, title: "Add Course", context: context).show();
 
 
       AlertDialog(
