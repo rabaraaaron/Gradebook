@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/course_service.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 import '../../services/course_service.dart';
 
@@ -42,6 +43,7 @@ class _CourseOptionsState extends State<CourseOptions> {
 
     checked1 = course.passFail;
     checked2 = course.equalWeights;
+
   }
 
 
@@ -53,6 +55,7 @@ class _CourseOptionsState extends State<CourseOptions> {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
 
 
     SizedBox confirmButton = SizedBox(
@@ -63,28 +66,31 @@ class _CourseOptionsState extends State<CourseOptions> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(13.0)),
         onPressed: () async {
-          if(courseTitleController == null){
-            courseTitleController = TextEditingController();
-            courseTitleController.text = initialTitle;
-            initialTitle = null;
-          }
-          if(creditHoursController == null){
-            creditHoursController = TextEditingController();
-            creditHoursController.text = initialCredits;
-            initialCredits = null;
-          }
+          if(_formKey.currentState.validate()){
 
-          await CourseService(termID).updateCourse(
-            courseTitleController.text,
-            creditHoursController.text,
-            course.id,
-            checked1,
-            checked2,);
-          if (int.parse(creditHoursController.text) is int) {
-            // print(creditHoursController.text);
+            if(courseTitleController == null){
+              courseTitleController = TextEditingController();
+              courseTitleController.text = initialTitle;
+              initialTitle = null;
+            }
+            if(creditHoursController == null){
+              creditHoursController = TextEditingController();
+              creditHoursController.text = initialCredits;
+              initialCredits = null;
+            }
+
+            await CourseService(termID).updateCourse(
+              courseTitleController.text,
+              creditHoursController.text,
+              course.id,
+              checked1,
+              checked2,);
+            if (int.parse(creditHoursController.text) is int) {
+              // print(creditHoursController.text);
+            }
+            Navigator.pop(context);
+            setState(() {});
           }
-          Navigator.pop(context);
-          setState(() {});
         },
         child: Text(
           "Confirm",
@@ -105,6 +111,7 @@ class _CourseOptionsState extends State<CourseOptions> {
           child: FocusScope(
             node: focusScopeNode,
             child: Form(
+                key: _formKey,
                 child: SingleChildScrollView(
                   child: Column(children: [
                     TextFormField(
@@ -114,6 +121,14 @@ class _CourseOptionsState extends State<CourseOptions> {
                         hintText: "ex CS 101",
                         labelText: 'Course Title',
                       ),
+                      validator: (value){
+                        if(value == null || value.isEmpty) {
+                          MessageBar(context: context,
+                              msg:"Please enter a name for the new course.",
+                              title: "Missing course title").show();
+                          return 'Required field';
+                        } else {return null;}
+                      },
                       onEditingComplete: handleSubmitted,
                       onTap: (){
                         if(courseTitleController == null){
