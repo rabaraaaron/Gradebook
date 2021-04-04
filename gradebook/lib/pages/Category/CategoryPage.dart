@@ -167,6 +167,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     //TextStyle styleInCard = Theme.of(context).textTheme.bodyText2;
 
 
+
     return Scaffold(
       key: scaffoldKey,
       drawer: MenuDrawer(),

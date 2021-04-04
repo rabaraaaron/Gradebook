@@ -162,12 +162,19 @@ class CourseService {
     QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
     double courseGradeDecimal = 0.0;
     int counter = 0;
+    double allocatedWeight = 0.0;
 
     for ( DocumentSnapshot category in categories.docs){
       courseGradeDecimal += category.get('gradePercentAsDecimal');
       counter += category.get('countOfIncompleteItems');
+      allocatedWeight += category.get('weight');
     }
-    double gradePercent = courseGradeDecimal;
+    double gradePercent = 0.0;
+    if(allocatedWeight<100){
+      gradePercent = courseGradeDecimal/allocatedWeight *100;
+    }else{
+      gradePercent = courseGradeDecimal;
+    }
 
        String letterGrade = getLetterGrade(gradePercent);
 
