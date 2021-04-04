@@ -6,6 +6,7 @@ class Category{
   double categoryWeight = 0;
   List<Assessment> categoryItems;
   bool dropLowestScore = false;
+  int numberDropped;
   bool equalWeights = false;
   String id;
   int countOfIncompleteItems = 0;
@@ -21,10 +22,12 @@ class Category{
     this.categoryWeight,
     this.id,
     this.dropLowestScore,
+    this.numberDropped,
     this.total,
     this.earned,
     this.equalWeights,
     this.countOfIncompleteItems
+
   });
 
 

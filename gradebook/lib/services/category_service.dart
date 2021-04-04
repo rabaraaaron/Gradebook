@@ -27,7 +27,7 @@ class CategoryService {
         .collection("categories");
   }
 
-  Future<void> addCategory(name, weight, dropLowest, equalWeights) async {
+  Future<void> addCategory(name, weight, dropLowest, equalWeights, {numberDropped}) async {
     bool duplicate;
     await categoryRef
         .where('name', isEqualTo: name)
@@ -44,6 +44,7 @@ class CategoryService {
             'name': name,
             'weight': double.parse(weight),
             'dropLowest': dropLowest,
+            'numberDropped' : numberDropped ?? 1,
             'total': 0.0,
             'earned': 0.0,
             'gradePercentAsDecimal': 0.0,
@@ -72,6 +73,7 @@ class CategoryService {
           categoryWeight: doc.get('weight') ?? 0.0,
           id: doc.id,
           dropLowestScore: doc.get('dropLowest') ?? false,
+          numberDropped: doc.get('numberDropped'),
           total: doc.get('total').toString() ?? "0",
           earned: doc.get('earned').toString() ?? "0",
           equalWeights: doc.get('equalWeights') ?? false,
@@ -88,6 +90,7 @@ class CategoryService {
           categoryWeight: doc.get('weight') ?? 0.0,
           id: doc.id,
           dropLowestScore: false,
+          numberDropped: doc.get('numberDropped'),
           total: doc.get('total') ?? "0",
           earned: doc.get('earned') ?? "0",
           equalWeights: doc.get('equalWeights') ?? false,
@@ -188,19 +191,25 @@ class CategoryService {
         var sortedByValue = new SplayTreeMap.from(
             map, (key1, key2) => map[key1].compareTo(map[key2]));
 
-        var droppedAssessmentID = sortedByValue.firstKey();
+        for(int i =0; i < categorySnap.get('numberDropped'); i++) {
+          if(sortedByValue.length > 1) {
+            var droppedAssessmentID = sortedByValue.firstKey();
+            sortedByValue.remove(droppedAssessmentID);
 
-        DocumentReference docRef = categoryRef
-            .doc(catID)
-            .collection('assessments')
-            .doc(droppedAssessmentID);
-        DocumentSnapshot aSnap = await docRef.get();
-        var lowestEP = double.parse(aSnap.get('yourPoints'));
-        var lowestTP = double.parse(aSnap.get('totalPoints'));
 
-        aServ.updateDropState(aSnap.id, true);
-        categoryEarnedPoints -= lowestEP;
-        categoryTotalPoints -= lowestTP;
+            DocumentReference docRef = categoryRef
+                .doc(catID)
+                .collection('assessments')
+                .doc(droppedAssessmentID);
+            DocumentSnapshot aSnap = await docRef.get();
+            var lowestEP = double.parse(aSnap.get('yourPoints'));
+            var lowestTP = double.parse(aSnap.get('totalPoints'));
+
+            aServ.updateDropState(aSnap.id, true);
+            categoryEarnedPoints -= lowestEP;
+            categoryTotalPoints -= lowestTP;
+          }
+        }
       }
 
       if (categoryTotalPoints > 0) {
@@ -235,27 +244,52 @@ class CategoryService {
       }
         print("Final sumPercent:" + sumPercents.toString());
 
-        if (dropLowest && assessmentsSnap.size > 1) {
-          print("Drop Check:" + dropLowest.toString());
+        // if (dropLowest && assessmentsSnap.size > 1) {
+        //   print("Drop Check:" + dropLowest.toString());
+        //
+        //   double lowestPercent = 1.1;
+        //   String lowID;
+        //   gradePercents.forEach((key, value) {
+        //     if(value.compareTo(lowestPercent) < 0){
+        //       lowestPercent = value;
+        //       lowID = key;
+        //     }
+        //
+        //
+        //   });
+        //   print("Drop Percent:" + lowestPercent.toString());
+        //   print("Drop id:" + lowID.toString());
+        //   if(lowestPercent<1.1) {
+        //     sumPercents -= lowestPercent;
+        //     numCompleted--;
+        //     aServ.updateDropState(lowID, true);
+        //   }
+        // }
 
-          double lowestPercent = 1.1;
-          String lowID;
-          gradePercents.forEach((key, value) {
-            if(value.compareTo(lowestPercent) < 0){
-              lowestPercent = value;
-              lowID = key;
-            }
+      if (dropLowest && gradePercents.length > 1) {
+        var sortedByValue = new SplayTreeMap.from(
+            gradePercents, (key1, key2) => gradePercents[key1].compareTo(gradePercents[key2]));
+
+        for(int i =0; i < categorySnap.get('numberDropped'); i++) {
+          if(sortedByValue.length > 1) {
+            var droppedAssessmentID = sortedByValue.firstKey();
+            sortedByValue.remove(droppedAssessmentID);
 
 
-          });
-          print("Drop Percent:" + lowestPercent.toString());
-          print("Drop id:" + lowID.toString());
-          if(lowestPercent<1.1) {
-            sumPercents -= lowestPercent;
+            DocumentReference docRef = categoryRef
+                .doc(catID)
+                .collection('assessments')
+                .doc(droppedAssessmentID);
+            DocumentSnapshot aSnap = await docRef.get();
+            var lowestEP = double.parse(aSnap.get('yourPoints'));
+            var lowestTP = double.parse(aSnap.get('totalPoints'));
+
+            aServ.updateDropState(aSnap.id, true);
+            sumPercents -= lowestEP / lowestTP;
             numCompleted--;
-            aServ.updateDropState(lowID, true);
           }
         }
+      }
 
         gradePercentAsDecimal = (sumPercents / numCompleted) * categoryWeight;
 
