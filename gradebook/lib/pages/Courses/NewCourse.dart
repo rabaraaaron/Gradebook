@@ -66,6 +66,7 @@ class _NewCourseState extends State<NewCourse> {
                 Expanded(
 
                   child: TextFormField(
+                    textAlign: TextAlign.center,
                     validator: (value){
                       if(value == null || value.isEmpty) {
                         MessageBar(context: context,
@@ -85,6 +86,7 @@ class _NewCourseState extends State<NewCourse> {
                 SizedBox(width: 20,),
                 Expanded(
                   child: TextFormField(
+                    textAlign: TextAlign.center,
                     controller: creditHoursController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -155,76 +157,6 @@ class _NewCourseState extends State<NewCourse> {
             )));
 
     return CustomDialog(form: form, button: addButton, title: "Add Course", context: context).show();
-
-
-      AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      contentPadding: EdgeInsets.only(top: 0.0),
-      content: Container(
-        width: 3300.0,
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32.0),
-                    topRight: Radius.circular(32.0)),
-              ),
-              child: Center(child: Text("Add Course", style: Theme.of(context).textTheme.bodyText1,),),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: form,
-            ),
-            Divider(
-              thickness: 1,
-              color: Colors.grey,
-              height: 2.0,
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              decoration: BoxDecoration(
-                //color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32.0),
-                    bottomRight: Radius.circular(32.0)),
-              ),
-              child: addButton,
-            ),
-          ],
-        ),
-      ),
-    );
-
-
-
-    AlertDialog(
-      title: Column(children: [
-        Text(
-          "Add Course",
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        Divider(color: Theme.of(context).dividerColor),
-      ],),
-        content: SizedBox(
-          child: Scrollbar(
-
-            child: FocusScope(
-              node: focusScopeNode,
-              child: form,
-            ),
-          ),
-          width: 100,
-          height: 200,
-        ),
-      actions: [addButton],
-    );
   }
 }
 

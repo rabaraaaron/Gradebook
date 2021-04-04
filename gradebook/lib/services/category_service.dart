@@ -27,7 +27,10 @@ class CategoryService {
         .collection("categories");
   }
 
-  Future<void> addCategory(name, weight, dropLowest, equalWeights, {numberDropped}) async {
+  Future<void> addCategory(name, weight, dropLowest, numberDropped, equalWeights) async {
+    if(numberDropped == ""){
+      numberDropped = "0";
+    }
     bool duplicate;
     await categoryRef
         .where('name', isEqualTo: name)
@@ -44,7 +47,7 @@ class CategoryService {
             'name': name,
             'weight': double.parse(weight),
             'dropLowest': dropLowest,
-            'numberDropped' : numberDropped ?? 1,
+            'numberDropped' : int.parse(numberDropped) ?? 1,
             'total': 0.0,
             'earned': 0.0,
             'gradePercentAsDecimal': 0.0,
@@ -124,15 +127,18 @@ class CategoryService {
   }
 
   Future<void> updateCategory(
-      name, newWeight, oldWeight, dropLowest, equalWeights, catID) async {
+      name, newWeight, oldWeight, dropLowest, numberDropped, equalWeights, catID) async {
     var result = double.parse(newWeight) - oldWeight;
+
 
     await categoryRef.doc(catID).update({
       'name': name,
       'weight': double.parse(newWeight),
       'dropLowest': dropLowest,
       'equalWeights': equalWeights,
+      'numberDropped': int.parse(numberDropped),
     });
+
     if (result < 0) {
       await CourseService(termID)
           .increaseRemainingWeight(courseID, (result).abs());
