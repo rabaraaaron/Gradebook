@@ -40,4 +40,7 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+
 local.properties
+android/local.properties
+.android/local.properties
