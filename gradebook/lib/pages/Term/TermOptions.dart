@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'package:gradebook/utils/customDialog.dart';
 
 
 // ignore: must_be_immutable
@@ -19,6 +20,7 @@ class _TermOptionsState extends State<TermOptions> {
   var termYear;
   var addedTerm;
   var isHypothetical = false;
+  Form form;
 
   _TermOptionsState(t) {
     term = t;
@@ -51,12 +53,83 @@ class _TermOptionsState extends State<TermOptions> {
             value: i,
           ));
     }
+    form = Form(
+        child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton(
+                        hint: Center(
+                          child: Text(
+                            "Term",
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                        ),
+                        value: addedTerm,
+                        items: listOfTerms,
+                        onChanged: (newTerm) {
+                          setState(() {
+                            addedTerm = newTerm;
+                          });
+                        },
+                        isExpanded: true,
+                      ),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      child: DropdownButton(
+                        hint: Center(
+                          child: Text(
+                            "Year",
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                        ),
+                        onChanged: (newYear) {
+                          setState(() {
+                            termYear = newYear;
+                          });
+                        },
+                        value: termYear,
+                        isExpanded: true,
+                        items: listOfYears,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Row(
+                  children: [
+                    Switch(
+                      activeColor: Theme.of(context).accentColor,
+                      value: isHypothetical,
+                      onChanged: (updateisHypothetical) {
+                        setState(() {
+                          isHypothetical = updateisHypothetical;
+                        });
+                      },
+                    ),
+                    Text(
+                      "Completed term",
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                    SizedBox(height: 20,),
+                  ]
+              ),
+            ]
+        )
+    );
 
     SizedBox confirmButton = SizedBox(
       height: 50,
       width: 300,
       child: RaisedButton(
-          color: Theme.of(context).primaryColor,
+          elevation: 0,
+          color: Colors.transparent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
             //TODO: send update to database
@@ -66,11 +139,13 @@ class _TermOptionsState extends State<TermOptions> {
             // await term.addTerm(addedTerm, termYear);
             // Navigator.pop(context);
           },
-          child: Text("Confirm",  style: Theme.of(context).textTheme.headline2,)
+          child: Text("Confirm",  style: Theme.of(context).textTheme.headline3,)
       ),
     );
 
-    return AlertDialog(
+    return CustomDialog(title: "Term Options", context: context, form: form, button: confirmButton).show();
+
+      AlertDialog(
         title: Column(children: [
           Text(
             "Term Options",
@@ -79,58 +154,7 @@ class _TermOptionsState extends State<TermOptions> {
           Divider(color: Theme.of(context).dividerColor),
         ],),
         content: SizedBox(
-          child: Form(
-              child: Column(
-                  children: [
-                    DropdownButton(
-                      hint: Text(
-                        "Term",
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                      value: addedTerm,
-                      items: listOfTerms,
-                      onChanged: (newTerm) {
-                        setState(() {
-                          addedTerm = newTerm;
-                        });
-                      },
-                      isExpanded: true,
-                    ),
-                    DropdownButton(
-                      hint: Text(
-                        "Year",
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                      onChanged: (newYear) {
-                        setState(() {
-                          termYear = newYear;
-                        });
-                      },
-                      value: termYear,
-                      isExpanded: true,
-                      items: listOfYears,
-                    ),
-                    Row(
-                        children: [
-                          Switch(
-                            activeColor: Theme.of(context).accentColor,
-                            value: isHypothetical,
-                            onChanged: (updateisHypothetical) {
-                              setState(() {
-                                isHypothetical = updateisHypothetical;
-                              });
-                            },
-                          ),
-                          Text(
-                            "Hypothetical term",
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                          SizedBox(height: 20,),
-                        ]
-                    ),
-                  ]
-              )
-          ),
+          child: form,
           width: 100,
           height: 145,
         ),
