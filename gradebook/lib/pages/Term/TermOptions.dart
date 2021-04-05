@@ -19,7 +19,7 @@ class _TermOptionsState extends State<TermOptions> {
   Term term;
   var termYear;
   var addedTerm;
-  var isHypothetical = false;
+  var isCompletedTerm = false;
   Form form;
 
   _TermOptionsState(t) {
@@ -106,10 +106,10 @@ class _TermOptionsState extends State<TermOptions> {
                   children: [
                     Switch(
                       activeColor: Theme.of(context).accentColor,
-                      value: isHypothetical,
+                      value: isCompletedTerm,
                       onChanged: (updateisHypothetical) {
                         setState(() {
-                          isHypothetical = updateisHypothetical;
+                          isCompletedTerm = updateisHypothetical;
                         });
                       },
                     ),
@@ -144,21 +144,5 @@ class _TermOptionsState extends State<TermOptions> {
     );
 
     return CustomDialog(title: "Term Options", context: context, form: form, button: confirmButton).show();
-
-      AlertDialog(
-        title: Column(children: [
-          Text(
-            "Term Options",
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          Divider(color: Theme.of(context).dividerColor),
-        ],),
-        content: SizedBox(
-          child: form,
-          width: 100,
-          height: 145,
-        ),
-      actions: [confirmButton],
-    );
   }
 }

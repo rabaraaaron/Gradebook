@@ -141,19 +141,5 @@ class _NewTermState extends State<NewTerm> {
 
     return CustomDialog(title: 'Add Term', context: context, form: form, button: addButton).show();
 
-      AlertDialog(
-      title: Column(children: [
-        Text("Add Term",
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        Divider(color: Theme.of(context).dividerColor),
-      ],),
-        content: SizedBox(
-          child: form,
-          width: 100,
-          height: 145,
-        ),
-      actions: [addButton],
-    );
   }
 }
