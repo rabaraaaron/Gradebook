@@ -49,7 +49,7 @@ class AssessmentService {
        print('Error in adding assessment: ' + e.toString());
     }
 
-    List dueAssessments = await DueDateQuery().getAssesmentsDue();
+    List dueAssessments = await DueDateQuery().getAssessmentsDue();
 
      //print(dueAssessments);
 

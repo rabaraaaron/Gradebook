@@ -56,7 +56,31 @@ class Assessment with ChangeNotifier{
 
     @override
     String toString() {
-      return {name, totalPoints, yourPoints}.toString();
+    String line = "\n---------- Printing Assessment ------------";
+    String name = "\n   Name: " + this.name;
+    String tp = "\n   TP: " + this.totalPoints.toString();
+    String yp = "\n   YP: " + this.yourPoints.toString();
+    String id = "\n   ID: " + this.id;
+    String catID = "\n   catID: " + this.catID;
+    String termID = "\n   termID: " + this.termID;
+    String courseID = "\n   courseID: " + this.courseID;
+    String createDate = "\n   createDate: " + this.createDate.toString();
+    String isDropped = "\n   isDropped: " + this.isDropped.toString();
+    String isCompleted = "\n   isCompleted: " + this.isCompleted.toString();
+    String dueDate = "\n   dueDate: " + this.dueDate.toString();
+    String line2 = "\n---------------------------------------------" ;
+
+      return {line, name, tp, yp, id, catID, termID, courseID, createDate, isDropped, isCompleted, dueDate, line2}.toString();
     }
+  String getFormattedNumber( num ) {
+    //double x = ((cat.gradePercentAsDecimal / cat.categoryWeight)* 100);
+    var result;
+    if(num % 1 == 0) {
+      result = num.toInt();
+    } else {
+      result = num.toStringAsFixed(2);
+    }
+    return result.toString();
+  }
   }
 

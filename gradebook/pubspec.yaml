@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^1.0.3
   flushbar: ^1.10.4
   intl: ^0.17.0
+  sizer: ^1.1.8
 
 
 dev_dependencies:

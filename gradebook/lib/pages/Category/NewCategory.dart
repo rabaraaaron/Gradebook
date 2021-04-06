@@ -42,7 +42,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
     //equalWeights = course.equalWeights;
     categoryService = new CategoryService(term.termID, course.id);
   }
-
+  TextEditingController numberDroppedController = new TextEditingController();
   TextEditingController categoryWeightController =
   new TextEditingController();
   @override
@@ -125,6 +125,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                   SizedBox(width: 20,),
                   Expanded(
                     child: TextFormField(
+                      textAlign: TextAlign.center,
                       controller: categoryWeightController,
                       keyboardType: TextInputType.number,
                       validator:
@@ -231,6 +232,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                   SizedBox(width: 20,),
                   Expanded(
                     child: TextFormField(
+                      textAlign: TextAlign.center,
                       controller: categoryWeightController,
                       keyboardType: TextInputType.number,
                       validator:
@@ -286,7 +288,8 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                 ],
               ),
               TextFormField(
-                controller: categoryWeightController,
+                textAlign: TextAlign.center,
+                controller: numberDroppedController,
                 keyboardType: TextInputType.number,
                 validator:
                     (value) {
@@ -298,9 +301,15 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
                     ).show();
                     return 'Required field.';
                   }
-
                   return null;
-
+                },
+                onTap: () {
+                  // if (numberDroppedController == null) {
+                  //   numberDroppedController = TextEditingController();
+                  //   numberDroppedController.text = initialnumberDropped;
+                  //   initialnumberDropped = null;
+                  //   setState(() {});
+                  // }
                 },
                 decoration: const InputDecoration(
                   hintText: "ex 2",
@@ -324,7 +333,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
           //print(addedCategory);
           await categoryService.addCategory(
               addedCategory, categoryWeightController.text,
-              dropLowest_isChecked, course.equalWeights);
+              dropLowest_isChecked, numberDroppedController.text, course.equalWeights);
           Navigator.pop(context);
         }
       },
@@ -336,83 +345,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
       elevation: 0,
     );
 
-    return CustomDialog(form: form, button: button, context: context).show();
-
-      AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      contentPadding: EdgeInsets.only(top: 0.0),
-      content: Container(
-        width: 3300.0,
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32.0),
-                    topRight: Radius.circular(32.0)),
-              ),
-              child:Center(
-                child: Text(
-                  "Add Category",
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: form,
-            ),
-            Divider(
-              thickness: 1,
-              color: Colors.grey,
-              height: 2.0,
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              decoration: BoxDecoration(
-                //color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32.0),
-                    bottomRight: Radius.circular(32.0)),
-              ),
-              child: button,
-            ),
-          ],
-        ),
-      ),
-    );
-
-      AlertDialog(
-        title: Column(children: [
-          Text(
-            "Add Category",
-            style: TextStyle(
-              fontSize: 27.5,
-              color: Theme.of(context).dividerColor,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          Divider(color: Theme.of(context).dividerColor,),
-        ],),
-        content: SizedBox(
-          child: form,
-          width: 100,
-          height: 155,
-        ),
-        actions: [ SizedBox(
-          height: 50,
-          width: 300,
-          child: button,
-        )],
-      );
-
-
+    return CustomDialog(form: form, button: button, title: "Add Category" , context: context).show();
 
   }
 }

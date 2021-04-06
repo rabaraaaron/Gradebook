@@ -81,7 +81,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
   bool assignmentIsCompleted = false;
   Form form;
   double dialogueHeight;
-  double dialogueWidth = 150;
+  //double dialogueWidth = 175;
 
 
 
@@ -99,6 +99,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
         key: _formKey,
         child: Column(children: [
           TextFormField(
+            textAlign: TextAlign.center,
             initialValue: initialName,
             controller: nameController,
             inputFormatters: [LengthLimitingTextInputFormatter(20)],
@@ -130,6 +131,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
             children: [
               Expanded(
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   initialValue: initialYourPoints,
                   controller: yourPointsController,
                   inputFormatters: [LengthLimitingTextInputFormatter(4)],
@@ -171,6 +173,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
 
               Expanded(
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   initialValue: initialTotalPoints,
                   controller: totalPointsController,
                   inputFormatters: [LengthLimitingTextInputFormatter(4)],
@@ -215,12 +218,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   });
                 },
               ),
-              Expanded(
-                  flex:10,
-                  child: Text(
-                      "Assignment Completed",
-                    style: Theme.of(context).textTheme.headline3,
-                  )
+              Text(
+                  "Assignment Completed",
+                style: Theme.of(context).textTheme.headline3,
               ),
             ],
           ),
@@ -276,11 +276,12 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       );
 
     } else { //When assignment is not completed yet
-      dialogueHeight = 155;
+      //dialogueHeight = 155;
       form = Form(
         key: _formKey,
         child: Column(children: [
           TextFormField(
+            textAlign: TextAlign.center,
             initialValue: initialName,
             controller: nameController,
             inputFormatters: [LengthLimitingTextInputFormatter(20)],
@@ -303,6 +304,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
               SizedBox(
                 width: 175,
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   initialValue: initialDate,
                   enabled: false,
                   readOnly: true,
@@ -395,58 +397,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       );
     }
 
-    return CustomDialog(form: form, button: confirmButton, context: context).show();
+    return CustomDialog(form: form, button: confirmButton, title: 'Assessment Options', context: context).show();
 
+  }
+  Widget getExtraFormFields(){
 
-      AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      contentPadding: EdgeInsets.only(top: 0.0),
-      content: Container(
-        width: 300.0,
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32.0),
-                    topRight: Radius.circular(32.0)),
-              ),
-              child:Center(
-                child: Text(
-                  "Add Assessment",
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-              child: form,
-            ),
-            Divider(
-              thickness: 1,
-              color: Colors.grey,
-              height: 2.0,
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              decoration: BoxDecoration(
-                //color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32.0),
-                    bottomRight: Radius.circular(32.0)),
-              ),
-              child: confirmButton,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
 }

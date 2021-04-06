@@ -77,6 +77,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         child: SingleChildScrollView(
           child: Column(children: [
             TextFormField(
+              textAlign: TextAlign.center,
               controller: name,
               validator: (text) {
                 if (text == null || text.isEmpty) {
@@ -100,6 +101,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 Expanded(
 
                   child: TextFormField(
+                    textAlign: TextAlign.center,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         MessageBar(context: context,
@@ -130,6 +132,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 SizedBox(width: 20,),
                 Expanded(
                   child: TextFormField(
+                    textAlign: TextAlign.center,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         MessageBar(context: context,
@@ -218,6 +221,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         child: SingleChildScrollView(
             child: Column(children: [
           TextFormField(
+            textAlign: TextAlign.center,
             controller: name,
             validator: (text) {
               if (text == null || text.isEmpty) {
@@ -242,6 +246,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
               SizedBox(
                 width: 175,
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   enabled: false,
                   readOnly: true,
                   controller: date,
@@ -318,61 +323,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
       );
     }
 
-    Color myColor = Color(0xff00bfa5);
-
-
-
-    return CustomDialog(form: form, button: addButton, context: context).show();
-
-      AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(32.0))),
-            contentPadding: EdgeInsets.only(top: 0.0),
-            content: Container(
-              width: 300.0,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32.0),
-                          topRight: Radius.circular(32.0)),
-                    ),
-                    child:Center(
-                      child: Text(
-                        "Add Assessment",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                    child: form,
-                  ),
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    height: 2.0,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                    decoration: BoxDecoration(
-                      //color: Theme.of(context).accentColor,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(32.0),
-                          bottomRight: Radius.circular(32.0)),
-                    ),
-                    child: addButton,
-                  ),
-                ],
-              ),
-            ),
-          );
+    return CustomDialog(form: form, button: addButton, title: "Add Assessment", context: context).show();
   }
 
 }
