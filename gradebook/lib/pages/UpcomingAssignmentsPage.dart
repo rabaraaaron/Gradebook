@@ -15,6 +15,7 @@ import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/dueDateQuery.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'package:gradebook/utils/LinearLoading.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -96,10 +97,10 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
     //String termID, courseID, catID, id;
 
     // var loading = true;
-    // if(dueDateQuery.getAssesmentsDue() != null ){
+    // if(dueDateQuery.getAssessmentsDue() != null ){
     //   loading = false;
     // }
-
+    //
 
 
     return Scaffold(
@@ -116,138 +117,191 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
       ),
       body: FutureBuilder(
         initialData: Loading(),
-        future: dueDateQuery.getAssesmentsDue(),
+        future: dueDateQuery.getAssessmentsDue(),
           builder: (context, snapshot){
 
-            if(snapshot.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
+          if(snapshot.connectionState != ConnectionState.done){
+            return Loading();
+          }
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
 
-                  return Slidable(
-                    controller: slidableController,
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: .2,
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        color: Colors.transparent,
-                        closeOnTap: true,
-                        iconWidget: IconButton(
-                          icon: Icon(
-                            Icons.check,
-                            color: Theme.of(context).dividerColor,
-                            size: 35,
+            return Slidable(
+              controller: slidableController,
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: .2,
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: IconButton(
+                    icon: Icon(
+                      Icons.check,
+                      color: Theme.of(context).dividerColor,
+                      size: 35,
+                    ),
+                    onPressed: ()async{
+                      //TODO: implement updating assessments from here
+                      // await showDialog(
+                      //     context: context,
+                      //     builder: (BuildContext context){
+                      //       return AssessmentCompleted(
+                      //           termID,
+                      //           snapshot.data[index].courseID,
+                      //           snapshot.data[index].catID,
+                      //           snapshot.data[index]);
+                      //     }
+                      // );
+                    },
+                  ),
+                  // onTap: () async {
+                  //   showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext context) {
+                  //         // return AssessmentOptions(context, termID,
+                  //         //     courseID, categoryID, element);
+                  //         return null;
+                  //       });
+                  // },
+                ),
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(
+                    Icons.delete,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
+                    size: 35,
+                  ),
+                  onTap: () async {
+                    String courseID, termID, catID, id;
+                    courseID = snapshot.data[index].courseID;
+                    termID = snapshot.data[index].termID;
+                    catID = snapshot.data[index].catID;
+                    id = snapshot.data[index].id;
+
+                    AssessmentService aServ = AssessmentService(termID, courseID, catID);
+
+                    await aServ.deleteAssessment(id);
+                    setState(() {
+
+                    });
+                  },
+                )
+              ],
+              child: Card(
+                color: Theme.of(context).accentColor.withOpacity(.2),
+                child: ListTile(
+                  leading: Icon(Icons.album_sharp),
+                  title: Text(snapshot.data[index].name,),
+                  subtitle: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('Course: ', style: TextStyle(fontSize: 14,
+                                  fontWeight: FontWeight.bold),),
+                              FutureBuilder(
+                                initialData: "--",
+                                //future: dueDateQuery.getAssesmentsDue(),
+                                future: CourseService(snapshot.data[index].termID)
+                                    .getCourseName(
+                                    snapshot.data[index].courseID),
+                                builder: (context, courseNameSnap) {
+                                  //print(snap.data);
+                                  if(courseNameSnap.connectionState != ConnectionState.done){
+                                    return LinearLoading();
+                                  }
+                                  return Text(courseNameSnap.data);
+                                },
+
+                              ),
+                            ],
                           ),
-                          onPressed: ()async{
-                            //TODO: implement updating assessments from here
-                            // await showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context){
-                            //       return AssessmentCompleted(
-                            //           termID,
-                            //           snapshot.data[index].courseID,
-                            //           snapshot.data[index].catID,
-                            //           snapshot.data[index]);
-                            //     }
-                            // );
-                          },
-                        ),
-                        // onTap: () async {
-                        //   showDialog(
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         // return AssessmentOptions(context, termID,
-                        //         //     courseID, categoryID, element);
-                        //         return null;
-                        //       });
-                        // },
+                          Row(
+                            children: [
+                              Text("Due on: ", style: TextStyle(fontSize: 14,
+                                  fontWeight: FontWeight.bold),),
+                              Text(DateFormat('yyyy-MM-dd').format(
+                                  snapshot.data[index].dueDate)),
+                              //test(snapshot.data[index]),
+                            ],
+                          ),
+                        ],
                       ),
-                      IconSlideAction(
-                        color: Colors.transparent,
-                        closeOnTap: true,
-                        iconWidget: Icon(
-                          Icons.delete,
-                          color: Theme
-                              .of(context)
-                              .dividerColor,
-                          size: 35,
-                        ),
-                        onTap: () async {
-                          String courseID, termID, catID, id;
-                          courseID = snapshot.data[index].courseID;
-                          termID = snapshot.data[index].termID;
-                          catID = snapshot.data[index].catID;
-                          id = snapshot.data[index].id;
+                      Expanded(child: Container(),flex: 10,),
+                      IconButton(
+                        icon: Icon(Icons.check),
+                        color: Colors.white,
+                        onPressed: ()  {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context){
 
-                          AssessmentService aServ = AssessmentService(termID, courseID, catID);
+                                //todo: =======================================================
 
-                          await aServ.deleteAssessment(id);
-                          setState(() {
+                                /// By Mohd:  this button works but I couldn't find a way to rebuild this page
+                                /// after updating an assessment as complete. I think this is becouse we are not using
+                                /// a steam. The changes to the assessments will not be reflected on the list of
+                                /// assessments used here in this page.
+                                ///
+                                /// Another solution:  Once the user taps on the tile, we could possible navigate the user
+                                /// the course/category where the assessment is. Then they can set it as complete from there.
+                                ///
+                                ///
+                                //todo: =======================================================
 
-                          });
+                                return AssessmentCompleted(
+                                  snapshot.data[index].termID,
+                                  snapshot.data[index].courseID,
+                                  snapshot.data[index].catID,
+                                  snapshot.data[index]);// Here
+
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => CategoryPageWrap(
+                                //             term: term,
+                                //             course: classes[index])));
+                                // return;
+                              });
                         },
                       )
                     ],
-                    child: Card(
-                      color: Theme
-                          .of(context)
-                          .accentColor
-                          .withOpacity(.2),
-                      child: ListTile(
-                        leading: Icon(Icons.album_sharp),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(snapshot.data[index].name,),
-                            // FutureBuilder(contex, snap){
-                            //
-                            // }
+                  ),
 
-                          ],
-                        ),
-                        subtitle: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text('Course: ', style: TextStyle(fontSize: 14,
-                                    fontWeight: FontWeight.bold),),
-                                FutureBuilder(
-                                  initialData: "--",
-                                  //future: dueDateQuery.getAssesmentsDue(),
-                                  future: CourseService(
-                                      snapshot.data[index].termID)
-                                      .getCourseName(
-                                      snapshot.data[index].courseID),
-                                  builder: (context, courseNameSnap) {
-                                    //print(snap.data);
-
-                                    return Text(courseNameSnap.data);
-                                  },
-
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Due on: ", style: TextStyle(fontSize: 14,
-                                    fontWeight: FontWeight.bold),),
-                                Text(DateFormat('yyyy-MM-dd').format(
-                                    snapshot.data[index].dueDate)),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                      ),
-                    ),
-                  );
-                },
-              );
-            } else{
-              return Loading();
-            }
-
-          })
+                ),
+              ),
+            );
+          },
+        );
+        })
     );
+  }
+
+  Widget test(Assessment a){
+    //
+    // AssessmentCompleted(
+    //     a.termID,
+    //     a.courseID,
+    //     a.catID,
+    //     a);// Here
+
+    if(a.isCompleted)
+    // setState(() {
+    //
+    // });
+      return Text(a.isCompleted.toString());
+
+    else return Text(a.isCompleted.toString());
+
+
+
+
   }
 }

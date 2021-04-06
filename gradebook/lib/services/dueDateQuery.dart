@@ -8,7 +8,7 @@ import 'package:gradebook/services/term_service.dart';
 class DueDateQuery {
   Map dueAssessmentsMap = new HashMap<String, DocumentSnapshot>();
 
-  Future<List<Assessment>> getAssesmentsDue([int days]) async {
+  Future<List<Assessment>> getAssessmentsDue([int days]) async {
     DateTime futureDateCutOff;
 
     List<Assessment> upcomingAssessments = List.empty(growable: true);

@@ -118,6 +118,9 @@ class _AssessmentCompletedState extends State<AssessmentCompleted> {
               d,
             );
             Navigator.pop(context);
+            setState(() {
+
+            });
           }
           // } else if(totalPointsController.text == "" ||
           //     totalPointsController.text == ""){
