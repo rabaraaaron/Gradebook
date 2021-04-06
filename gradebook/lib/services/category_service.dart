@@ -81,6 +81,8 @@ class CategoryService {
           earned: doc.get('earned').toString() ?? "0",
           equalWeights: doc.get('equalWeights') ?? false,
           countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
+          gradePercentAsDecimal: doc.get('gradePercentAsDecimal') ?? 0,
+
         );
       }).toList();
       listOfCategories = v;
@@ -130,14 +132,14 @@ class CategoryService {
       name, newWeight, oldWeight, dropLowest, numberDropped, equalWeights, catID) async {
     var result = double.parse(newWeight) - oldWeight;
 
-
     await categoryRef.doc(catID).update({
       'name': name,
       'weight': double.parse(newWeight),
       'dropLowest': dropLowest,
       'equalWeights': equalWeights,
-      'numberDropped': int.parse(numberDropped),
+      'numberDropped': dropLowest? int.parse(numberDropped) : 0,
     });
+
 
     if (result < 0) {
       await CourseService(termID)

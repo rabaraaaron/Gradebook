@@ -81,7 +81,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
   bool assignmentIsCompleted = false;
   Form form;
   double dialogueHeight;
-  double dialogueWidth = 150;
+  //double dialogueWidth = 175;
 
 
 
@@ -218,12 +218,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                   });
                 },
               ),
-              Expanded(
-                  flex:10,
-                  child: Text(
-                      "Assignment Completed",
-                    style: Theme.of(context).textTheme.headline3,
-                  )
+              Text(
+                  "Assignment Completed",
+                style: Theme.of(context).textTheme.headline3,
               ),
             ],
           ),
@@ -279,7 +276,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       );
 
     } else { //When assignment is not completed yet
-      dialogueHeight = 155;
+      //dialogueHeight = 155;
       form = Form(
         key: _formKey,
         child: Column(children: [
@@ -401,6 +398,9 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     }
 
     return CustomDialog(form: form, button: confirmButton, title: 'Assessment Options', context: context).show();
+
+  }
+  Widget getExtraFormFields(){
 
   }
 

@@ -134,6 +134,8 @@ class CourseService {
       'passFail': passFail,
       'equalWeights': equalWeights,
     });
+    //Todo: check with Mike if this is needed
+    calculateGrade(courseID);
   }
   Future<void> updateCourseIcon(courseID, iconName) async {
     await courseRef.doc(courseID).update({

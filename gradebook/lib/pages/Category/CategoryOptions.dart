@@ -86,268 +86,113 @@ class _CategoryOptions extends State<CategoryOptions> {
           ));
     }
 
-    if(!dropLowest) {
-      form = Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == null) {
-                            MessageBar(context: context,
-                                msg: "Please select one form the list of categories.",
-                                title: "Missing selection").show();
-                            return 'field required';
-                          } else {
-                            return null;
-                          }
-                        },
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline3,
-                        hint: Text(
-                          "Select Category",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline3,
-                        ),
-                        value: addedCategory,
-                        items: listOfCategories,
-                        onChanged: (val) {
-                          setState(() {
-                            addedCategory = val;
-                          });
-                        },
-                        isExpanded: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
+    form = Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: DropdownButtonFormField(
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          MessageBar(
-                            context: context,
-                            title: 'Missing field value',
-                            msg: 'Please enter a weight value',
-                          ).show();
-                          return 'Please enter weight value';
-                        } else if (double.parse(value) >
-                            course.remainingWeight + c.categoryWeight) {
-                          MessageBar(
-                              title: "invalid weight value",
-                              msg: 'Weight cannot be grater than ' +
-                                  (course.remainingWeight + c.categoryWeight)
-                                      .toString(),
-                              context: context).show();
-                          return 'Weight cannot be grater than ' +
-                              (course.remainingWeight + c.categoryWeight).toString();
+                        if (value == null) {
+                          MessageBar(context: context,
+                              msg: "Please select one form the list of categories.",
+                              title: "Missing selection").show();
+                          return 'field required';
                         } else {
                           return null;
                         }
                       },
-                      controller: categoryWeightController,
-                      initialValue: initialWeight,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "ex 25",
-                        labelText: 'Weight',
-                      ),
-                      onTap: () {
-                        if (categoryWeightController == null) {
-                          categoryWeightController = TextEditingController();
-                          categoryWeightController.text = initialWeight;
-                          initialWeight = null;
-                          setState(() {});
-                        }
+                      style: Theme.of(context).textTheme.headline3,
+                      hint: Text("Select Category", style: Theme.of(context).textTheme.headline3,),
+                      value: addedCategory,
+                      items: listOfCategories,
+                      onChanged: (val) {
+                        setState(() {
+                          addedCategory = val;
+                        });
                       },
+                      isExpanded: true,
                     ),
                   ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  Switch(
-                    value: dropLowest,
-                    activeColor: Theme
-                        .of(context)
-                        .accentColor,
-                    onChanged: (updateChecked) {
-                      setState(() {
-                        dropLowest = updateChecked;
-                      });
-                    },
-                  ),
-                  Text(
-                    "Drop Lowest Score?",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline3,
-                  ),
-                ],
-              ),
-            ]),
-          )
-      );
-    } else {
-      form = Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == null) {
-                            MessageBar(context: context,
-                                msg: "Please select one form the list of categories.",
-                                title: "Missing selection").show();
-                            return 'field required';
-                          } else {
-                            return null;
-                          }
-                        },
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline3,
-                        hint: Text(
-                          "Select Category",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline3,
-                        ),
-                        value: addedCategory,
-                        items: listOfCategories,
-                        onChanged: (val) {
-                          setState(() {
-                            addedCategory = val;
-                          });
-                        },
-                        isExpanded: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          MessageBar(
-                            context: context,
-                            title: 'Missing field value',
-                            msg: 'Please enter a weight value',
-                          ).show();
-                          return 'Please enter weight value';
-                        } else if (double.parse(value) >
-                            course.remainingWeight + c.categoryWeight) {
-                          MessageBar(
-                              title: "invalid weight value",
-                              msg: 'Weight cannot be grater than ' +
-                                  (course.remainingWeight + c.categoryWeight)
-                                      .toString(),
-                              context: context).show();
-                          return 'Weight cannot be grater than ' +
-                              (course.remainingWeight + c.categoryWeight).toString();
-                        } else {
-                          return null;
-                        }
-                      },
-                      controller: categoryWeightController,
-                      initialValue: initialWeight,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "ex 25",
-                        labelText: 'Weight',
-                      ),
-                      onTap: () {
-                        if (categoryWeightController == null) {
-                          categoryWeightController = TextEditingController();
-                          categoryWeightController.text = initialWeight;
-                          initialWeight = null;
-                          setState(() {});
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Switch(
-                    value: dropLowest,
-                    activeColor: Theme
-                        .of(context)
-                        .accentColor,
-                    onChanged: (updateChecked) {
-                      setState(() {
-                        dropLowest = updateChecked;
-                      });
-                    },
-                  ),
-                  Text(
-                    "Drop Lowest Score?",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline3,
-                  ),
-                ],
-              ),
-              TextFormField(
-                textAlign: TextAlign.center,
-                controller: numberDroppedController,
-                initialValue: initialnumberDropped,
-                keyboardType: TextInputType.number,
-                validator:
-                    (value) {
-                  if (value == null || value.isEmpty) {
-                    MessageBar(
-                      context: context,
-                      title: 'Required field',
-                      msg: 'Please enter number of assessments to be drooped.',
-                    ).show();
-                    return 'Required field.';
-                  }
-                  return null;
-                },
-                onTap: () {
-                  if (numberDroppedController == null) {
-                    numberDroppedController = TextEditingController();
-                    numberDroppedController.text = initialnumberDropped;
-                    initialnumberDropped = null;
-                    setState(() {});
-                  }
-                },
-                decoration: const InputDecoration(
-                  hintText: "ex 2",
-                  labelText: 'Number of dropped assessments.',
                 ),
-              ),
-              SizedBox(height: 10,)
-            ]),
-          )
-      );
+                SizedBox(width: 20,),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        MessageBar(
+                          context: context,
+                          title: 'Missing field value',
+                          msg: 'Please enter a weight value',
+                        ).show();
+                        return 'Please enter weight value';
+                      } else if (double.parse(value) >
+                          course.remainingWeight + c.categoryWeight) {
+                        MessageBar(
+                            title: "invalid weight value",
+                            msg: 'Weight cannot be grater than ' +
+                                (course.remainingWeight + c.categoryWeight)
+                                    .toString(),
+                            context: context).show();
+                        return 'Weight cannot be grater than ' +
+                            (course.remainingWeight + c.categoryWeight).toString();
+                      } else {
+                        return null;
+                      }
+                    },
+                    controller: categoryWeightController,
+                    initialValue: initialWeight,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 25",
+                      labelText: 'Weight',
+                    ),
+                    onTap: () {
+                      if (categoryWeightController == null) {
+                        categoryWeightController = TextEditingController();
+                        categoryWeightController.text = initialWeight;
+                        initialWeight = null;
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: dropLowest,
+                  activeColor: Theme
+                      .of(context)
+                      .accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      dropLowest = updateChecked;
+                    });
+                  },
+                ),
+                Text(
+                  "Drop Lowest Score?",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline3,
+                ),
+              ],
+            ),
 
-    }
+            getExtraFormFields(),
+          ]),
+        )
+    );
+
 
     SizedBox confirmButton = SizedBox(
       height: 50,
@@ -361,26 +206,22 @@ class _CategoryOptions extends State<CategoryOptions> {
             categoryWeightController.text = initialWeight;
             initialWeight = null;
           }
-          //TODO: Update the category info in the database
-          // Get updated category name with addedCategory
-          // Get updated weight with categoryWeightController.text
-          // Get updated drop lowest bool with dropLowest
+
+          if (numberDroppedController == null) {
+            numberDroppedController = TextEditingController();
+            numberDroppedController.text = initialnumberDropped;
+            initialnumberDropped = null;
+          }
 
           if(_formKey.currentState.validate()) {
-           // if(dropLowest) {
-              await categoryService.updateCategory(
-                  addedCategory,
-                  categoryWeightController.text,
-                  c.categoryWeight,
-                  dropLowest,
-                  numberDroppedController.text,
-                  equalWeights,
-                  c.id);
-            // } else {
-            //   await categoryService.updateCategory(addedCategory,
-            //       categoryWeightController.text, c.categoryWeight, dropLowest,
-            //       equalWeights, c.id);
-            // }
+            await categoryService.updateCategory(
+                addedCategory,
+                categoryWeightController.text,
+                c.categoryWeight,
+                dropLowest,
+                numberDroppedController.text,
+                equalWeights,
+                c.id);
             await categoryService.calculateGrade(c.id);
 
             Navigator.pop(context);
@@ -398,6 +239,46 @@ class _CategoryOptions extends State<CategoryOptions> {
 
     return CustomDialog(form: form, button: confirmButton, title: "Category Options", context: context).show();
 
+  }
+
+  Widget getExtraFormFields(){
+    if(!dropLowest) return Container();
+
+    return Column(
+      children: [
+        TextFormField(
+          textAlign: TextAlign.center,
+          controller: numberDroppedController,
+          initialValue: initialnumberDropped,
+          keyboardType: TextInputType.number,
+          validator:
+              (value) {
+            if (value == null || value.isEmpty) {
+              MessageBar(
+                context: context,
+                title: 'Required field',
+                msg: 'Please enter number of assessments to be drooped.',
+              ).show();
+              return 'Required field.';
+            }
+            return null;
+          },
+          onTap: () {
+            if (numberDroppedController == null) {
+              numberDroppedController = TextEditingController();
+              numberDroppedController.text = initialnumberDropped;
+              initialnumberDropped = null;
+              setState(() {});
+            }
+          },
+          decoration: const InputDecoration(
+            hintText: "ex 2",
+            labelText: 'Number of dropped assessments.',
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    );
   }
 
 }

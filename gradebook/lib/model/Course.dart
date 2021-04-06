@@ -53,5 +53,16 @@ class Course with ChangeNotifier {
     return _gradeLetter;
   }
 
+  String getFormattedNumber( num ) {
+    //double x = ((cat.gradePercentAsDecimal / cat.categoryWeight)* 100);
+    var result;
+    if(num % 1 == 0) {
+      result = num.toInt();
+    } else {
+      result = num.toStringAsFixed(2);
+    }
+    return result.toString();
+  }
+
 }
 
