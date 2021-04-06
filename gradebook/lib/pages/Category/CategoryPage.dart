@@ -5,6 +5,7 @@ import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/pages/Assessment/AssessmentPage.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
@@ -13,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'CategoryOptions.dart';
 import 'DeleteCategoryConfirmation.dart';
 import 'NewCategory.dart';
-import '../Assessment/AssessmentPage.dart';
 
 
 // ignore: must_be_immutable
@@ -148,7 +148,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       },
                     )
                   ],
-                  child: AssessmentTile(
+                  child: AssessmentPage(
                     termID: term.termID,
                     courseID: course.id,
                     index: index,
@@ -238,7 +238,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
     ),
           Expanded(flex: 1,child: listView),
-        ],
+        ]
       )
     );
   }
