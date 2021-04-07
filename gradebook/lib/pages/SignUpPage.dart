@@ -153,7 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: Theme.of(context).dividerColor,
+          color: Colors.white,
           iconSize: 35,
           onPressed: (){
             Navigator.pop(context);

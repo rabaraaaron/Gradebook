@@ -55,13 +55,15 @@ class _AssessmentListState extends State<AssessmentList> {
         }
 
         String dateOrGrade;
+        var totalPoints = element.getFormattedNumber(element.totalPoints);
+        var yourPoints = element.getFormattedNumber(element.yourPoints);
         if(element.isCompleted){
-          dateOrGrade = "${element.yourPoints} / ${element.totalPoints}";
+          dateOrGrade = yourPoints + " / " + totalPoints;
 
         } else{
-          //todo: what if the due date is not entered? ------(by Mohammad)
           dateOrGrade =
-          DateFormat('MM-dd-yyyy').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
+          DateFormat('MM-dd-yyyy').format(element.dueDate) ?? yourPoints + " / " + totalPoints;
+          //DateFormat('MM-dd-yyyy').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
           // element.dueDate,
 
         }
@@ -87,7 +89,6 @@ class _AssessmentListState extends State<AssessmentList> {
           );
         } else{
           r = Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(width: 10,),
               Text(
@@ -212,134 +213,6 @@ class _AssessmentListState extends State<AssessmentList> {
 
     return Column(children: entries);
   }
-
-
-// class _AssessmentListState extends State<AssessmentList> {
-//
-//
-//   String termID, courseID, categoryID, courseName;
-//
-//
-//
-//   final SlidableController slidableController = new SlidableController();
-//   _AssessmentListState({this.termID, this.categoryID, this.courseID, this.courseName});
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
-//    List assessments = Provider.of<List<Assessment>>(context);
-//     List<Widget> entries = [];
-//     if (Provider.of<List<Assessment>>(context) != null)  {
-//       assessments.forEach((element) {
-//         print(element);
-//         entries.add(
-//             Slidable(
-//               controller: slidableController,
-//               actionPane: SlidableDrawerActionPane(),
-//               actionExtentRatio: .2,
-//               secondaryActions: <Widget>[
-//                 IconSlideAction(
-//                   color: Colors.transparent,
-//                   closeOnTap: true,
-//                   iconWidget: Icon(
-//                     Icons.add_alert,
-//                     color: Theme.of(context).dividerColor,
-//                     size: 35,
-//                   ),
-//                   onTap: () => scheduleNotification(courseName, element.name),
-//                 ),
-//                 IconSlideAction(
-//                   color: Colors.transparent,
-//                   closeOnTap: true,
-//                   iconWidget: Icon(
-//                     Icons.delete,
-//                     color: Theme.of(context).dividerColor,
-//                     size: 35,
-//                   ),
-//                   onTap: () async {
-//
-//                     await assServ.deleteAssessment(element.id);
-//                   },
-//                 )
-//               ],
-//               child: Row(
-//                 // mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   SizedBox(width: 10,),
-//                   Expanded(
-//                       flex: 8,
-//                       child: TextFormField(
-//                         initialValue: element.name,
-//                         style: Theme.of(context).textTheme.headline5,
-//                         inputFormatters: [LengthLimitingTextInputFormatter(20)],
-//                         decoration: InputDecoration(
-//                           border: InputBorder.none,
-//                         ),
-//                         onFieldSubmitted: (itemName) {
-//                           print(itemName);
-//                         },
-//                       )
-//                   ),
-//                   Expanded(
-//                     flex: 4,
-//                     child: Row(
-//                         children: [
-//                           Expanded(
-//                             child: TextFormField(
-//                               initialValue: "${element.yourPoints}",
-//                               inputFormatters: [
-//                                 LengthLimitingTextInputFormatter(4)
-//                               ],
-//                               style: Theme.of(context).textTheme.headline5,
-//                               keyboardType: TextInputType.numberWithOptions(
-//                                   signed: true, decimal: true),
-//                               onFieldSubmitted: (yourScore) {
-//                                 if (double.tryParse(yourScore) != null) {
-//                                   print("Good change");
-//                                 }
-//                                 setState(() {
-//                                   //This is so that incorrect inputs that are not
-//                                   //pushed to the server will revert to the previous
-//                                   //version
-//                                 });
-//                                 print(yourScore);
-//                               },
-//                             ),
-//                           ),
-//                           Text("/ ", style: Theme.of(context).textTheme.headline5,),
-//                           Expanded(
-//                             child: TextFormField(
-//                               initialValue: "${element.totalPoints}",
-//                               inputFormatters: [LengthLimitingTextInputFormatter(4)],
-//                               style: Theme.of(context).textTheme.headline5,
-//                               keyboardType: TextInputType.numberWithOptions(
-//                                   signed: true, decimal: true),
-//                               onFieldSubmitted: (totalPoints) {
-//                                 if (double.tryParse(totalPoints) != null) {
-//                                   print("Good change");
-//                                 }
-//                                 setState(() {
-//                                   //This is so that incorrect inputs that are not
-//                                   //pushed to the server will revert to the previous
-//                                   //version
-//                                 });
-//                               },
-//                             ),
-//                           )
-//                         ]
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ));
-//       });
-//     }
-//
-//     return Column(children: entries);
-
-
 
   Future scheduleNotification(String courseID, String assignmentName) async {
 

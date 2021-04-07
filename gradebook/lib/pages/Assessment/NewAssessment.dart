@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:gradebook/utils/customDialog.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 import '../../services/category_service.dart';
 
@@ -75,11 +77,15 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         child: SingleChildScrollView(
           child: Column(children: [
             TextFormField(
+              textAlign: TextAlign.center,
               controller: name,
               validator: (text) {
                 if (text == null || text.isEmpty) {
+                  MessageBar(context: context,
+                      msg:"Please enter a name for the new assessment.",
+                      title: "Required field").show();
                   //print("text is empty");
-                  return 'Text is empty';
+                  return 'Required field';
                 }
                 return null;
               },
@@ -90,25 +96,64 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 labelText: 'Assessment Title',
               ),
             ),
-            TextFormField(
-              controller: totalPoints,
-              inputFormatters: [LengthLimitingTextInputFormatter(4)],
-              onEditingComplete: handleSubmitted,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: "ex 100",
-                labelText: 'Total Points',
-              ),
-            ),
-            TextFormField(
-              controller: yourPoints,
-              inputFormatters: [LengthLimitingTextInputFormatter(4)],
-              onEditingComplete: handleSubmitted,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: "ex 89.8",
-                labelText: 'Points Earned',
-              ),
+            Row(
+              children: [
+                Expanded(
+
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter total points earned.",
+                            title: "Required field").show();
+                        //print("text is empty");
+                        return 'Required field';
+                      } else if (double.parse(text) > double.parse(totalPoints.text)){
+                        print('3333');
+                        MessageBar(context: context,
+                            msg:"Earned points cannot be greater than total points.",
+                            title: "Invalid input").show();
+                        return 'Invalid input';
+
+                      }
+                      return null;
+                    },
+                    controller: yourPoints,
+                    inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                    onEditingComplete: handleSubmitted,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 89.8",
+                      labelText: 'Points Earned',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter total points value for this assessment.",
+                            title: "Required field").show();
+                        //print("text is empty");
+                        return 'Required field';
+                      }
+                      return null;
+                    },
+                    controller: totalPoints,
+                    inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                    onEditingComplete: handleSubmitted,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 100",
+                      labelText: 'Total Points',
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: 15,
@@ -139,31 +184,33 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
           height: buttonHeight,
           width: 300,
           child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(13.0),
-            ),
+            elevation: 0,
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(13.0),
+            // ),
             onPressed: () async {
-              if(name.text != "" && totalPoints.text != "" &&
-                  yourPoints.text != ""){//When assignment is completed
+              if(_formKey.currentState.validate()){
+                if(name.text != "" && totalPoints.text != "" &&
+                    yourPoints.text != ""){//When assignment is completed
 
-                await assServ.addAssessment(
-                    name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate);
-                Navigator.pop(context);
-              } else if(name.text == ""){
-              } else{ //When assignment is not completed yet
+                  await assServ.addAssessment(
+                      name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate);
+                  Navigator.pop(context);
+                } else if(name.text == ""){
+                } else{ //When assignment is not completed yet
 
-                await assServ.addAssessment(
-                    name.text, "0", "0", isCompleted, dueDate);
-                Navigator.pop(context);
+                  await assServ.addAssessment(
+                      name.text, "0", "0", isCompleted, dueDate);
+                  Navigator.pop(context);
+                }
               }
-
-
             },
             child: Text(
               "Add",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.headline3,
             ),
-            color: Theme.of(context).primaryColor,
+            color: Colors.transparent,
+            //color: Theme.of(context).primaryColor,
           )
       );
 
@@ -174,11 +221,15 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
         child: SingleChildScrollView(
             child: Column(children: [
           TextFormField(
+            textAlign: TextAlign.center,
             controller: name,
             validator: (text) {
               if (text == null || text.isEmpty) {
+                MessageBar(context: context,
+                    msg:"Please enter a name for the new assessment.",
+                    title: "Required field").show();
                 //print("text is empty");
-                return 'Text is empty';
+                return 'Required field';
               }
               return null;
             },
@@ -195,6 +246,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
               SizedBox(
                 width: 175,
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   enabled: false,
                   readOnly: true,
                   controller: date,
@@ -249,67 +301,29 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
       );
 
       addButton = SizedBox(
-          height: buttonHeight,
-          width: 295,
           child: RaisedButton(
+            //padding: EdgeInsets.only(top: ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(13.0),
             ),
             onPressed: () async {
-              // if (_formKey.currentState.validate()) {
-              //   // TODO submit
-              //   await assServ.addAssessment(
-              //       name.text, totalPoints.text, yourPoints.text, isCompleted);
-              //   //await CategoryService(termID, courseID).calculateGrade(categoryID);
-              //   Navigator.pop(context);
-              // }
-              print("DATEEE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + dueDate.toString());
-              if(name.text != "" && totalPoints.text != "" &&
-                  yourPoints.text != ""){
-
-                await assServ.addAssessment(
-                    name.text, totalPoints.text, yourPoints.text, isCompleted, dueDate ) ;
-                Navigator.pop(context);
-              } else if(name.text == ""){
-              } else{
-                await assServ.addAssessment(
-                    name.text, "0", "0", isCompleted, dueDate);
-                Navigator.pop(context);
-              }
+               if (_formKey.currentState.validate()) {
+                 await assServ.addAssessment(
+                     name.text, "0", "0", isCompleted, dueDate);
+                 Navigator.pop(context);
+               }
+              //}
             },
-            child: Text(
-              "Add",
-              style: Theme.of(context).textTheme.headline2,
+            child: Text("Add",
+                style:Theme.of(context).textTheme.headline3,
             ),
-            color: Theme.of(context).primaryColor,
+            color: Colors.transparent,
+            elevation: 0,
           )
       );
     }
 
-    return AlertDialog(
-      title: Column(
-        children: [
-          Text(
-            "Add Assessment",
-            style: TextStyle(
-              fontSize: 30,
-              color: Theme.of(context).dividerColor,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          Divider(color: Theme.of(context).dividerColor,),
-        ],
-      ),
-        content: SizedBox(
-          child: FocusScope(
-            node: focusScopeNode,
-            child: form,
-          ),
-          width: dialogueWidth,
-          height: dialogueHeight,
-        ),
-      actions: [addButton],
-    );
+    return CustomDialog(form: form, button: addButton, title: "Add Assessment", context: context).show();
   }
 
 }

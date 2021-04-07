@@ -5,6 +5,7 @@ import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/pages/Assessment/AssessmentPage.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/course_service.dart';
@@ -13,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'CategoryOptions.dart';
 import 'DeleteCategoryConfirmation.dart';
 import 'NewCategory.dart';
-import '../Assessment/AssessmentTile.dart';
 
 
 // ignore: must_be_immutable
@@ -148,7 +148,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       },
                     )
                   ],
-                  child: AssessmentTile(
+                  child: AssessmentPage(
                     termID: term.termID,
                     courseID: course.id,
                     index: index,
@@ -161,11 +161,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
     } else {
       listView = Container();
     }
-
-    String percent = double.parse((course.gradePercent)).toStringAsFixed(2);
-    String letterGrade = course.letterGrade;
-    //TextStyle styleInCard = Theme.of(context).textTheme.bodyText2;
-
 
 
     return Scaffold(
@@ -227,16 +222,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     children: [
                   Text(" Grade:",),
               Center(child: Text(course.letterGrade, style: TextStyle(fontWeight: FontWeight.bold),)),
-              Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Unallocated: ')])),
-              Center(child: Text(course.remainingWeight.toString() + "%",style: TextStyle(fontWeight: FontWeight.bold))),
+              Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Remaining Weight:')])),
+              Center(child: Text(course.getFormattedNumber(course.remainingWeight) + "%",style: TextStyle(fontWeight: FontWeight.bold))),
               ]),
           TableRow(
               children: [
                 Text(" Percent:",),
-                Center(child: Text(percent, style: TextStyle(fontWeight: FontWeight.bold),)),
+                Center(
+                    child: Text("${course.getFormattedNumber(double.parse(course.gradePercent))}%", style: TextStyle(fontWeight: FontWeight.bold),)),
                 Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),Text('Incomplete items:')])),
-
-                //todo: count the number of incomplete assessment and display them here.
                 Center(child: Text(course.countOfIncompleteItems.toString(), style: TextStyle(fontWeight: FontWeight.bold),)),
               ]
           )
@@ -244,7 +238,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
     ),
           Expanded(flex: 1,child: listView),
-        ],
+        ]
       )
     );
   }

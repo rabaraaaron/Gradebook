@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/course_service.dart';
+import 'package:gradebook/utils/customDialog.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 // ignore: camel_case_types, must_be_immutable
 class NewCourse extends StatefulWidget {
@@ -22,6 +24,7 @@ class NewCourse extends StatefulWidget {
 // ignore: camel_case_types
 class _NewCourseState extends State<NewCourse> {
   String termID;
+  Form form;
 
   _NewCourseState(BuildContext c, List<Course> t, String tID) {
     this.termID = tID;
@@ -34,13 +37,14 @@ class _NewCourseState extends State<NewCourse> {
 
   List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer", "Other"];
   List<DropdownMenuItem> listOfTerms = [];
+  final _formKey = GlobalKey<FormState>();
 
   void handleSubmitted() {
     focusScopeNode.nextFocus();
   }
 
-  bool checked1 = false;
-  bool checked2 = false;
+  bool passFail = false;
+  bool equalWeights = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,104 +57,106 @@ class _NewCourseState extends State<NewCourse> {
       listOfYears.insert(0, DropdownMenuItem(child: Text("$i")));
     }
 
+    form = Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Row(
+              children: [
+                Expanded(
+
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (value){
+                      if(value == null || value.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter a name for the new course.",
+                            title: "Required field").show();
+                        return 'Required field';
+                      } else {return null;}
+                    },
+                    controller: classTitleController,
+                    decoration: const InputDecoration(
+                      hintText: "ex CS 101",
+                      labelText: 'Course Title',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                  ),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    controller: creditHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 4",
+                      labelText: 'Credit Hours',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                  ),
+                ),
+              ],
+            ),
+
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Switch(
+                      value: passFail,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (updateChecked) {
+                        setState(() {
+                          passFail = updateChecked;
+                        });
+                      },
+                    ),
+                    Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Switch(
+                      value: equalWeights,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (updateChecked) {
+                        setState(() {
+                          equalWeights = updateChecked;
+                        });
+                      },
+                    ),
+                    Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
+                  ],
+                ),
+              ],
+            ),
+          ]),
+        ));
+
     SizedBox addButton = SizedBox(
         height: 50,
         width: 300,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Theme.of(context).primaryColor),
-                shape: MaterialStateProperty.resolveWith((states) =>
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13.0)))),
+        child: RaisedButton(
+            elevation: 0,
+            color: Colors.transparent,
             onPressed: () async {
-              await CourseService(termID).addCourse(classTitleController.text,
-                  creditHoursController.text, checked1, checked2);
-              if (int.parse(creditHoursController.text) is int) {
-                print(creditHoursController.text);
+              if(_formKey.currentState.validate()) {
+
+                if (creditHoursController.text.isEmpty) {
+                  await CourseService(termID).addCourse(classTitleController.text, "0" , passFail, equalWeights);
+                } else{
+                  await CourseService(termID).addCourse(classTitleController.text,
+                      creditHoursController.text, passFail, equalWeights);
+                }
+                Navigator.pop(context);
+                setState(() {});
               }
-              Navigator.pop(context);
-              setState(() {});
             },
-            child: Text(
-              "Add",
-              style: Theme.of(context).textTheme.headline2,
+            child: Text("Add", style: Theme.of(context).textTheme.headline3,
             )));
 
-    return AlertDialog(
-      title: Column(children: [
-        Text(
-          "Add Course",
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        Divider(color: Theme.of(context).dividerColor),
-      ],),
-        content: SizedBox(
-          child: Scrollbar(
-
-            child: FocusScope(
-              node: focusScopeNode,
-              child: Form(
-                  child: SingleChildScrollView(
-                    child: Column(children: [
-                      TextFormField(
-                        controller: classTitleController,
-                        decoration: const InputDecoration(
-                          hintText: "ex CS 101",
-                          labelText: 'Course Title',
-                        ),
-                        onEditingComplete: handleSubmitted,
-                      ),
-                      TextFormField(
-                        controller: creditHoursController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "ex 4",
-                          labelText: 'Credit Hours',
-                        ),
-                        onEditingComplete: handleSubmitted,
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Switch(
-                                value: checked1,
-                                activeColor: Theme.of(context).accentColor,
-                                onChanged: (updateChecked) {
-                                  setState(() {
-                                    checked1 = updateChecked;
-                                  });
-                                },
-                              ),
-                              Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Switch(
-                                value: checked2,
-                                activeColor: Theme.of(context).accentColor,
-                                onChanged: (updateChecked) {
-                                  setState(() {
-                                    checked2 = updateChecked;
-                                  });
-                                },
-                              ),
-                              Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ]),
-                  )),
-            ),
-          ),
-          width: 100,
-          height: 200,
-        ),
-      actions: [addButton],
-    );
+    return CustomDialog(form: form, button: addButton, title: "Add Course", context: context).show();
   }
 }
 
