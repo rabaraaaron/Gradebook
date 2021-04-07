@@ -161,7 +161,7 @@ class CategoryService {
     double gradePercentAsDecimal = 0,
         categoryTotalPoints = 0,
         categoryEarnedPoints = 0;
-    int counter = 0;
+    int numIncomplete = 0;
     double categoryWeight = categorySnap.get('weight');
     bool dropLowest = categorySnap.get('dropLowest');
     bool equalWeight = categorySnap.get('equalWeights');
@@ -189,7 +189,7 @@ class CategoryService {
             //this will be used only for equally wighted calc
           }
         } else {
-          counter++;
+          numIncomplete++;
         }
       }
 
@@ -246,6 +246,8 @@ class CategoryService {
           print("Running sumPercent:" + sumPercents.toString());
           print("Running completed:" + numCompleted.toString());
         }
+        else
+          numIncomplete++;
       }
       print("Final sumPercent:" + sumPercents.toString());
 
@@ -283,7 +285,7 @@ class CategoryService {
       'gradePercentAsDecimal': gradePercentAsDecimal,
       'total': categoryTotalPoints,
       'earned': categoryEarnedPoints,
-      'countOfIncompleteItems': counter,
+      'countOfIncompleteItems': numIncomplete,
     });
 
     await CourseService(termID).calculateGrade(courseID);
