@@ -69,7 +69,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             child: Row(
               children: [
                 Expanded(child: Container(),flex: 3,),
-                getWidget(cat),
+                getCatGrade(cat),
                 Expanded(child: Container(),flex: 2,),
                 Container(
                   width: 60,
@@ -108,9 +108,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
-  Widget getWidget(Category cat) {
+  Widget getCatGrade(Category cat) {
 
-    if(cat.equalWeights){
+   // if(cat.equalWeights){
       double x = ((cat.gradePercentAsDecimal / cat.categoryWeight)* 100);
       var result;
       if(x % 1 == 0) {
@@ -127,12 +127,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
           ),
         ],
       );
-    } else {
-      return Text(
-        "${cat.earned}" + "/" + "${cat.total}",
-        style: Theme.of(context).textTheme.headline4,
-      );
-    }
+
+    // } else {
+    //   return Text(
+    //     "${cat.earned}" + "/" + "${cat.total}",
+    //     style: Theme.of(context).textTheme.headline4,
+    //   );
+    // }
   }
 
   String toStringAsFixedNoZero(int n) =>

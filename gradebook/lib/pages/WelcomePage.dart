@@ -15,9 +15,46 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
       body: Stack(
         children: <Widget>[
+          Container(
+            transform: Matrix4.rotationZ(.5),
+            //padding: EdgeInsets.only(right: 540),
+            width: 300,
+            height: 700,
+            decoration: BoxDecoration(
+              color: Colors.brown[50],
+              //Theme.of(context).primaryColor,
+              // borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 20,
+                  offset: Offset(4, 10), // Shadow position
+                ),
+              ],
+            ),
+          ),
+          Container(
+            transform: Matrix4.rotationZ(.6),
+            //padding: EdgeInsets.only(right: 540),
+            width: 300,
+            height: 700,
+            //color: Theme.of(context).accentColor,
+            decoration: BoxDecoration(
+              color: Colors.brown[50],
+              //Theme.of(context).accentColor,
+             // borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 4,
+                  //offset: Offset(4, 8), // Shadow position
+                ),
+              ],
+            ),
+          ),
           Center(
             heightFactor: 2,
-            child: Image.asset('assets/icon.png'),
+           // child: Image.asset('assets/icon.png'),
           ),
           Stack(
             children: [
