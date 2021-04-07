@@ -82,5 +82,5 @@ class Assessment with ChangeNotifier{
     }
     return result.toString();
   }
-  }
+}
 

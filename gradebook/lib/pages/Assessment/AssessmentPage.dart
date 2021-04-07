@@ -110,7 +110,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   Widget getCatGrade(Category cat) {
 
-   // if(cat.equalWeights){
+    if(cat.equalWeights){
       double x = ((cat.gradePercentAsDecimal / cat.categoryWeight)* 100);
       var result;
       if(x % 1 == 0) {
@@ -119,24 +119,23 @@ class _AssessmentPageState extends State<AssessmentPage> {
         result = ((cat.gradePercentAsDecimal / cat.categoryWeight) * 100)
             .toStringAsFixed(2);
       }
-      return Row(
-        children: [
-          Text('Grade: ' + result.toString() + "%",
-            // Text( num.parse(((cat.gradePercentAsDecimal / cat.categoryWeight)* 100).toStringAsFixed(2)).toString(),
-            style: Theme.of(context).textTheme.headline5,
-          ),
-        ],
+      return Text('Grade: ' + result.toString() + "%",
+        // Text( num.parse(((cat.gradePercentAsDecimal / cat.categoryWeight)* 100).toStringAsFixed(2)).toString(),
+        style: Theme.of(context).textTheme.headline5,
       );
 
-    // } else {
-    //   return Text(
-    //     "${cat.earned}" + "/" + "${cat.total}",
-    //     style: Theme.of(context).textTheme.headline4,
-    //   );
-    // }
-  }
+    } else {
 
-  String toStringAsFixedNoZero(int n) =>
-      double.parse(n.toStringAsFixed(n)).toString();
+      var result = cat.getFormattedNumber((double.parse(cat.earned) / double.parse(cat.total)) * 100);
+
+      return Text('Grade: ' + result.toString() + "%",
+          style: Theme.of(context).textTheme.headline5,
+        );
+      //   Text(
+      //   "${cat.earned}" + "/" + "${cat.total}",
+      //   style: Theme.of(context).textTheme.headline4,
+      // );
+    }
+  }
 
 }

@@ -54,7 +54,7 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           Center(
             heightFactor: 2,
-           // child: Image.asset('assets/icon.png'),
+            child: Image.asset('assets/grade_a.png'),
           ),
           Stack(
             children: [
