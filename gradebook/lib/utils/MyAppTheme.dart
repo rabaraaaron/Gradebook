@@ -54,7 +54,24 @@ class MyAppTheme with ChangeNotifier{
 
     _themeList.add(
       AppTheme(
-        id: "dark_blue",
+          id: "bluegrey_dm",
+          description: 'white appbar, lightMode',
+          data: ThemeData(
+            accentColorBrightness: Brightness.dark,
+            accentColor: Colors.blueGrey[300],
+            primaryColor: Colors.blueGrey.shade600,
+            dividerColor: Colors.white,
+            brightness: Brightness.dark,
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(dark),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+
+    _themeList.add(
+      AppTheme(
+        id: "darkblue_lm",
         description: 'Dark Blue appbar, lightMode',
         data: ThemeData(
           primaryColor: Colors.blue[900],
@@ -214,7 +231,7 @@ class MyAppTheme with ChangeNotifier{
           data: ThemeData(
             primaryColor: Colors.brown[400],
             accentColor: Colors.brown[300],
-            dividerColor: Colors.brown,
+            dividerColor: Colors.black,
             brightness: Brightness.light,
             backgroundColor: Colors.brown[100],
             fontFamily: GoogleFonts.quicksand().toStringShort(),
@@ -230,11 +247,11 @@ class MyAppTheme with ChangeNotifier{
           data: ThemeData(
             primaryColor: Colors.brown[400],
             accentColor: Colors.brown[300],
-            dividerColor: Colors.brown,
+            dividerColor: Colors.white,
             brightness: Brightness.dark,
             backgroundColor: Colors.brown[100],
             fontFamily: GoogleFonts.quicksand().toStringShort(),
-            textTheme: getTextTheme(light),
+            textTheme: getTextTheme(dark),
             buttonColor: _appBarIconColor,
           )
       ),

@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
           centerTitle: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            color: Theme.of(context).dividerColor,
+            color: Colors.white,
             iconSize: 35,
             onPressed: (){
               Navigator.pop(context);
