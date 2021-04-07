@@ -2,15 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/Course.dart';
-import 'package:gradebook/model/Grade.dart';
-import 'package:gradebook/model/Term.dart';
-import 'package:gradebook/model/User.dart';
+
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/term_service.dart';
-import 'package:provider/provider.dart';
-import '../model/Category.dart';
-import 'assessment_service.dart';
-import 'user_service.dart';
+
 
 class CourseService {
   CollectionReference courseRef;
@@ -125,6 +120,7 @@ class CourseService {
       for(DocumentSnapshot category in categoriesSnap.docs){
         await CategoryService(termID, courseID).setEqualWeightsState(category.id, equalWeights);
       }
+      await CategoryService(termID, courseID).recalculateGrades();
     }
 
     await courseRef.doc(courseID).update({

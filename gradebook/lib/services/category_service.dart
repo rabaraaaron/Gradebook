@@ -291,4 +291,12 @@ class CategoryService {
     await CourseService(termID).calculateGrade(courseID);
   }
 
+  Future<void> recalculateGrades() async {
+    var categories = await categoryRef.get();
+    for(DocumentSnapshot cat in categories.docs){
+      await calculateGrade(cat.id);
+    }
+
+  }
+
 }
