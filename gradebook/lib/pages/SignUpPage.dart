@@ -11,9 +11,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   // From and page init state
-  String email = '';
-  String password = '';
-  String name = '';
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   String error = '';
 
   final AuthService _auth = AuthService();
@@ -35,6 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Column(
         children: [
           TextFormField(
+            controller: nameController,
             obscureText: false,
             style: Theme.of(context).textTheme.headline5,
             decoration: InputDecoration(
@@ -42,12 +43,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
             validator: (val) =>
                 ValidatorService().validateName(val),
-            onChanged: (val) =>
-                setState(() => name = val),
+
             onEditingComplete: handleSubmitted,
           ),
           SizedBox(height: 25.0),
           TextFormField(
+            controller: emailController,
             obscureText: false,
             style: Theme.of(context).textTheme.headline5,
             decoration: InputDecoration(
@@ -55,12 +56,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
             validator: (val) =>
                 ValidatorService().validateEmail(val),
-            onChanged: (val) =>
-                setState(() => email = val),
             onEditingComplete: handleSubmitted,
           ),
           SizedBox(height: 25.0),
           TextFormField(
+            controller: passwordController,
             obscureText: true,
             style: Theme.of(context).textTheme.headline5,
             decoration: InputDecoration(
@@ -69,8 +69,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
             validator: (val) =>
                 ValidatorService().validatePassword(val),
-            onChanged: (val) =>
-                setState(() => password = val),
             onEditingComplete: handleSubmitted,
           ),
           SizedBox(height: 25.0),
@@ -101,7 +99,10 @@ class _SignUpPageState extends State<SignUpPage> {
           setState(() => loading = true);
           dynamic result =
           await _auth.regEmailPass(
-              context, email, password, name);
+              context,
+              emailController.text,
+              passwordController.text,
+              nameController.text);
           if(result != null)
             Navigator.pop(context);
           loading = false;

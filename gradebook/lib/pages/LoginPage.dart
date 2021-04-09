@@ -16,14 +16,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  String email = '';
-  String password = '';
   String error = '';
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   final FocusScopeNode focusScopeNode = FocusScopeNode();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
 
   void handleSubmitted(){
@@ -37,28 +38,25 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           TextFormField(
+            controller: emailController,
             obscureText: false,
             style: Theme.of(context).textTheme.headline5,
             validator: (val) => ValidatorService().validateEmail(val),
             decoration: InputDecoration(
                 hintText: "Email",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-            onChanged: (val) {
-              setState(() => email = val);
-            },
             onEditingComplete: handleSubmitted,
           ),
           SizedBox(height: 25.0),
           TextFormField(
+            controller: passwordController,
             obscureText: true,
             style: Theme.of(context).textTheme.headline5,
             validator: (val) => ValidatorService().validatePassword(val),
             decoration: InputDecoration(
                 hintText: "Password",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
-            onChanged: (val) {
-              setState(() => password = val);
-            },
+
           )
         ],
       ),
@@ -84,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
         if (_formKey.currentState.validate()) {
           print("validation passed");
           setState(() => loading = true);
-          dynamic result = await _auth.signInEmailPass(context, email, password);
+          dynamic result = await _auth.signInEmailPass(
+              context, emailController.text, passwordController.text);
           if(result != null)
             Navigator.pop(context);
 
@@ -103,7 +102,12 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.all(18.0),
     );
 
-    final forgotPasswordButton = FlatButton(
+    final forgotPasswordButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.transparent,
+        onPrimary: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ),
       child: Text(
         "Forgot password?",
         style: Theme.of(context).textTheme.headline3,

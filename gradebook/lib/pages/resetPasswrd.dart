@@ -13,8 +13,9 @@ class ResetPassword extends StatefulWidget {
 
 class _resetPageState extends State<ResetPassword> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  String email = '';
   String error = '';
+
+  final TextEditingController emailController = TextEditingController();
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
@@ -24,28 +25,25 @@ class _resetPageState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     var emailField = TextFormField(
-
+      controller: emailController,
       obscureText: false,
       style: Theme.of(context).textTheme.headline6,
       validator: (val) => ValidatorService().validateEmail(val),
       decoration: InputDecoration(
           hintText: "Email",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
-      onChanged: (val) {
-        setState(() => email = val);
-      },
     );
 
     final submitButton = RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       child: SizedBox(
         width: 305.0,
-        height: 55.0,
+        height: 40.0,
 
         child: Center(
           child: Text(
             'Submit',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline2,
           ),
         ),
       ),
@@ -55,11 +53,11 @@ class _resetPageState extends State<ResetPassword> {
         if (_formKey.currentState.validate()) {
           print("validation passed");
           setState(() => loading = true);
-          dynamic successful = await _auth.resetPassword(context, email);
+          dynamic successful = await _auth.resetPassword(context, emailController.text);
           if (successful){
             Navigator.pop(context);
             _auth.displayMessage(context,
-                "Reset link has been sent to " + email,
+                "Reset link has been sent to " + emailController.text,
                 "Successful request");
           } else {
             setState(() { loading = false; });
@@ -104,6 +102,14 @@ class _resetPageState extends State<ResetPassword> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            iconSize: 35,
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
           title: Text(
             "Reset Password",
             style: Theme.of(context).textTheme.headline1,
