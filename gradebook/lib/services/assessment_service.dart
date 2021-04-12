@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:gradebook/model/Assessment.dart';
+import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/dueDateQuery.dart';
 
