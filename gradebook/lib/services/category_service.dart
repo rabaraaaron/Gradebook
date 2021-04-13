@@ -217,8 +217,10 @@ class CategoryService {
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
           if (assessments.length > 1) {
-            var droppedAssessmentID = assessments[i].id;
+            var droppedAssessmentID = assessments[0].id;
             // sortedByValue.remove(droppedAssessmentID);
+
+            assessments.remove(assessments[0]);
 
             DocumentReference docRef = categoryRef
                 .doc(catID)
@@ -287,9 +289,10 @@ class CategoryService {
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
           if (assessments.length > 1) {
-            var droppedAssessmentID = assessments[i].id;
+            var droppedAssessmentID = assessments[0].id;
             // var droppedAssessmentID = sortedByValue.firstKey();
             // sortedByValue.remove(droppedAssessmentID);
+            assessments.remove(assessments[0]);
 
             DocumentReference docRef = categoryRef
                 .doc(catID)
