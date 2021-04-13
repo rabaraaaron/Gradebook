@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'assessment_service.dart';
 import 'course_service.dart';
@@ -157,7 +158,7 @@ class CategoryService {
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
     QuerySnapshot assessmentsSnap =
         await categoryRef.doc(catID).collection('assessments').get();
-    SplayTreeMap map = new SplayTreeMap<String, double>();
+    Map map = new SplayTreeMap<String, double>();
     double gradePercentAsDecimal = 0,
         categoryTotalPoints = 0,
         categoryEarnedPoints = 0;
@@ -165,6 +166,7 @@ class CategoryService {
     double categoryWeight = categorySnap.get('weight');
     bool dropLowest = categorySnap.get('dropLowest');
     bool equalWeight = categorySnap.get('equalWeights');
+    List<DocumentSnapshot> assessments=[];
 
     print("EQUAL WEIGHT: " + equalWeight.toString());
 
@@ -185,6 +187,7 @@ class CategoryService {
 
         if (isCompleted) {
           if (totalPoints > 0) {
+            assessments.add(assessment);
             map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
             //this will be used only for equally wighted calc
           }
@@ -195,13 +198,27 @@ class CategoryService {
 
       //findLowest
       if (dropLowest && map.length > 1) {
-        var sortedByValue = new SplayTreeMap.from(
-            map, (key1, key2) => map[key1].compareTo(map[key2]));
+        assessments.sort((a,b){
+          double aScore = double.parse(a.get('yourPoints'))/double.parse(a.get('totalPoints'));
+          double bScore = double.parse(b.get('yourPoints'))/double.parse(b.get('totalPoints'));
+          if(aScore<bScore)
+            return -1;
+          else if(aScore>bScore)
+            return 1;
+          else
+            return 0;
+        });
+
+        // print(map.toString());
+        // var sortedByValue = new SplayTreeMap.from(
+        //     map, (key1, key2) => map[key1].compareTo(map[key2]));
+        // print(sortedByValue.toString());
+
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
-          if (sortedByValue.length > 1) {
-            var droppedAssessmentID = sortedByValue.firstKey();
-            sortedByValue.remove(droppedAssessmentID);
+          if (assessments.length > 1) {
+            var droppedAssessmentID = assessments[i].id;
+            // sortedByValue.remove(droppedAssessmentID);
 
             DocumentReference docRef = categoryRef
                 .doc(catID)
@@ -238,6 +255,7 @@ class CategoryService {
         bool isCompleted = assessment.get('isCompleted');
 
         if (isCompleted) {
+          assessments.add(assessment);
           print("Complete Check:" + isCompleted.toString());
           numCompleted++;
           double percent = yourPoints / totalPoints;
@@ -252,13 +270,26 @@ class CategoryService {
       print("Final sumPercent:" + sumPercents.toString());
 
       if (dropLowest && gradePercents.length > 1) {
+
+        assessments.sort((a,b){
+          double aScore = double.parse(a.get('yourPoints'))/double.parse(a.get('totalPoints'));
+          double bScore = double.parse(b.get('yourPoints'))/double.parse(b.get('totalPoints'));
+          if(aScore<bScore)
+            return -1;
+          else if(aScore>bScore)
+            return 1;
+          else
+            return 0;
+        });
+
         var sortedByValue = new SplayTreeMap.from(gradePercents,
             (key1, key2) => gradePercents[key1].compareTo(gradePercents[key2]));
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
-          if (sortedByValue.length > 1) {
-            var droppedAssessmentID = sortedByValue.firstKey();
-            sortedByValue.remove(droppedAssessmentID);
+          if (assessments.length > 1) {
+            var droppedAssessmentID = assessments[i].id;
+            // var droppedAssessmentID = sortedByValue.firstKey();
+            // sortedByValue.remove(droppedAssessmentID);
 
             DocumentReference docRef = categoryRef
                 .doc(catID)
