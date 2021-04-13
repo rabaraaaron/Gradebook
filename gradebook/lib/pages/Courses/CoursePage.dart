@@ -159,7 +159,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                 padding: new EdgeInsets.all(20.0),
                                 child: Text(
                                   "${classes[index].name}",
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headline6,
                                 ),
                               ),
                             ),

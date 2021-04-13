@@ -22,7 +22,7 @@ class DeleteCategoryConfirmation extends StatelessWidget{
           children: [
             Text(
               "Delete Category",
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline6,
             ),
             Divider(color: Theme.of(context).dividerColor,),
             Text(

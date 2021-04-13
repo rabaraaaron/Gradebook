@@ -324,24 +324,6 @@ class MyAppTheme with ChangeNotifier{
           )
       ),
     );
-
-    // _themeList.add(
-    //   AppTheme(
-    //       id: "grey",
-    //       description: 'grey, lightMode',
-    //
-    //       data: ThemeData(
-    //         primaryColor: Colors.grey[600],
-    //         accentColor: Colors.grey[700],
-    //         dividerColor: Colors.black,
-    //         brightness: Brightness.light,
-    //         backgroundColor: Colors.grey[400],
-    //         fontFamily: GoogleFonts.quicksand().toStringShort(),
-    //         textTheme: getTextTheme(light),
-    //         buttonColor: _appBarIconColor,
-    //       )
-    //   ),
-    // );
   }
 
 
@@ -365,15 +347,15 @@ class MyAppTheme with ChangeNotifier{
             color: Colors.black,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
-            fontSize: 30.0,
-            color: Colors.black,
+            fontSize: 15.0,
+            color: Colors.white,
             fontWeight: FontWeight.w300),
         headline5: TextStyle(
             fontSize: 20.0,
             color: Colors.black,
             fontWeight: FontWeight.w300),
         headline6: TextStyle(
-            fontSize: 25.0,
+            fontSize: 30.0,
             color: Colors.black,
             fontWeight: FontWeight.w300
         ),
@@ -403,7 +385,7 @@ class MyAppTheme with ChangeNotifier{
             color: Colors.white,
             fontWeight: FontWeight.w300),
         headline4: TextStyle(
-            fontSize: 30.0,
+            fontSize: 15.0,
             color: Colors.white,
             fontWeight: FontWeight.w300),
         headline5: TextStyle(
@@ -411,7 +393,7 @@ class MyAppTheme with ChangeNotifier{
             color: Colors.white,
             fontWeight: FontWeight.w300),
         headline6: TextStyle(
-            fontSize: 25.0,
+            fontSize: 30.0,
             color: Colors.white,
             fontWeight: FontWeight.w300
         ),

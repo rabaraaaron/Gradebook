@@ -30,6 +30,7 @@ class _TermsPageState extends State<TermsPage> {
   }
 }
 
+
 class TermsList extends StatefulWidget {
   @override
   _TermsListState createState() => _TermsListState();
@@ -120,7 +121,7 @@ class _TermsListState extends State<TermsList> {
                           padding: new EdgeInsets.all(20.0),
                           child: Text(
                             "${terms[index].name} ${terms[index].year}",
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
                       ),

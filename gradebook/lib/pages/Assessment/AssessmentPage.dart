@@ -55,12 +55,12 @@ class _AssessmentPageState extends State<AssessmentPage> {
             Expanded(
               child: Text(
                 "${cat.categoryName}",
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             //SizedBox(width: 20,),
             Text(cat.getFormattedNumber(cat.categoryWeight)+"%",
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ],
         ),
