@@ -276,8 +276,8 @@ class _AssessmentListState extends State<AssessmentList> {
               'channelID',
               'Local Notifications',
               'Scheduled alarm notification',
-              icon: 'icon',
-              largeIcon: DrawableResourceAndroidBitmap('icon'),
+              icon: 'img',
+              largeIcon: DrawableResourceAndroidBitmap('img'),
               importance: Importance.high
           );
 

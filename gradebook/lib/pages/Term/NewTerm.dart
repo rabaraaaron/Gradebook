@@ -19,7 +19,7 @@ class NewTerm extends StatefulWidget {
 class _NewTermState extends State<NewTerm> {
   var thisContext;
   var thisTerms;
-  var termYear;
+  var termYear = DateTime.now().year;
   var addedTerm;
   var checked = false;
   Form form;
@@ -44,7 +44,7 @@ class _NewTermState extends State<NewTerm> {
           ));
     }
     List<DropdownMenuItem> listOfYears = [];
-    for (var i = 2015; i <= DateTime.now().year; i++) {
+    for (var i = 2015; i <= DateTime.now().year + 1; i++) {
       listOfYears.insert(
           0,
           DropdownMenuItem(
