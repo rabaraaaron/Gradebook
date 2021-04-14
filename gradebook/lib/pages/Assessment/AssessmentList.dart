@@ -8,6 +8,7 @@ import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
 import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
+import 'package:gradebook/services/course_service.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -61,8 +62,9 @@ class _AssessmentListState extends State<AssessmentList> {
           dateOrGrade = yourPoints + " / " + totalPoints;
 
         } else{
+          //var h = element.dueDate.
           dateOrGrade =
-          DateFormat('MM-dd-yyyy').format(element.dueDate) ?? yourPoints + " / " + totalPoints;
+          DateFormat('M-d-yyyy, h:mm a').format(element.dueDate)?? yourPoints + " / " + totalPoints;
           //DateFormat('MM-dd-yyyy').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
           // element.dueDate,
 
@@ -90,19 +92,34 @@ class _AssessmentListState extends State<AssessmentList> {
         } else{
           r = Row(
             children: [
-              SizedBox(width: 10,),
+              SizedBox(
+                height: 60,
+                width: 10,),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
               Text(
                 element.name,
-                style: Theme.of(context).textTheme.bodyText1,),
-              SizedBox(width: 10,),
-              isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
-              //Text(element.createDate.toString()),
-              Expanded(child: Container(),),
-              Text(
-                dateOrGrade,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              SizedBox(width: 10, height: 60,),
+               //SizedBox(width: 10,),
+              //Text(element.createDate.toString()),
+              Row(
+                children: [
+                  Text('Due on: ',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  Text(
+                    dateOrGrade,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ],
+              ),
+              // SizedBox(width: 10, height: 60,),
+              ],),
+              Expanded(child: Container(),),
+
               IconButton(
                 icon: Icon(Icons.check),
                 color: Colors.white,
@@ -271,9 +288,9 @@ class _AssessmentListState extends State<AssessmentList> {
             iOS: iOSDetails,
           );
 
+          String courseName = await CourseService(termID).getCourseName(courseID);
 
-          String message1stHalf = 'Do ' + assignmentName + 'from ' + courseID;
-          //TODO: Get the name of the course
+          String message1stHalf = 'Do ' + assignmentName + 'from ' + courseName;
 
           if(!d.toLocal().isBefore(DateTime.now())){
 

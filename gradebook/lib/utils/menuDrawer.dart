@@ -7,7 +7,7 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle t = Theme.of(context).textTheme.headline4;
+    TextStyle t = Theme.of(context).textTheme.headline6;
 
     return Drawer(
       child: ListView(

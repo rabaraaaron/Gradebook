@@ -200,7 +200,6 @@ class _AssessmentCompletedState extends State<AssessmentCompleted> {
                   },
                   controller: totalPointsController,
                   inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                  onEditingComplete: handleSubmitted,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     hintText: "ex 100",

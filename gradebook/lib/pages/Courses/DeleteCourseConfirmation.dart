@@ -22,7 +22,7 @@ class DeleteCourseConfirmation extends StatelessWidget {
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(
           "Delete Course",
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headline6,
         ),
         Divider(
           color: Theme.of(context).dividerColor,

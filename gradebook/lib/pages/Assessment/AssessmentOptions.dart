@@ -43,9 +43,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
   Assessment assessment;
 
   String initialName;
+  DateTime dueDate;
   String initialDate;
   String initialYourPoints;
   String initialTotalPoints;
+  var initialTime;
   final _formKey = GlobalKey<FormState>();
 
   _AssessmentOptionsState(BuildContext bc, String termID, String courseID,
@@ -60,8 +62,14 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     initialDate = a.dueDate.month.toString()
         +'-'+a.dueDate.day.toString()
         + '-'+a.dueDate.year.toString();
-    initialYourPoints = a.yourPoints.toString();
-    initialTotalPoints = a.totalPoints.toString();
+    if(a.yourPoints > 0 ){
+      initialYourPoints = a.getFormattedNumber(a.yourPoints);
+    }
+    if(a.totalPoints > 0) {
+      initialTotalPoints = a.getFormattedNumber(a.totalPoints);
+    }
+    dueDate = a.dueDate;
+    initialTime = new TimeOfDay(hour: dueDate.hour, minute: dueDate.minute);
 
 
   }
@@ -75,6 +83,7 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
   TextEditingController totalPointsController;
   TextEditingController yourPointsController;
   TextEditingController dateController;
+  TextEditingController timeController;
 
   DateTime d = DateTime.now();
 
@@ -328,27 +337,11 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                       dateController.text = initialDate;
                       initialDate = null;
                     }
-                    showDatePicker(
-                      context: context,
-                      initialDate: d,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2025),
-                    ).then((v) {
-                      if(v == null){
-                        return null;
-                      } else{
-                        d = v;
-                        dateController = TextEditingController();
-                        setState(() {
-                          dateController.text = v.month.toString()+'-'+
-                              v.day.toString()+'-'+v.year.toString();
-                        });
-                      }
-                    });
-                  },
-                )
+                  }
+                ),
               ],
             ),
+            getDueTimeWidget(),
             Row(
               children: [
                 Switch(
@@ -388,6 +381,12 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
               }
 
               if(_formKey.currentState.validate()) {
+                d = new DateTime(
+                    d.year,
+                    d.month,
+                    d.day,
+                    initialTime.hour,
+                    initialTime.minute);
                 await assServ.updateAssessmentData(assessment, nameController.text, "0", "0", assignmentIsCompleted, d);
                 Navigator.pop(context);
               }
@@ -406,8 +405,63 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
     return CustomDialog(form: form, button: confirmButton, title: 'Assessment Options', context: context).show();
 
   }
-  Widget getExtraFormFields(){
 
+  Widget getDueTimeWidget(){
+    // if(dateController.text == ""){
+    //   return Container();
+    // }
+    timeController = new TextEditingController();
+    timeController.text = initialTime.format(context);
+        //DateFormat('h:mm a').format(dueDate).toString();
+
+    return Row(children: [
+      SizedBox(
+        width: 175,
+        child: TextFormField(
+          textAlign: TextAlign.center,
+          enabled: false,
+          readOnly: true,
+          controller: timeController,
+          decoration: const InputDecoration(
+              labelText: 'Due Time (optional)'
+          ),
+        ),
+      ),
+      IconButton(
+        iconSize: 40,
+        icon: Icon(Icons.access_time_outlined),
+        onPressed: () {
+          showTimePicker(
+            context: context,
+            initialTime: initialTime,
+            builder: (BuildContext context, Widget child) {
+              return MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(alwaysUse24HourFormat: false),
+                child: child,
+              );
+            },).then((v) {
+
+            if (v == null) {
+              return null;
+            } else {
+
+              dueDate = new DateTime(
+                  dueDate.year,
+                  dueDate.month,
+                  dueDate.day,
+                  v.hour,
+                  v.minute);
+              setState(() {
+                initialTime = v;
+                timeController.text = v.format(context).toString();
+              });
+            }
+          });
+        },
+      ),
+    ],
+    );
   }
 
 }

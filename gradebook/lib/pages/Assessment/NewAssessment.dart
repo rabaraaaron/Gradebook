@@ -4,6 +4,7 @@ import 'package:gradebook/services/assessment_service.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:gradebook/utils/customDialog.dart';
 import 'package:gradebook/utils/messageBar.dart';
+import 'package:gradebook/utils/timePicker.dart';
 
 import '../../services/category_service.dart';
 
@@ -36,6 +37,10 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
   String courseID;
   String categoryID;
 
+  var selectedTime;
+
+  var initialTime = TimeOfDay.now();
+
   _AssessmentPopUpState(BuildContext bc, String termID, String courseID, String categoryID){
     context = bc;
     this.termID = termID;
@@ -51,19 +56,22 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
   final name = TextEditingController();
   final totalPoints = TextEditingController();
   final yourPoints = TextEditingController();
-  final date = TextEditingController();
+  final dueDateController = TextEditingController();
+  final dueTimeController = TextEditingController();
   DateTime dueDate = DateTime.now();
 
 
   bool isCompleted = false;
   Form form;
   double dialogueHeight = 325;
-  double dialogueWidth = 150;
+  double dialogueWidth = 170;
   double buttonHeight = 50;
 
 
   @override
   Widget build(BuildContext context) {
+
+    //initialTime
 
     AssessmentService assServ =
     new AssessmentService(termID, courseID, categoryID);
@@ -228,7 +236,6 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                 MessageBar(context: context,
                     msg:"Please enter a name for the new assessment.",
                     title: "Required field").show();
-                //print("text is empty");
                 return 'Required field';
               }
               return null;
@@ -249,7 +256,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                   textAlign: TextAlign.center,
                   enabled: false,
                   readOnly: true,
-                  controller: date,
+                  controller: dueDateController,
                   decoration: const InputDecoration(
                       labelText: 'Due Date'
                   ),
@@ -270,7 +277,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                     } else{
                       dueDate = v;
                       setState(() {
-                        date.text = v.month.toString()+'-'+v.day.toString()+
+                        dueDateController.text = v.month.toString()+'-'+v.day.toString()+
                             '-'+v.year.toString();
                       });
                     }
@@ -279,25 +286,31 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
               )
             ],
           ),
-          Row(
-            children: [
-              Switch(
-                value: isCompleted,
-                activeColor: Theme.of(context).accentColor,
-                onChanged: (updateChecked) {
-                  setState(() {
-                    isCompleted = updateChecked;
-                  });
-                },
+              getDueTimeWidget(),
+
+              Row(
+                children: [
+                  Switch(
+                    value: isCompleted,
+                    activeColor: Theme.of(context).accentColor,
+                    onChanged: (updateChecked) {
+                      setState(() {
+                        isCompleted = updateChecked;
+                      });
+                      },
+                  ),
+                  Expanded(
+                      flex: 10,
+                      child: Text(
+                        "Assignment Completed",
+                        style: Theme.of(context).textTheme.headline3,
+                      )
+                  ),
+                ],
               ),
-              Expanded(flex: 10,
-                  child: Text(
-                      "Assignment Completed",
-                    style: Theme.of(context).textTheme.headline3,
-                  )),
-            ],
-          ),
-        ])),
+            ]
+            )
+        ),
       );
 
       addButton = SizedBox(
@@ -326,4 +339,58 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
     return CustomDialog(form: form, button: addButton, title: "Add Assessment", context: context).show();
   }
 
+  Widget getDueTimeWidget(){
+    if(dueDateController.text == ""){
+      return Container();
+    }
+
+    return Row(children: [
+      SizedBox(
+        width: 175,
+        child: TextFormField(
+          textAlign: TextAlign.center,
+          enabled: false,
+          readOnly: true,
+          controller: dueTimeController,
+          decoration: const InputDecoration(
+              labelText: 'Due Time (optional)'
+          ),
+        ),
+      ),
+      IconButton(
+        iconSize: 40,
+        icon: Icon(Icons.access_time_outlined),
+        onPressed: () {
+            showTimePicker(
+              context: context,
+              initialTime: initialTime,
+              builder: (BuildContext context, Widget child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context)
+                      .copyWith(alwaysUse24HourFormat: false),
+                  child: child,
+                );
+              },).then((v) {
+
+              if (v == null) {
+                return null;
+              } else {
+
+                dueDate = new DateTime(
+                    dueDate.year,
+                    dueDate.month,
+                    dueDate.day,
+                    v.hour,
+                    v.minute);
+                setState(() {
+                  initialTime = v;
+                  dueTimeController.text = v.format(context).toString();
+                });
+              }
+            });
+        },
+      ),
+    ],
+    );
+  }
 }

@@ -43,6 +43,7 @@ dependencies:
   flushbar: ^1.10.4
   intl: ^0.17.0
   sizer: ^1.1.8
+  date_format: ^2.0.2
 
 
 dev_dependencies:
@@ -73,6 +74,7 @@ flutter:
     - assets/Sun.png
     - assets/Flower.png
     - assets/grade_a.png
+    - assets/background.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
