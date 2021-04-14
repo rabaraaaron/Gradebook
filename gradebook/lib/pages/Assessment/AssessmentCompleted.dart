@@ -145,73 +145,76 @@ class _AssessmentCompletedState extends State<AssessmentCompleted> {
 
     form = Form(
       key: _formKey,
-      child: Column(children: [
-        SizedBox(height: 15,),
-        Text(assessment.name, style: Theme.of(context).textTheme.headline5,),
-        SizedBox(height: 5,),
+      child: FocusScope(
+        node: focusScopeNode,
+        child: Column(children: [
+          SizedBox(height: 15,),
+          Text(assessment.name, style: Theme.of(context).textTheme.headline5,),
+          SizedBox(height: 5,),
 
-        Row(
-          children: [
-            Expanded(
+          Row(
+            children: [
+              Expanded(
 
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    MessageBar(context: context,
-                        msg:"Please enter total points earned.",
-                        title: "Required field").show();
-                    return 'Required field';
-                  } else if (totalPointsController.text.isNotEmpty && double.parse(text) > double.parse(totalPointsController.text)){
-                    print('3333');
-                    MessageBar(context: context,
-                        msg:"Earned points cannot be greater than total points.",
-                        title: "Invalid input").show();
-                    return 'Invalid input';
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      MessageBar(context: context,
+                          msg:"Please enter total points earned.",
+                          title: "Required field").show();
+                      return 'Required field';
+                    } else if (totalPointsController.text.isNotEmpty && double.parse(text) > double.parse(totalPointsController.text)){
+                      print('3333');
+                      MessageBar(context: context,
+                          msg:"Earned points cannot be greater than total points.",
+                          title: "Invalid input").show();
+                      return 'Invalid input';
 
-                  }
-                  return null;
-                },
-                controller: yourPointsController,
-                inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                onEditingComplete: handleSubmitted,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: "ex 89.8",
-                  labelText: 'Points Earned',
+                    }
+                    return null;
+                  },
+                  controller: yourPointsController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                  onEditingComplete: handleSubmitted,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: "ex 89.8",
+                    labelText: 'Points Earned',
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 20,),
-            Expanded(
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    MessageBar(context: context,
-                        msg:"Please enter total points value for this assessment.",
-                        title: "Required field").show();
-                    //print("text is empty");
-                    return 'Required field';
-                  }
-                  return null;
-                },
-                controller: totalPointsController,
-                inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                onEditingComplete: handleSubmitted,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: "ex 100",
-                  labelText: 'Total Points',
+              SizedBox(width: 20,),
+              Expanded(
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      MessageBar(context: context,
+                          msg:"Please enter total points value for this assessment.",
+                          title: "Required field").show();
+                      //print("text is empty");
+                      return 'Required field';
+                    }
+                    return null;
+                  },
+                  controller: totalPointsController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                  onEditingComplete: handleSubmitted,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: "ex 100",
+                    labelText: 'Total Points',
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 15,),
-        //button,
+            ],
+          ),
+          SizedBox(height: 15,),
+          //button,
 
-      ]),
+        ]),
+      ),
     );
 
 

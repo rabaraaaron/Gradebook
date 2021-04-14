@@ -18,7 +18,8 @@ class UserService {
       'lastSignIn': DateTime.now(),
       'displayPhoto': photoUrl,
       'displayName': displayName,
-      'email': email
+      'email': email,
+      'window': 7
     },
 
     );
@@ -37,4 +38,15 @@ class UserService {
         photoUrl: snapshot.get('displayPhoto')
     );
   }
+
+  Future<int> getUserWindow(String uID) async{
+    DocumentSnapshot userDoc = await userCollection.doc(uID).get();
+    return userDoc.get('window');
+  }
+
+  Future<void> setUserWindow(String uID, int window) async{
+    DocumentSnapshot userDoc = await userCollection.doc(uID).get();
+    userCollection.doc(uID).update({'window': window});
+  }
+
 }

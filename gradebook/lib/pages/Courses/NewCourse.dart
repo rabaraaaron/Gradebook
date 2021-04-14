@@ -59,79 +59,83 @@ class _NewCourseState extends State<NewCourse> {
 
     form = Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(children: [
-            Row(
-              children: [
-                Expanded(
+        child: FocusScope(
+          node: focusScopeNode,
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Row(
+                children: [
+                  Expanded(
 
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    validator: (value){
-                      if(value == null || value.isEmpty) {
-                        MessageBar(context: context,
-                            msg:"Please enter a name for the new course.",
-                            title: "Required field").show();
-                        return 'Required field';
-                      } else {return null;}
-                    },
-                    controller: classTitleController,
-                    decoration: const InputDecoration(
-                      hintText: "ex CS 101",
-                      labelText: 'Course Title',
+                    child: TextFormField(
+                      autofocus: true,
+                      textAlign: TextAlign.center,
+                      validator: (value){
+                        if(value == null || value.isEmpty) {
+                          MessageBar(context: context,
+                              msg:"Please enter a name for the new course.",
+                              title: "Required field").show();
+                          return 'Required field';
+                        } else {return null;}
+                      },
+                      controller: classTitleController,
+                      decoration: const InputDecoration(
+                        hintText: "ex CS 101",
+                        labelText: 'Course Title',
+                      ),
+                      onEditingComplete: handleSubmitted,
                     ),
-                    onEditingComplete: handleSubmitted,
                   ),
-                ),
-                SizedBox(width: 20,),
-                Expanded(
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    controller: creditHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: "ex 4",
-                      labelText: 'Credit Hours',
+                  SizedBox(width: 20,),
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: creditHoursController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: "ex 4",
+                        labelText: 'Credit Hours',
+                      ),
+                      onEditingComplete: handleSubmitted,
                     ),
-                    onEditingComplete: handleSubmitted,
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Switch(
-                      value: passFail,
-                      activeColor: Theme.of(context).accentColor,
-                      onChanged: (updateChecked) {
-                        setState(() {
-                          passFail = updateChecked;
-                        });
-                      },
-                    ),
-                    Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Switch(
-                      value: equalWeights,
-                      activeColor: Theme.of(context).accentColor,
-                      onChanged: (updateChecked) {
-                        setState(() {
-                          equalWeights = updateChecked;
-                        });
-                      },
-                    ),
-                    Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
-                  ],
-                ),
-              ],
-            ),
-          ]),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Switch(
+                        value: passFail,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            passFail = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: equalWeights,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (updateChecked) {
+                          setState(() {
+                            equalWeights = updateChecked;
+                          });
+                        },
+                      ),
+                      Text("Equally Weighed \nAssessments", style: Theme.of(context).textTheme.headline3),
+                    ],
+                  ),
+                ],
+              ),
+            ]),
+          ),
         ));
 
     SizedBox addButton = SizedBox(

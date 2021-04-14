@@ -104,96 +104,99 @@ class _CourseOptionsState extends State<CourseOptions> {
     
     form = Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  initialValue: initialTitle,
-                  controller: courseTitleController,
-                  decoration: const InputDecoration(
-                    hintText: "ex CS 101",
-                    labelText: 'Course Title',
-                  ),
-                  validator: (value){
-                    if(value == null || value.isEmpty) {
-                      MessageBar(context: context,
-                          msg:"Please enter a name for the new course.",
-                          title: "Missing course title").show();
-                      return 'Required field';
-                    } else {return null;}
-                  },
-                  onEditingComplete: handleSubmitted,
-                  onTap: (){
-                    if(courseTitleController == null){
-                      courseTitleController = TextEditingController();
-                      courseTitleController.text = initialTitle;
-                      initialTitle = null;
-                      setState(() {
+      child: FocusScope(
+        node: focusScopeNode,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    initialValue: initialTitle,
+                    controller: courseTitleController,
+                    decoration: const InputDecoration(
+                      hintText: "ex CS 101",
+                      labelText: 'Course Title',
+                    ),
+                    validator: (value){
+                      if(value == null || value.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter a name for the new course.",
+                            title: "Missing course title").show();
+                        return 'Required field';
+                      } else {return null;}
+                    },
+                    onEditingComplete: handleSubmitted,
+                    onTap: (){
+                      if(courseTitleController == null){
+                        courseTitleController = TextEditingController();
+                        courseTitleController.text = initialTitle;
+                        initialTitle = null;
+                        setState(() {
 
-                      });
-                    }
+                        });
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    initialValue: initialCredits,
+                    controller: creditHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 4",
+                      labelText: 'Credit Hours',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                    onTap: (){
+                      if(creditHoursController == null){
+                        creditHoursController = TextEditingController();
+                        creditHoursController.text = initialCredits;
+                        initialCredits = null;
+                        setState(() {
+
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isPassFail,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isPassFail = updateChecked;
+                    });
                   },
                 ),
-              ),
-              SizedBox(width: 20,),
-              Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  initialValue: initialCredits,
-                  controller: creditHoursController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: "ex 4",
-                    labelText: 'Credit Hours',
-                  ),
-                  onEditingComplete: handleSubmitted,
-                  onTap: (){
-                    if(creditHoursController == null){
-                      creditHoursController = TextEditingController();
-                      creditHoursController.text = initialCredits;
-                      initialCredits = null;
-                      setState(() {
-
-                      });
-                    }
+                Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isEquallyWeighted,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isEquallyWeighted = updateChecked;
+                    });
                   },
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Switch(
-                value: isPassFail,
-                activeColor: Theme.of(context).accentColor,
-                onChanged: (updateChecked) {
-                  setState(() {
-                    isPassFail = updateChecked;
-                  });
-                },
-              ),
-              Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-            ],
-          ),
-          Row(
-            children: [
-              Switch(
-                value: isEquallyWeighted,
-                activeColor: Theme.of(context).accentColor,
-                onChanged: (updateChecked) {
-                  setState(() {
-                    isEquallyWeighted = updateChecked;
-                  });
-                },
-              ),
-              Text("Equally weighed \nAssignments",
-                  style: Theme.of(context).textTheme.headline3),
-            ],
-          ),
-        ]),
+                Text("Equally weighed \nAssignments",
+                    style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
 

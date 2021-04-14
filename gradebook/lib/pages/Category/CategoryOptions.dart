@@ -257,7 +257,7 @@ class _CategoryOptions extends State<CategoryOptions> {
               MessageBar(
                 context: context,
                 title: 'Required field',
-                msg: 'Please enter number of assessments to be drooped.',
+                msg: 'Please enter number of assessments to be dropped.',
               ).show();
               return 'Required field.';
             }

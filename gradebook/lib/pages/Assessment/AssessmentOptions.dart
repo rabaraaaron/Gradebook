@@ -97,134 +97,137 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       dialogueHeight = 155;
       form = Form(
         key: _formKey,
-        child: Column(children: [
-          TextFormField(
-            textAlign: TextAlign.center,
-            initialValue: initialName,
-            controller: nameController,
-            inputFormatters: [LengthLimitingTextInputFormatter(20)],
-            onEditingComplete: handleSubmitted,
-            onTap: (){
-              if(nameController == null){
-                nameController = TextEditingController();
-                nameController.text = initialName;
-                initialName = null;
-                setState(() { });
-              }
-            },
-            decoration: const InputDecoration(
-              hintText: "ex Quiz 1",
-              labelText: 'Assessment Title',
+        child: FocusScope(
+          node: focusScopeNode,
+          child: Column(children: [
+            TextFormField(
+              textAlign: TextAlign.center,
+              initialValue: initialName,
+              controller: nameController,
+              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+              onEditingComplete: handleSubmitted,
+              onTap: (){
+                if(nameController == null){
+                  nameController = TextEditingController();
+                  nameController.text = initialName;
+                  initialName = null;
+                  setState(() { });
+                }
+              },
+              decoration: const InputDecoration(
+                hintText: "ex Quiz 1",
+                labelText: 'Assessment Title',
+              ),
+              validator: (text) {
+                if (text == null || text.isEmpty) {
+                  MessageBar(context: context,
+                      msg:"Please enter a name for the new assessment.",
+                      title: "Required field").show();
+                  //print("text is empty");
+                  return 'Required field';
+                }
+                return null;
+              },
             ),
-            validator: (text) {
-              if (text == null || text.isEmpty) {
-                MessageBar(context: context,
-                    msg:"Please enter a name for the new assessment.",
-                    title: "Required field").show();
-                //print("text is empty");
-                return 'Required field';
-              }
-              return null;
-            },
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  initialValue: initialYourPoints,
-                  controller: yourPointsController,
-                  inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                  onEditingComplete: handleSubmitted,
-                  keyboardType: TextInputType.number,
-                  onTap: (){
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    initialValue: initialYourPoints,
+                    controller: yourPointsController,
+                    inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                    onEditingComplete: handleSubmitted,
+                    keyboardType: TextInputType.number,
+                    onTap: (){
 
-                    if(yourPointsController == null){
-                      yourPointsController = TextEditingController();
-                      yourPointsController.text = initialYourPoints;
-                      initialYourPoints = null;
-                      setState(() { });
-                    }
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "ex 89.8",
-                    labelText: 'Points Earned',
+                      if(yourPointsController == null){
+                        yourPointsController = TextEditingController();
+                        yourPointsController.text = initialYourPoints;
+                        initialYourPoints = null;
+                        setState(() { });
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "ex 89.8",
+                      labelText: 'Points Earned',
+                    ),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter total points earned.",
+                            title: "Required field").show();
+                        //print("text is empty");
+                        return 'Required field';
+                      } else if (totalPointsController.text.isNotEmpty && double.parse(text) > double.parse(totalPointsController.text)){
+                        print('3333');
+                        MessageBar(context: context,
+                            msg:"Earned points cannot be greater than total points.",
+                            title: "Invalid input").show();
+                        return 'Invalid input';
+
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      MessageBar(context: context,
-                          msg:"Please enter total points earned.",
-                          title: "Required field").show();
-                      //print("text is empty");
-                      return 'Required field';
-                    } else if (totalPointsController.text.isNotEmpty && double.parse(text) > double.parse(totalPointsController.text)){
-                      print('3333');
-                      MessageBar(context: context,
-                          msg:"Earned points cannot be greater than total points.",
-                          title: "Invalid input").show();
-                      return 'Invalid input';
+                ),
+                SizedBox(width: 20,),
 
-                    }
-                    return null;
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    initialValue: initialTotalPoints,
+                    controller: totalPointsController,
+                    inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                    onEditingComplete: handleSubmitted,
+                    keyboardType: TextInputType.number,
+                    onTap: (){
+
+                      if(totalPointsController == null){
+                        totalPointsController = TextEditingController();
+                        totalPointsController.text = initialTotalPoints;
+                        initialTotalPoints = null;
+                        setState(() { });
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "ex 100",
+                      labelText: 'Total Points',
+                    ),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter total points value for this assessment.",
+                            title: "Required field").show();
+                        //print("text is empty");
+                        return 'Required field';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                Switch(
+                  value: assignmentIsCompleted,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      assignmentIsCompleted = updateChecked;
+                    });
                   },
                 ),
-              ),
-              SizedBox(width: 20,),
-
-              Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  initialValue: initialTotalPoints,
-                  controller: totalPointsController,
-                  inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                  onEditingComplete: handleSubmitted,
-                  keyboardType: TextInputType.number,
-                  onTap: (){
-
-                    if(totalPointsController == null){
-                      totalPointsController = TextEditingController();
-                      totalPointsController.text = initialTotalPoints;
-                      initialTotalPoints = null;
-                      setState(() { });
-                    }
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "ex 100",
-                    labelText: 'Total Points',
-                  ),
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      MessageBar(context: context,
-                          msg:"Please enter total points value for this assessment.",
-                          title: "Required field").show();
-                      //print("text is empty");
-                      return 'Required field';
-                    }
-                    return null;
-                  },
+                Text(
+                    "Assignment Completed",
+                  style: Theme.of(context).textTheme.headline3,
                 ),
-              ),
-            ],
-          ),
-
-          Row(
-            children: [
-              Switch(
-                value: assignmentIsCompleted,
-                activeColor: Theme.of(context).accentColor,
-                onChanged: (updateChecked) {
-                  setState(() {
-                    assignmentIsCompleted = updateChecked;
-                  });
-                },
-              ),
-              Text(
-                  "Assignment Completed",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-            ],
-          ),
-        ]),
+              ],
+            ),
+          ]),
+        ),
       );
 
       confirmButton = SizedBox(
@@ -279,91 +282,94 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
       //dialogueHeight = 155;
       form = Form(
         key: _formKey,
-        child: Column(children: [
-          TextFormField(
-            textAlign: TextAlign.center,
-            initialValue: initialName,
-            controller: nameController,
-            inputFormatters: [LengthLimitingTextInputFormatter(20)],
-            onEditingComplete: handleSubmitted,
-            onTap: (){
-              if(nameController == null){
-                nameController = TextEditingController();
-                nameController.text = initialName;
-                initialName = null;
-                setState(() { });
-              }
-            },
-            decoration: const InputDecoration(
-              hintText: "ex Quiz 1",
-              labelText: 'Assessment Title',
+        child: FocusScope(
+          node: focusScopeNode,
+          child: Column(children: [
+            TextFormField(
+              textAlign: TextAlign.center,
+              initialValue: initialName,
+              controller: nameController,
+              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+              onEditingComplete: handleSubmitted,
+              onTap: (){
+                if(nameController == null){
+                  nameController = TextEditingController();
+                  nameController.text = initialName;
+                  initialName = null;
+                  setState(() { });
+                }
+              },
+              decoration: const InputDecoration(
+                hintText: "ex Quiz 1",
+                labelText: 'Assessment Title',
+              ),
             ),
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 175,
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  initialValue: initialDate,
-                  enabled: false,
-                  readOnly: true,
-                  controller: dateController,
-                  decoration: const InputDecoration(
-                      labelText: 'Due Date'
+            Row(
+              children: [
+                SizedBox(
+                  width: 175,
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    initialValue: initialDate,
+                    enabled: false,
+                    readOnly: true,
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                        labelText: 'Due Date'
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                iconSize: 40,
-                icon: Icon(Icons.date_range),
-                onPressed: (){
-                  if(dateController == null){
-                    dateController = TextEditingController();
-                    dateController.text = initialDate;
-                    initialDate = null;
-                  }
-                  showDatePicker(
-                    context: context,
-                    initialDate: d,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2025),
-                  ).then((v) {
-                    if(v == null){
-                      return null;
-                    } else{
-                      d = v;
+                IconButton(
+                  iconSize: 40,
+                  icon: Icon(Icons.date_range),
+                  onPressed: (){
+                    if(dateController == null){
                       dateController = TextEditingController();
-                      setState(() {
-                        dateController.text = v.month.toString()+'-'+
-                            v.day.toString()+'-'+v.year.toString();
-                      });
+                      dateController.text = initialDate;
+                      initialDate = null;
                     }
-                  });
-                },
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Switch(
-                value: assignmentIsCompleted,
-                activeColor: Theme.of(context).accentColor,
-                onChanged: (updateChecked) {
-                  setState(() {
-                    assignmentIsCompleted = updateChecked;
-                  });
-                },
-              ),
-              Expanded(flex: 10,
-                  child: Text(
-                      "Assignment Completed",
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-              ),
-            ],
-          ),
-        ]),
+                    showDatePicker(
+                      context: context,
+                      initialDate: d,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2025),
+                    ).then((v) {
+                      if(v == null){
+                        return null;
+                      } else{
+                        d = v;
+                        dateController = TextEditingController();
+                        setState(() {
+                          dateController.text = v.month.toString()+'-'+
+                              v.day.toString()+'-'+v.year.toString();
+                        });
+                      }
+                    });
+                  },
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: assignmentIsCompleted,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      assignmentIsCompleted = updateChecked;
+                    });
+                  },
+                ),
+                Expanded(flex: 10,
+                    child: Text(
+                        "Assignment Completed",
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                ),
+              ],
+            ),
+          ]),
+        ),
       );
 
       confirmButton = SizedBox(
