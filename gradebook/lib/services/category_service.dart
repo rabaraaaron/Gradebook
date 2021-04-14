@@ -158,7 +158,7 @@ class CategoryService {
     DocumentSnapshot categorySnap = await categoryRef.doc(catID).get();
     QuerySnapshot assessmentsSnap =
         await categoryRef.doc(catID).collection('assessments').get();
-    Map map = new SplayTreeMap<String, double>();
+
     double gradePercentAsDecimal = 0,
         categoryTotalPoints = 0,
         categoryEarnedPoints = 0;
@@ -188,8 +188,7 @@ class CategoryService {
         if (isCompleted) {
           if (totalPoints > 0) {
             assessments.add(assessment);
-            map.putIfAbsent(assessment.id, () => yourPoints / totalPoints);
-            //this will be used only for equally wighted calc
+
           }
         } else {
           numIncomplete++;
@@ -197,7 +196,7 @@ class CategoryService {
       }
 
       //findLowest
-      if (dropLowest && map.length > 1) {
+      if (dropLowest && assessments.length > 1) {
         assessments.sort((a,b){
           double aScore = double.parse(a.get('yourPoints'))/double.parse(a.get('totalPoints'));
           double bScore = double.parse(b.get('yourPoints'))/double.parse(b.get('totalPoints'));
@@ -209,10 +208,6 @@ class CategoryService {
             return 0;
         });
 
-        // print(map.toString());
-        // var sortedByValue = new SplayTreeMap.from(
-        //     map, (key1, key2) => map[key1].compareTo(map[key2]));
-        // print(sortedByValue.toString());
 
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
@@ -241,6 +236,8 @@ class CategoryService {
         gradePercentAsDecimal =
             categoryWeight * (categoryEarnedPoints / categoryTotalPoints);
       }
+      else
+        gradePercentAsDecimal = 0;
     }
 
     if (equalWeight) {
@@ -284,8 +281,6 @@ class CategoryService {
             return 0;
         });
 
-        var sortedByValue = new SplayTreeMap.from(gradePercents,
-            (key1, key2) => gradePercents[key1].compareTo(gradePercents[key2]));
 
         for (int i = 0; i < categorySnap.get('numberDropped'); i++) {
           if (assessments.length > 1) {

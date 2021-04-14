@@ -172,6 +172,9 @@ class CourseService {
     }else{
       gradePercent = courseGradeDecimal;
     }
+    if(allocatedWeight==0){
+      gradePercent=100;
+    }
 
        String letterGrade = getLetterGrade(gradePercent);
 
