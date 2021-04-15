@@ -132,7 +132,7 @@ class _TermOptionsState extends State<TermOptions> {
           color: Colors.transparent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
-            //TODO: send update to database
+            //TODO: send update to database --- (By Mohd) this is done but the switch for completed term is still not doing anything
             
             termService.updateTerm(term.termID, addedTerm, termYear);
             // print(addedTerm); To get the term name
