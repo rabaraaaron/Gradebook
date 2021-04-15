@@ -45,7 +45,7 @@ class UserService {
   }
 
   Future<void> setUserWindow(String uID, int window) async{
-    DocumentSnapshot userDoc = await userCollection.doc(uID).get();
+    //DocumentSnapshot userDoc = await userCollection.doc(uID).get();
     userCollection.doc(uID).update({'window': window});
   }
 

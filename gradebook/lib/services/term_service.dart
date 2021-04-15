@@ -66,6 +66,21 @@ class TermService {
     }));
   }
 
+  Future<void> updateTerm(termID, name, year) async {
+    print('updating term ' + name + year.toString());
+    // print(termsCollection
+    //     .where('name', isEqualTo: name)
+    //     .where('year', isEqualTo: year)
+    //     .get()
+    //     .then((value) {
+    //   String id = value.docs.first.id;
+      termsCollection.doc(termID).update({
+        "name" : name,
+        'year' : year,
+      });
+  }
+
+
   Future<void> calculateGPA (termID) async {
     QuerySnapshot courses = await termsCollection.doc(termID).collection('courses').get();
     double gpa = 0.0;

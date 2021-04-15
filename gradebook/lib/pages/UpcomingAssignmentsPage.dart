@@ -1,14 +1,9 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Assessment.dart';
-import 'package:gradebook/model/Category.dart';
-import 'package:gradebook/model/Course.dart';
-import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
 import 'package:gradebook/pages/loading.dart';
 import 'package:gradebook/services/assessment_service.dart';
@@ -26,7 +21,6 @@ class UpcomingAssignments extends StatefulWidget {
 
 
   @override
-  // ignore: non_constant_identifier_names
   Widget build(BuildContext context) {
 
   return Container();

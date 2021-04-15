@@ -32,7 +32,7 @@ class _TermOptionsState extends State<TermOptions> {
 
   @override
   Widget build(BuildContext context) {
-    TermService term = new TermService();
+    TermService termService = new TermService();
 
     List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
     List<DropdownMenuItem> listOfTerms = [];
@@ -133,11 +133,16 @@ class _TermOptionsState extends State<TermOptions> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
             //TODO: send update to database
+            
+            termService.updateTerm(term.termID, addedTerm, termYear);
             // print(addedTerm); To get the term name
             // print(termYear); To get the term year
             // print(isHypothetical); Bool for if this is a hypothetical term
             // await term.addTerm(addedTerm, termYear);
             // Navigator.pop(context);
+            Navigator.pop(context);
+            setState(() {});
+
           },
           child: Text("Confirm",  style: Theme.of(context).textTheme.headline3,)
       ),
