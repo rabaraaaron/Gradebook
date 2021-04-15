@@ -125,8 +125,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
       );
 
     } else {
-
-      var result = cat.getFormattedNumber((double.parse(cat.earned) / double.parse(cat.total)) * 100);
+      var result;
+      if(double.parse(cat.total) > 0) {
+        result = cat.getFormattedNumber(
+            (double.parse(cat.earned) / double.parse(cat.total)) * 100);
+      } else {
+        result = cat.getFormattedNumber(0);
+      }
 
       return Text('Grade: ' + result.toString() + "%",
           style: Theme.of(context).textTheme.headline5,

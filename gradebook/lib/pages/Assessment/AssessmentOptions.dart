@@ -337,6 +337,23 @@ class _AssessmentOptionsState extends State<AssessmentOptions> {
                       dateController.text = initialDate;
                       initialDate = null;
                     }
+                    showDatePicker(
+                      context: context,
+                      initialDate: dueDate,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2025),
+                    ).then((v) {
+                      if(v == null){
+                        return null;
+                      } else{
+                        dueDate = v;
+                        setState(() {
+                          d = v;
+                          dateController.text = v.month.toString()+'-'+v.day.toString()+
+                              '-'+v.year.toString();
+                        });
+                      }
+                    });
                   }
                 ),
               ],
