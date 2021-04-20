@@ -6,13 +6,13 @@ import 'package:gradebook/utils/customDialog.dart';
 
 // ignore: must_be_immutable
 class TermOptions extends StatefulWidget {
-  var termsList;
+  Term term;
 
   TermOptions(t) {
-    termsList = t;
+    term = t;
   }
   @override
-  _TermOptionsState createState() => _TermOptionsState(termsList);
+  _TermOptionsState createState() => _TermOptionsState(term);
 }
 
 class _TermOptionsState extends State<TermOptions> {
@@ -20,14 +20,16 @@ class _TermOptionsState extends State<TermOptions> {
   var termYear;
   var addedTerm;
   var isCompletedTerm = false;
+  // TODO: add isCompleted to terms
   Form form;
+  TextEditingController gpaController = TextEditingController();
 
   _TermOptionsState(t) {
     term = t;
     addedTerm = term.name;
     termYear = term.year;
     //TODO: add hypothetical field?
-    // this.isHypothetical = term.isHypothetical;
+    // isCompletedTerm = term.isCompletedTerm;
   }
 
   @override
@@ -53,76 +55,109 @@ class _TermOptionsState extends State<TermOptions> {
             value: i,
           ));
     }
-    form = Form(
-        child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
 
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButton(
-                        hint: Center(
-                          child: Text(
-                            "Term",
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ),
-                        value: addedTerm,
-                        items: listOfTerms,
-                        onChanged: (newTerm) {
-                          setState(() {
-                            addedTerm = newTerm;
-                          });
-                        },
-                        isExpanded: true,
-                      ),
-                    ),
-                    SizedBox(width: 20,),
-                    Expanded(
-                      child: DropdownButton(
-                        hint: Center(
-                          child: Text(
-                            "Year",
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ),
-                        onChanged: (newYear) {
-                          setState(() {
-                            termYear = newYear;
-                          });
-                        },
-                        value: termYear,
-                        isExpanded: true,
-                        items: listOfYears,
-                      ),
-                    ),
-                  ],
+    Container container = Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton(
+              hint: Center(
+                child: Text(
+                  "Term",
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
-
-              Row(
-                  children: [
-                    Switch(
-                      activeColor: Theme.of(context).accentColor,
-                      value: isCompletedTerm,
-                      onChanged: (updateisHypothetical) {
-                        setState(() {
-                          isCompletedTerm = updateisHypothetical;
-                        });
-                      },
-                    ),
-                    Text(
-                      "Completed term",
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                    SizedBox(height: 20,),
-                  ]
+              value: addedTerm,
+              items: listOfTerms,
+              onChanged: (newTerm) {
+                setState(() {
+                  addedTerm = newTerm;
+                });
+              },
+              isExpanded: true,
+            ),
+          ),
+          SizedBox(width: 20,),
+          Expanded(
+            child: DropdownButton(
+              hint: Center(
+                child: Text(
+                  "Year",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               ),
-            ]
-        )
+              onChanged: (newYear) {
+                setState(() {
+                  termYear = newYear;
+                });
+              },
+              value: termYear,
+              isExpanded: true,
+              items: listOfYears,
+            ),
+          ),
+        ],
+      ),
     );
+
+    Row row = Row(
+        children: [
+          Switch(
+            activeColor: Theme.of(context).accentColor,
+            value: isCompletedTerm,
+            onChanged: (updateisHypothetical) {
+              setState(() {
+                isCompletedTerm = updateisHypothetical;
+              });
+            },
+          ),
+          Text(
+            "Completed term",
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          SizedBox(height: 20,),
+        ]
+    );
+
+    TextFormField gpaFormField = TextFormField(
+      textAlign: TextAlign.center,
+      controller: gpaController,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        hintText: "ex 4.00",
+        labelText: 'Term GPA',
+      ),
+    );
+
+    SizedBox gpaBox = SizedBox(
+      width: 154.00,
+      child: gpaFormField,
+    );
+
+    if(isCompletedTerm) {
+      form = Form(
+          child: Column(
+              children: [
+                container,
+                row,
+                gpaBox,
+                SizedBox(height: 15,),
+              ]
+          )
+      );
+    } else{
+      form = Form(
+          child: Column(
+              children: [
+                container,
+                row,
+
+              ]
+          )
+      );
+    }
 
     SizedBox confirmButton = SizedBox(
       height: 50,
@@ -133,6 +168,7 @@ class _TermOptionsState extends State<TermOptions> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
             //TODO: send update to database --- (By Mohd) this is done but the switch for completed term is still not doing anything
+            //TODO: add isCompleted to the updateTerm method
             
             termService.updateTerm(term.termID, addedTerm, termYear);
             // print(addedTerm); To get the term name
