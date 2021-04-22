@@ -47,7 +47,7 @@ class _TermOptionsState extends State<TermOptions> {
           ));
     }
     List<DropdownMenuItem> listOfYears = [];
-    for (var i = 2015; i <= DateTime.now().year; i++) {
+    for (var i = 2015; i <= DateTime.now().year + 1; i++) {
       listOfYears.insert(
           0,
           DropdownMenuItem(
@@ -107,9 +107,9 @@ class _TermOptionsState extends State<TermOptions> {
           Switch(
             activeColor: Theme.of(context).accentColor,
             value: isCompletedTerm,
-            onChanged: (updateisHypothetical) {
+            onChanged: (updateIsHypothetical) {
               setState(() {
-                isCompletedTerm = updateisHypothetical;
+                isCompletedTerm = updateIsHypothetical;
               });
             },
           ),
