@@ -246,34 +246,37 @@ class _CategoryOptions extends State<CategoryOptions> {
 
     return Column(
       children: [
-        TextFormField(
-          textAlign: TextAlign.center,
-          controller: numberDroppedController,
-          initialValue: initialnumberDropped,
-          keyboardType: TextInputType.number,
-          validator:
-              (value) {
-            if (value == null || value.isEmpty) {
-              MessageBar(
-                context: context,
-                title: 'Required field',
-                msg: 'Please enter number of assessments to be dropped.',
-              ).show();
-              return 'Required field.';
-            }
-            return null;
-          },
-          onTap: () {
-            if (numberDroppedController == null) {
-              numberDroppedController = TextEditingController();
-              numberDroppedController.text = initialnumberDropped;
-              initialnumberDropped = null;
-              setState(() {});
-            }
-          },
-          decoration: const InputDecoration(
-            hintText: "ex 2",
-            labelText: 'Number of dropped assessments.',
+        SizedBox(
+          width: 155,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            controller: numberDroppedController,
+            initialValue: initialnumberDropped,
+            keyboardType: TextInputType.number,
+            validator:
+                (value) {
+              if (value == null || value.isEmpty) {
+                MessageBar(
+                  context: context,
+                  title: 'Required field',
+                  msg: 'Please enter number of assessments to be dropped.',
+                ).show();
+                return 'Required field.';
+              }
+              return null;
+            },
+            onTap: () {
+              if (numberDroppedController == null) {
+                numberDroppedController = TextEditingController();
+                numberDroppedController.text = initialnumberDropped;
+                initialnumberDropped = null;
+                setState(() {});
+              }
+            },
+            decoration: const InputDecoration(
+              hintText: "ex 2",
+              labelText: 'Number of dropped assessments.',
+            ),
           ),
         ),
         SizedBox(height: 10,),

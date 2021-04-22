@@ -21,13 +21,18 @@ class _NewTermState extends State<NewTerm> {
   var thisTerms;
   var termYear = DateTime.now().year;
   var addedTerm;
-  var checked = false;
+  var termIsCompleted = false;
   Form form;
+  TextEditingController gpaController = TextEditingController();
+
+
 
   _NewTermState(context, terms) {
     thisContext = context;
     thisTerms = terms;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,75 +58,111 @@ class _NewTermState extends State<NewTerm> {
           ));
     }
 
-    form = Form(
-        child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButton(
-                        hint: Center(
-                          child: Text(
-                            "Term",
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ),
-                        value: addedTerm,
-                        items: listOfTerms,
-                        onChanged: (newTerm) {
-                          setState(() {
-                            addedTerm = newTerm;
-                          });
-                        },
-                        isExpanded: true,
-                      ),
-                    ),
-                    SizedBox(width: 20,),
-                    Expanded(
-                      child: DropdownButton(
-                        hint: Center(
-                          child: Text(
-                            "Year",
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ),
-                        onChanged: (newYear) {
-                          setState(() {
-                            termYear = newYear;
-                          });
-                        },
-                        value: termYear,
-                        isExpanded: true,
-                        items: listOfYears,
-                      ),
-                    ),
-                  ],
+    Container container = Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton(
+              hint: Center(
+                child: Text(
+                  "Term",
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
-
-              Row(
-                  children: [
-                    Switch(
-                      activeColor: Theme.of(context).accentColor,
-                      value: checked,
-                      onChanged: (updateChecked) {
-                        setState(() {
-                          checked = updateChecked;
-                        });
-                      },
-                    ),
-                    Text(
-                      "Completed term",
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                    SizedBox(height: 20,),
-                  ]
+              value: addedTerm,
+              items: listOfTerms,
+              onChanged: (newTerm) {
+                setState(() {
+                  addedTerm = newTerm;
+                });
+              },
+              isExpanded: true,
+            ),
+          ),
+          SizedBox(width: 20,),
+          Expanded(
+            child: DropdownButton(
+              hint: Center(
+                child: Text(
+                  "Year",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               ),
-            ]
-        )
+              onChanged: (newYear) {
+                setState(() {
+                  termYear = newYear;
+                });
+              },
+              value: termYear,
+              isExpanded: true,
+              items: listOfYears,
+            ),
+          ),
+        ],
+      ),
     );
+
+    TextFormField gpaFormField = TextFormField(
+      textAlign: TextAlign.center,
+      controller: gpaController,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        hintText: "ex 4.00",
+        labelText: 'Term GPA',
+      ),
+    );
+
+    SizedBox gpaBox = SizedBox(
+      width: 155.00,
+      child: gpaFormField,
+    );
+
+
+    Row row = Row(
+        children: [
+          Switch(
+            activeColor: Theme.of(context).accentColor,
+            value: termIsCompleted,
+            onChanged: (updatetermIsCompleted) {
+              setState(() {
+                termIsCompleted = updatetermIsCompleted;
+              });
+            },
+          ),
+          Text(
+            "Completed term",
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          SizedBox(height: 20,),
+        ]
+    );
+
+
+    if(termIsCompleted){
+      form = Form(
+          child: Column(
+              children: [
+                container,
+                row,
+                gpaBox,
+                SizedBox(height: 15,)
+              ]
+          )
+      );
+
+    } else{
+      form = Form(
+          child: Column(
+              children: [
+                container,
+                row,
+              ]
+          )
+      );
+    }
+
+
 
     SizedBox addButton = SizedBox(
       height: 50,
@@ -132,6 +173,7 @@ class _NewTermState extends State<NewTerm> {
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
+            //TODO: add termIsComplete to the addTerm method
             await term.addTerm(addedTerm, termYear);
             Navigator.pop(context);
           },
