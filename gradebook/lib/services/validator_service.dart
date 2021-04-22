@@ -68,4 +68,35 @@ class ValidatorService {
     }
   }
 
+  /// validateRepeatPassword
+  ///
+  /// @param String newPassword : value from the text input
+  /// @param String repeatedPassword:
+  /// @return String : error message if invalid, null if valid
+  ///
+  String validateRepeatPassword(String newPassword, String repeatedPassword){
+
+    if(repeatedPassword.isEmpty){
+      return "Enter a password.";
+    }
+    if(repeatedPassword == newPassword){
+      return null;
+    } else{
+      return "Password does not match.";
+    }
+
+  }
+  String validateCurrentPassword(String value){
+
+    if(value.isEmpty){
+      return "Enter the current password.";
+    }
+    // if(repeatedPassword == newPassword){
+    //   return null;
+     else{
+      return null;
+    }
+
+  }
+
 }

@@ -7,7 +7,7 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle t = Theme.of(context).textTheme.headline6;
+    TextStyle t = Theme.of(context).textTheme.headline5;
 
     return Drawer(
       child: ListView(
@@ -23,7 +23,13 @@ class MenuDrawer extends StatelessWidget {
             }
           ),
           Divider(thickness: .5,),
-          ListTile(title: Text("Membership", style: t,),),
+          ListTile(
+            title: Text("Account Management", style: t,),
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/AccountManagement');
+              }
+          ),
           Divider(thickness: .5,),
           ListTile(
               title: Text(

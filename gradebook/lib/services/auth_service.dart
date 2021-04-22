@@ -54,6 +54,19 @@ class AuthService {
       return null;
     }
   }
+  Future<bool> validatePassword(String password) async{
+    var firebaseUser = _auth.currentUser;
+    var autCredential = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    try {
+      var authResult = await firebaseUser.reauthenticateWithCredential(
+          autCredential);
+
+    return authResult.user != null;
+    } catch (err){
+      print(err.toString() + " ------------");
+      return false;
+    }
+  }
 
   // sign out
   Future signOut(context) async{
@@ -92,5 +105,13 @@ class AuthService {
     ).show(context);
 
   }
+
+  Future<void> updateUserPassword(String newPassword) async{
+   await _auth.currentUser.updatePassword(newPassword);
+  }
+
+  // User getCurrentUser(){
+  //   return _auth.currentUser;
+  // }
 
 }

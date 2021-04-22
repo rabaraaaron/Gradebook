@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradebook/services/auth_service.dart';
 
 class UserService {
 
@@ -47,6 +48,10 @@ class UserService {
   Future<void> setUserWindow(String uID, int window) async{
     //DocumentSnapshot userDoc = await userCollection.doc(uID).get();
     userCollection.doc(uID).update({'window': window});
+  }
+
+  Future<bool> validateCurrentPassword(String password) async {
+    return await AuthService().validatePassword(password);
   }
 
 }
