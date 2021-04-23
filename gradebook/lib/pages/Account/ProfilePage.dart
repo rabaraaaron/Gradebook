@@ -119,7 +119,7 @@ class ProfileView extends StatelessWidget {
                             SizedBox(height: 10,),
                           ],
                         ),
-                        SizedBox(width: 20,),
+                        SizedBox(width: 10,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -35,10 +35,44 @@ class MyAppTheme with ChangeNotifier{
     // );
     bool dark = false;
     bool light = true;
+
+
     _themeList.add(
       AppTheme(
           id: "my_default",
-          description: 'white appbar, lightMode',
+          description: 'deep_orange, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.deepOrange[200],
+            accentColor: Colors.deepOrange[400],
+            dividerColor: Colors.black,
+            brightness: Brightness.light,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(light),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+    _themeList.add(
+      AppTheme(
+          id: 'deep_orange_lm',
+          description: 'deepOrange, lightMode',
+          data: ThemeData(
+            primaryColor: Colors.deepOrange[300],
+            accentColor: Colors.deepOrange[400],
+            dividerColor: Colors.white,
+            brightness: Brightness.dark,
+            backgroundColor: Colors.grey[400],
+            fontFamily: GoogleFonts.quicksand().toStringShort(),
+            textTheme: getTextTheme(dark),
+            buttonColor: _appBarIconColor,
+          )
+      ),
+    );
+    _themeList.add(
+      AppTheme(
+          id: "bluegrey_dm",
+          description: 'white appbar, darkMode',
           data: ThemeData(
             accentColorBrightness: Brightness.dark,
             accentColor: Colors.blueGrey[300],
@@ -54,7 +88,7 @@ class MyAppTheme with ChangeNotifier{
 
     _themeList.add(
       AppTheme(
-          id: "bluegrey_dm",
+          id: "bluegrey_lm",
           description: 'white appbar, lightMode',
           data: ThemeData(
             accentColorBrightness: Brightness.dark,
@@ -291,39 +325,6 @@ class MyAppTheme with ChangeNotifier{
       ),
     );
 
-    _themeList.add(
-      AppTheme(
-          id: "deep_orange_light",
-          description: 'deep_orange, lightMode',
-          data: ThemeData(
-            primaryColor: Colors.deepOrange[200],
-            accentColor: Colors.deepOrange[400],
-            dividerColor: Colors.black,
-            brightness: Brightness.light,
-            backgroundColor: Colors.grey[400],
-            fontFamily: GoogleFonts.quicksand().toStringShort(),
-            textTheme: getTextTheme(light),
-            buttonColor: _appBarIconColor,
-          )
-      ),
-    );
-
-    _themeList.add(
-      AppTheme(
-          id: "deep_orange_dark",
-          description: 'deepOrange, darkMode',
-          data: ThemeData(
-            primaryColor: Colors.deepOrange[200],
-            accentColor: Colors.deepOrange[400],
-            dividerColor: Colors.white,
-            brightness: Brightness.dark,
-            backgroundColor: Colors.grey[400],
-            fontFamily: GoogleFonts.quicksand().toStringShort(),
-            textTheme: getTextTheme(dark),
-            buttonColor: _appBarIconColor,
-          )
-      ),
-    );
   }
 
 
