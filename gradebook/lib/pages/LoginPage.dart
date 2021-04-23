@@ -26,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool validEmailOrUsername = true;
+
 
   void handleSubmitted(){
     focusScopeNode.nextFocus();
@@ -41,9 +43,10 @@ class _LoginPageState extends State<LoginPage> {
             controller: emailController,
             obscureText: false,
             style: Theme.of(context).textTheme.headline5,
-            validator: (val) => ValidatorService().validateEmail(val),
+            //validator: (val) => ValidatorService().validateEmailOrUsername(val),
             decoration: InputDecoration(
-                hintText: "Email",
+                errorText: validEmailOrUsername ? null: "Invalid username/email",
+                hintText: "Email or username",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
             onEditingComplete: handleSubmitted,
           ),
@@ -79,7 +82,11 @@ class _LoginPageState extends State<LoginPage> {
       color: Theme.of(context).primaryColor,
 
       onPressed: () async {
-        if (_formKey.currentState.validate()) {
+
+        validEmailOrUsername = await ValidatorService().validateEmailOrUsername(emailController.text);
+
+
+        if (_formKey.currentState.validate() && validEmailOrUsername) {
           print("validation passed");
           setState(() => loading = true);
           dynamic result = await _auth.signInEmailPass(

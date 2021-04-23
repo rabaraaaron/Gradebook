@@ -89,8 +89,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.0)),
                   errorText: checkCurrentPasswordValid ? null : "Please double check your current password",
                 ),
-                // validator: (val) =>
-                //     ValidatorService().validateCurrentPassword(val),
 
                 onEditingComplete: handleSubmitted,
               ),

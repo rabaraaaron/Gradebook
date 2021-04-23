@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/pages/Account/ChangePasswordPage.dart';
+import 'package:gradebook/pages/Account/ProfilePage.dart';
 
 class AccountManagement extends StatelessWidget {
   @override
@@ -86,7 +87,7 @@ class AccountManagement extends StatelessWidget {
             ),
               children: [
                 //todo: implement profile image add/update
-                ChangePasswordPage(), // this is only for testing the scrollable view of the page and it should be changed later.
+                ProfilePage(), // this is only for testing the scrollable view of the page and it should be changed later.
               ],
 
             )

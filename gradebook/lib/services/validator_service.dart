@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ValidatorService {
 
   /// validateEmail
@@ -97,6 +99,34 @@ class ValidatorService {
       return null;
     }
 
+  }
+
+  Future<bool> usernameCheck(String username) async {
+    final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+
+    final result = await userCollection
+        .where('username', isEqualTo: username).get();
+
+    return result.size == 0;
+  }
+  Future<bool> validateEmailOrUsername(String value) async{
+    bool usernameNotFound =  await usernameCheck(value);
+
+    // Check if empty
+    if (value.isEmpty) {
+      // The form is empty
+      return false;
+    }
+
+    // Regex Check
+    var regex = "^[a-zA-Z0-9.!#\%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$";
+    RegExp regExp = new RegExp(regex);
+    if (regExp.hasMatch(value) || !usernameNotFound) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 }

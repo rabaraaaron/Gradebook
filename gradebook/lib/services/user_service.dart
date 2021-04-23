@@ -13,13 +13,14 @@ class UserService {
   UserService({this.uid});
 
   // Update User Document
-  Future updateUserDocument(uidInput, email, {displayName, photoUrl}) async {
+  Future updateUserDocument(uidInput, email, username, {displayName, photoUrl}) async {
     await userCollection.doc(uid).set({
       'uid': uidInput,
       'lastSignIn': DateTime.now(),
       'displayPhoto': photoUrl,
       'displayName': displayName,
       'email': email,
+      'username': username,
       'window': 7
     },
 
@@ -36,7 +37,8 @@ class UserService {
         uid: FirebaseAuth.instance.currentUser.uid,
         email: snapshot.get('email'),
         displayName: snapshot.get('displayName'),
-        photoUrl: snapshot.get('displayPhoto')
+        photoUrl: snapshot.get('displayPhoto'),
+        username: snapshot.get('username'),
     );
   }
 
@@ -52,6 +54,16 @@ class UserService {
 
   Future<bool> validateCurrentPassword(String password) async {
     return await AuthService().validatePassword(password);
+  }
+
+  Future<String> getUserName(uID) async{
+    DocumentSnapshot userDoc = await userCollection.doc(uID).get();
+    return userDoc.get('username');
+  }
+
+  Future<String> getDisplayName(String uID) async{
+    DocumentSnapshot userDoc = await userCollection.doc(uID).get();
+    return userDoc.get('displayName');
   }
 
 }

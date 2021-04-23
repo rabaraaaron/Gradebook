@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/services/user_service.dart';
+import 'package:gradebook/services/validator_service.dart';
 
 
 
@@ -11,7 +13,13 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // Create user obj based on FirebaseUser
   GradeBookUser _userFromFirebaseUser(User user) {
-    return user != null ? GradeBookUser(uid: user.uid, email: user.email, photoUrl: user.photoURL, displayName: user.displayName) : null;
+    //print('dispaly name : ' + user.displayName);
+    return user != null ? GradeBookUser(
+        uid: user.uid,
+        email: user.email,
+        photoUrl: user.photoURL,
+        displayName: user.displayName,
+    ) : null;
   }
 
   // auth change user stream
@@ -22,9 +30,25 @@ class AuthService {
 
 
   // sign in with email & password
-  Future signInEmailPass (context, String email, String password) async {
+  Future signInEmailPass (context, String username, String password) async {
+
+    bool isEmail = false;
+    if(ValidatorService().validateEmail(username) == null){
+      isEmail = true;
+    }
+
     try{
-      User user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
+      User user;
+
+      if(isEmail) {
+        user = (await _auth.signInWithEmailAndPassword(
+            email: username, password: password)).user;
+      } else {
+        String userEmail = await getUserEmail(username);
+
+        user = (await _auth.signInWithEmailAndPassword(
+            email: userEmail, password: password)).user;
+      }
 
       // User profile
       return _userFromFirebaseUser(user);
@@ -38,13 +62,45 @@ class AuthService {
      }
   }
 
+  Future<String> getUserEmail(String username) async{
+
+  final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+  String email;
+
+  final userSnap = await userCollection
+      .where('username', isEqualTo: username).get();
+  List<QueryDocumentSnapshot> test = userSnap.docs;
+
+  for(QueryDocumentSnapshot  snapshot in test){
+    if( snapshot.get('username') == username){
+      email = snapshot.get('email');
+    }
+  }
+
+  return email;
+}
+
   // register with email & password
-  Future regEmailPass (context, String email, String password, String displayName) async {
+  Future regEmailPass (context, String email, String password, String displayName, String username) async {
     try{
       User user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
-      // User profile
-      await UserService(uid: user.uid).updateUserDocument(user.uid, user.email, displayName: displayName);
+      // User
+      if(username.isEmpty) {
+        await UserService(uid: user.uid).updateUserDocument(
+            user.uid,
+            user.email,
+            user.email, //<<--- Default value: set the username as email if the user didn't enter a username.
+            displayName: displayName);
+      } else {
+        await UserService(uid: user.uid).updateUserDocument(
+            user.uid,
+            user.email,
+            username,
+            displayName: displayName);
+      }
+
+
       return _userFromFirebaseUser(user);
     }
     catch(e){
@@ -62,8 +118,8 @@ class AuthService {
           autCredential);
 
     return authResult.user != null;
-    } catch (err){
-      print(err.toString() + " ------------");
+    } catch (e){
+      print(e.toString() + " ------------");
       return false;
     }
   }
@@ -109,9 +165,5 @@ class AuthService {
   Future<void> updateUserPassword(String newPassword) async{
    await _auth.currentUser.updatePassword(newPassword);
   }
-
-  // User getCurrentUser(){
-  //   return _auth.currentUser;
-  // }
 
 }
