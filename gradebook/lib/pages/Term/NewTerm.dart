@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/customDialog.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 
 // ignore: must_be_immutable
@@ -25,17 +26,15 @@ class _NewTermState extends State<NewTerm> {
   Form form;
   TextEditingController gpaController = TextEditingController();
 
-
-
   _NewTermState(context, terms) {
     thisContext = context;
     thisTerms = terms;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
     TermService term = new TermService();
 
     List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
@@ -59,7 +58,7 @@ class _NewTermState extends State<NewTerm> {
     }
 
     Container container = Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(top: 10),
       child: Row(
         children: [
           Expanded(
@@ -104,9 +103,22 @@ class _NewTermState extends State<NewTerm> {
     );
 
     TextFormField gpaFormField = TextFormField(
+      autofocus: true,
       textAlign: TextAlign.center,
       controller: gpaController,
       keyboardType: TextInputType.number,
+      validator:
+          (value) {
+        if (value == null || value.isEmpty || double.tryParse(value) == null) {
+          MessageBar(
+            context: context,
+            title: 'Invalid Term GPA',
+            msg: 'Please enter a valid Term GPA.',
+          ).show();
+          return 'Required field.';
+        }
+        return null;
+      },
       decoration: const InputDecoration(
         hintText: "ex 4.00",
         labelText: 'Term GPA',
@@ -114,7 +126,6 @@ class _NewTermState extends State<NewTerm> {
     );
 
     SizedBox gpaBox = SizedBox(
-      width: 155.00,
       child: gpaFormField,
     );
 
@@ -124,35 +135,36 @@ class _NewTermState extends State<NewTerm> {
           Switch(
             activeColor: Theme.of(context).accentColor,
             value: termIsCompleted,
-            onChanged: (updatetermIsCompleted) {
+            onChanged: (updateTermIsCompleted) {
               setState(() {
-                termIsCompleted = updatetermIsCompleted;
+                termIsCompleted = updateTermIsCompleted;
               });
             },
           ),
           Text(
-            "Completed term",
+            "Manually enter GPA",
             style: Theme.of(context).textTheme.headline3,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
         ]
     );
 
 
     if(termIsCompleted){
       form = Form(
+        key: _formKey,
           child: Column(
               children: [
                 container,
-                row,
                 gpaBox,
-                SizedBox(height: 15,)
+                row,
               ]
           )
       );
 
     } else{
       form = Form(
+        key: _formKey,
           child: Column(
               children: [
                 container,
@@ -173,9 +185,12 @@ class _NewTermState extends State<NewTerm> {
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
           onPressed: () async {
-            //TODO: add termIsComplete to the addTerm method
-            await term.addTerm(addedTerm, termYear);
-            Navigator.pop(context);
+            //TODO: add manually entered term gpa to database using gpaController.text
+            if(_formKey.currentState.validate()){
+              await term.addTerm(addedTerm, termYear);
+              Navigator.pop(context);
+            }
+
           },
           child: Text("Add",  style: Theme.of(context).textTheme.headline3,)
       ),
