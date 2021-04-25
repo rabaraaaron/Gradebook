@@ -4,6 +4,7 @@ import 'package:gradebook/model/Category.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/category_service.dart';
+import 'package:gradebook/utils/calculator.dart';
 import 'package:gradebook/utils/customDialog.dart';
 import 'package:gradebook/utils/messageBar.dart';
 
@@ -25,6 +26,7 @@ class CategoryOptions extends StatefulWidget {
 
 class _CategoryOptions extends State<CategoryOptions> {
   // ignore: non_constant_identifier_names
+  Term term;
   bool dropLowest;
   Category c;
   String addedCategory;
@@ -33,6 +35,7 @@ class _CategoryOptions extends State<CategoryOptions> {
   bool equalWeights;
   Course course;
   Form form;
+  Calculator calculator;
 
   CategoryService categoryService;
 
@@ -41,7 +44,9 @@ class _CategoryOptions extends State<CategoryOptions> {
 
     this.course = course;
     this.c = c;
+    this.term = term;
     categoryService = new CategoryService(term.termID, course.id);
+    calculator = new Calculator();
     addedCategory = c.categoryName;
     initialWeight = c.categoryWeight.toString();
     initialnumberDropped = c.numberDropped.toString();
@@ -222,7 +227,7 @@ class _CategoryOptions extends State<CategoryOptions> {
                 numberDroppedController.text,
                 equalWeights,
                 c.id);
-            await categoryService.calculateGrade(c.id);
+            await calculator.calcCategoryGrade(term.termID, course.id, c.id);
 
             Navigator.pop(context);
           }

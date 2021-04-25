@@ -5,6 +5,7 @@ import 'package:gradebook/model/Course.dart';
 
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/term_service.dart';
+import 'package:gradebook/utils/calculator.dart';
 
 
 class CourseService {
@@ -119,8 +120,9 @@ class CourseService {
       QuerySnapshot categoriesSnap = await courseRef.doc(courseID).collection('categories').get();
       for(DocumentSnapshot category in categoriesSnap.docs){
         await CategoryService(termID, courseID).setEqualWeightsState(category.id, equalWeights);
+        await Calculator().recalculateGrades(termID,courseID);
       }
-      await CategoryService(termID, courseID).recalculateGrades();
+
     }
 
     await courseRef.doc(courseID).update({
@@ -130,7 +132,7 @@ class CourseService {
       'equalWeights': equalWeights,
     });
     //Todo: check with Mike if this is needed
-    calculateGrade(courseID);
+    Calculator().calcCourseGrade(termID, courseID);
   }
   Future<void> updateCourseIcon(courseID, iconName) async {
     await courseRef.doc(courseID).update({
@@ -154,54 +156,6 @@ class CourseService {
     });
   }
 
-  Future<void> calculateGrade(courseID) async {
-    //DocumentSnapshot course = await courseRef.doc(courseID).get();
-    QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
-    double courseGradeDecimal = 0.0;
-    int counter = 0;
-    double allocatedWeight = 0.0;
 
-    for ( DocumentSnapshot category in categories.docs){
-      courseGradeDecimal += category.get('gradePercentAsDecimal');
-      counter += category.get('countOfIncompleteItems');
-      allocatedWeight += category.get('weight');
-    }
-    double gradePercent = 0.0;
-    if(allocatedWeight<100){
-      gradePercent = courseGradeDecimal/allocatedWeight *100;
-    }else{
-      gradePercent = courseGradeDecimal;
-    }
-    if(allocatedWeight==0){
-      gradePercent=100;
-    }
-
-       String letterGrade = getLetterGrade(gradePercent);
-
-    print(courseGradeDecimal);
-    await courseRef.doc(courseID).update({
-      'gradePercent' : gradePercent,
-      'letterGrade' : letterGrade,
-      'countOfIncompleteItems': counter,
-    });
-
-    await TermService().calculateGPA(courseRef.parent.id);
-
-  }
-
-  String getLetterGrade(gradePercent){
-    var gPercent = gradePercent;
-    if(gPercent >= 93){ return"A"; }
-    if(gPercent >=90){ return"A-"; }
-    if(gPercent >= 87){ return"B+"; }
-    if(gPercent >= 83){ return"B"; }
-    if(gPercent >= 80){ return"B-"; }
-    if(gPercent >= 77){ return"C+"; }
-    if(gPercent >= 73){ return"C"; }
-    if(gPercent >= 70){ return"C-"; }
-    if(gPercent >= 67){ return"D+"; }
-    if(gPercent >= 63){ return"D"; }
-    if(gPercent >= 60){ return"D-"; } else {return "F";}
-  }
 
 }
