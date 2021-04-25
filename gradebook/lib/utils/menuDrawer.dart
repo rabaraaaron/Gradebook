@@ -24,7 +24,7 @@ class MenuDrawer extends StatelessWidget {
           ),
           Divider(thickness: .5,),
           ListTile(
-            title: Text("Account Management", style: t,),
+            title: Text("Membership", style: t,),
               onTap: (){
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/AccountManagement');

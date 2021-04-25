@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
-import 'loading.dart';
+import '../../utils/loading.dart';
 
 
 class ResetPassword extends StatefulWidget {

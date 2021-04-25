@@ -4,12 +4,12 @@ import 'package:gradebook/services/user_service.dart';
 import 'package:gradebook/services/validator_service.dart';
 import 'package:gradebook/utils/messageBar.dart';
 
-class ChangePasswordPage extends StatefulWidget {
+class ChangePasswordTile extends StatefulWidget {
   @override
-  _ChangePasswordPageState createState() => _ChangePasswordPageState();
+  _ChangePasswordTileState createState() => _ChangePasswordTileState();
 }
 
-class _ChangePasswordPageState extends State<ChangePasswordPage> {
+class _ChangePasswordTileState extends State<ChangePasswordTile> {
 
   final TextEditingController repeatPswdController = TextEditingController();
   final TextEditingController newPswdController = TextEditingController();

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gradebook/pages/loading.dart';
+import 'package:gradebook/utils/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
