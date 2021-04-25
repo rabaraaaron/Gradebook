@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
-// import 'package:gradebook/pages/Settings/ChangePasswordPage.dart';
-// import 'package:gradebook/pages/Settings/ProfilePage.dart';
+// import 'package:gradebook/pages/Settings/ChangePasswordTile.dart';
+// import 'package:gradebook/pages/Settings/ProfileTile.dart';
 //
 // class AccountManagement extends StatelessWidget {
 //   @override
@@ -52,7 +52,7 @@
 //               ),
 //               //shrinkWrap: true,
 //               children: [
-//                 ChangePasswordPage(),
+//                 ChangePasswordTile(),
 //               ],
 //
 //             ),
@@ -86,7 +86,7 @@
 //               ],
 //             ),
 //               children: [
-//                 ProfilePage(),
+//                 ProfileTile(),
 //               ],
 //
 //             )
