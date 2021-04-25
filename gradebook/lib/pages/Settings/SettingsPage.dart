@@ -3,14 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/pages/Settings/ChangePasswordTile.dart';
 import 'package:gradebook/pages/Settings/ProfileTile.dart';
 import 'package:gradebook/pages/Settings/ThemeSelectionTile.dart';
-import 'package:gradebook/utils/MyAppTheme.dart';
 
-class SettingsPage extends StatefulWidget {
-  @override
-  _SettingsPageState createState() => _SettingsPageState();
-}
+class SettingsPage extends StatelessWidget {
 
-class _SettingsPageState extends State<SettingsPage> {
 
   @override
   build(BuildContext context) {

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:gradebook/pages/loading.dart';
+import 'package:gradebook/utils/loading.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/validator_service.dart';
 

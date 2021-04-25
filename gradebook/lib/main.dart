@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/User.dart';
-import 'package:gradebook/pages/Account/accountManagment.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/pages/Courses/CoursePage.dart';
 import 'package:gradebook/pages/Settings/SettingsPage.dart';
 import 'package:gradebook/pages/Term/TermsPage.dart';
-import 'package:gradebook/pages/UpcomingAssignmentsPage.dart';
-import 'package:gradebook/pages/WelcomePage.dart';
-import 'package:gradebook/pages/auth_wrapper.dart';
-import 'package:gradebook/pages/loading.dart';
-import 'package:gradebook/pages/LoginPage.dart';
-import 'package:gradebook/pages/SignUpPage.dart';
+import 'package:gradebook/pages/Assessment/UpcomingAssignmentsPage.dart';
+import 'package:gradebook/pages/Login_related_pages/WelcomePage.dart';
+import 'package:gradebook/pages/Login_related_pages/auth_wrapper.dart';
+import 'package:gradebook/utils/loading.dart';
+import 'package:gradebook/pages/Login_related_pages/LoginPage.dart';
+import 'package:gradebook/pages/Login_related_pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gradebook/pages/pswdRecoveryPage.dart';
+import 'package:gradebook/pages/Login_related_pages/pswdRecoveryPage.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/services/auth_service.dart';
@@ -123,7 +122,6 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/resetPassword': (context) => ResetPassword(),
               '/Settings': (context) => SettingsPage(),
               '/Upcoming': (context) => UpcomingAssignments(),
-              //'/AccountManagement': (context) => AccountManagement(),
             },
           ),
         ),

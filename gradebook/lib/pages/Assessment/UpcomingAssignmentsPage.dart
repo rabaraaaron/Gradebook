@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
-import 'package:gradebook/pages/loading.dart';
+import 'package:gradebook/utils/loading.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:gradebook/services/dueDateQuery.dart';
