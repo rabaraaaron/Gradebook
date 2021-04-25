@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gradebook/pages/Settings/ChangePasswordPage.dart';
 import 'package:gradebook/pages/Settings/ProfilePage.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
@@ -37,17 +36,12 @@ class _SettingsPageState extends State<SettingsPage> {
     );
 
     final Container themeContainer = Container(
-     // margin: EdgeInsets.symmetric(vertical: 10),
       height: 120,
       child: ListView(
         scrollDirection: Axis.horizontal,
           children: List.generate(themeList.length, (index) {
 
             Color brightness;
-            double width = 60;
-            double primaryHeight = 40;
-            double secondaryHeight = 20;
-
             if(themeList[index].data.brightness == Brightness.dark){
               brightness = Colors.black;
             } else{
@@ -69,11 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(13),
                         gradient: LinearGradient(
-                          stops: [
-                            0.19,
-                            0.4,
-                            0.6,
-                          ],
+                          stops: [0.19, 0.4, 0.6,],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
@@ -106,23 +96,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Icon(Icons.account_circle, size: 45,)
                 ),
               ),
-              //SizedBox(width: 10,),
               Expanded(
                 child: ListTile(
                   title: Text("Profile", style: Theme.of(context).textTheme.headline5,),
-                  // onTap: (){
-                  //   Navigator.pop(context);
-                  //   Navigator.pushNamed(context, '/Settings');
-                  // }
                 ),
               ),
-
             ],
           ),
-          children: [
-            ProfilePage(),
-          ],
-
+          children: [ProfilePage(),],
         ),
         divider,
 
@@ -139,19 +120,11 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: ListTile(
                   title: Text("Password", style: Theme.of(context).textTheme.headline5,),
-                  // onTap: (){
-                  //   //Navigator.pop(context);
-                  //   Navigator.pushNamed(context, '/Settings');
-                  // }
                 ),
               ),
             ],
           ),
-          //shrinkWrap: true,
-          children: [
-            ChangePasswordPage(),
-          ],
-
+          children: [ChangePasswordPage(),],
         ),
 
         divider,
@@ -170,39 +143,15 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: ListTile(
                   title: Text('App Theme', style: Theme.of(context).textTheme.headline5,),
-                  // onTap: (){
-                  //   //Navigator.pop(context);
-                  //   Navigator.pushNamed(context, '/Settings');
-                  // }
                 ),
               ),
             ],
           ),
-          //shrinkWrap: true,
-          children: [
-            themeContainer,
-          ],
-
+          children: [themeContainer,],
         ),
-
-       // SizedBox(height: 15,),
-       //  ExpansionTile(
-       //    children: [
-       //      SizedBox(width: 15,),
-       //    Text("Change Theme",
-       //        style: Theme.of(context).textTheme.headline5,
-       //    //     TextStyle(
-       //    //   fontSize: 35.0,
-       //    //   fontWeight: FontWeight.w300,
-       //    //   fontFamily: GoogleFonts.quicksand().toStringShort(),
-       //    // )
-       //    ),
-       //    ]
-       //  ),
-
-
       ],
     );
+
 
 
     return Scaffold(
