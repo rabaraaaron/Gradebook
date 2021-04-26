@@ -29,12 +29,16 @@ class _CourseOptionsState extends State<CourseOptions> {
   Course course;
   TextEditingController courseTitleController;
   TextEditingController creditHoursController;
-  final FocusScopeNode focusScopeNode = FocusScopeNode();
+  TextEditingController courseGradeController = TextEditingController();
   String initialTitle;
   String initialCredits;
   bool isPassFail = false;
   bool isEquallyWeighted = false;
+  bool isManuallyEntered = false;
   Form form;
+  final FocusScopeNode focusScopeNode = FocusScopeNode();
+  final _formKey = GlobalKey<FormState>();
+
 
 
   _CourseOptionsState(String tID, Course course) {
@@ -42,11 +46,10 @@ class _CourseOptionsState extends State<CourseOptions> {
     this.course = course;
     initialTitle = course.name;
     initialCredits = course.credits;
-
-
     isPassFail = course.passFail;
     isEquallyWeighted = course.equalWeights;
-
+    courseGradeController.text =
+        double.tryParse(course.gradePercent).toStringAsFixed(2);
   }
 
 
@@ -54,11 +57,8 @@ class _CourseOptionsState extends State<CourseOptions> {
     focusScopeNode.nextFocus();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
 
 
     SizedBox confirmButton = SizedBox(
@@ -83,6 +83,7 @@ class _CourseOptionsState extends State<CourseOptions> {
               initialCredits = null;
             }
 
+            //TODO: send course grade to database with courseGradeController.text;
             await CourseService(termID).updateCourse(
               courseTitleController.text,
               creditHoursController.text,
@@ -101,12 +102,132 @@ class _CourseOptionsState extends State<CourseOptions> {
         ),
       ),
     );
-    
-    form = Form(
-      key: _formKey,
-      child: FocusScope(
-        node: focusScopeNode,
-        child: SingleChildScrollView(
+
+    if(!isManuallyEntered){
+      form = Form(
+        key: _formKey,
+        child: FocusScope(
+          node: focusScopeNode,
+          child: Column(children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    autofocus: true,
+                    textAlign: TextAlign.center,
+                    initialValue: initialTitle,
+                    controller: courseTitleController,
+                    decoration: const InputDecoration(
+                      hintText: "ex CS 101",
+                      labelText: 'Course Title',
+                    ),
+                    validator: (value){
+                      if(value == null || value.isEmpty) {
+                        MessageBar(context: context,
+                            msg:"Please enter a name for the new course.",
+                            title: "Missing course title").show();
+                        return 'Required field';
+                      } else {return null;}
+                    },
+                    onEditingComplete: handleSubmitted,
+                    onTap: (){
+                      if(courseTitleController == null){
+                        courseTitleController = TextEditingController();
+                        courseTitleController.text = initialTitle;
+                        initialTitle = null;
+                        setState(() {
+
+                        });
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    validator: (value){
+                      if(value == null || value.isEmpty || int.tryParse(value) == null) {
+                        MessageBar(context: context,
+                            msg:"Please enter the credit hours of this course.",
+                            title: "Invalid credit hours").show();
+                        return 'Required field';
+                      } else {return null;}
+                    },
+                    initialValue: initialCredits,
+                    controller: creditHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "ex 4",
+                      labelText: 'Credit Hours',
+                    ),
+                    onEditingComplete: handleSubmitted,
+                    onTap: (){
+                      if(creditHoursController == null){
+                        creditHoursController = TextEditingController();
+                        creditHoursController.text = initialCredits;
+                        initialCredits = null;
+                        setState(() {
+
+                        });
+                      }
+                    },
+                  ),
+                ),
+
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isManuallyEntered,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isManuallyEntered = updateChecked;
+                    });
+                  },
+                ),
+                Text("Manually enter grade", style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isPassFail,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isPassFail = updateChecked;
+                    });
+                  },
+                ),
+                Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isEquallyWeighted,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isEquallyWeighted = updateChecked;
+                    });
+                  },
+                ),
+                Text("Equally weighed \nAssignments",
+                    style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
+          ]),
+        ),
+      );
+    } else{
+      form = Form(
+        key: _formKey,
+        child: FocusScope(
+          node: focusScopeNode,
           child: Column(children: [
             Row(
               children: [
@@ -144,6 +265,14 @@ class _CourseOptionsState extends State<CourseOptions> {
                 Expanded(
                   child: TextFormField(
                     textAlign: TextAlign.center,
+                    validator: (value){
+                      if(value == null || value.isEmpty || int.tryParse(value) == null) {
+                        MessageBar(context: context,
+                            msg:"Please enter the credit hours of this course.",
+                            title: "Invalid credit hours").show();
+                        return 'Required field';
+                      } else {return null;}
+                    },
                     initialValue: initialCredits,
                     controller: creditHoursController,
                     keyboardType: TextInputType.number,
@@ -166,6 +295,37 @@ class _CourseOptionsState extends State<CourseOptions> {
                 ),
               ],
             ),
+            TextFormField(
+              textAlign: TextAlign.center,
+              controller: courseGradeController,
+              decoration: const InputDecoration(
+                hintText: "ex 95.5",
+                labelText: 'Course Grade',
+              ),
+              validator: (value){
+                if(value == null || value.isEmpty || double.tryParse(value) == null) {
+                  MessageBar(context: context,
+                      msg:"Please enter a valid course grade.",
+                      title: "Invalid course grade").show();
+                  return 'Required field';
+                } else {return null;}
+              },
+              onEditingComplete: handleSubmitted,
+            ),
+            Row(
+              children: [
+                Switch(
+                  value: isManuallyEntered,
+                  activeColor: Theme.of(context).accentColor,
+                  onChanged: (updateChecked) {
+                    setState(() {
+                      isManuallyEntered = updateChecked;
+                    });
+                  },
+                ),
+                Text("Manually enter grade", style: Theme.of(context).textTheme.headline3),
+              ],
+            ),
             Row(
               children: [
                 Switch(
@@ -180,46 +340,15 @@ class _CourseOptionsState extends State<CourseOptions> {
                 Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
               ],
             ),
-            Row(
-              children: [
-                Switch(
-                  value: isEquallyWeighted,
-                  activeColor: Theme.of(context).accentColor,
-                  onChanged: (updateChecked) {
-                    setState(() {
-                      isEquallyWeighted = updateChecked;
-                    });
-                  },
-                ),
-                Text("Equally weighed \nAssignments",
-                    style: Theme.of(context).textTheme.headline3),
-              ],
-            ),
+
           ]),
         ),
-      ),
-    );
+      );
+    }
+
 
     return CustomDialog(title: "Course Options", form: form, button: confirmButton, context: context).show();
-      
-      AlertDialog(
-      title: Column(children: [
-        Text(
-            "Course Options",
-            style: Theme.of(context).textTheme.headline4
-        ),
-        Divider(color: Theme.of(context).dividerColor),
-      ],),
-        content: SizedBox(
-          child: FocusScope(
-            node: focusScopeNode,
-            child: form
-          ),
-          width: 100,
-          height: 155,
-        ),
-      actions: [confirmButton],
-    );
+
   }
 }
 

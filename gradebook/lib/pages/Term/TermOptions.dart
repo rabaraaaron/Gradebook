@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/customDialog.dart';
+import 'package:gradebook/utils/messageBar.dart';
 
 
 // ignore: must_be_immutable
@@ -19,21 +20,24 @@ class _TermOptionsState extends State<TermOptions> {
   Term term;
   var termYear;
   var addedTerm;
-  var isCompletedTerm = false;
+  var manuallyEnteredGPA = false;
   // TODO: add isCompleted to terms
   Form form;
   TextEditingController gpaController = TextEditingController();
 
   _TermOptionsState(t) {
     term = t;
-    addedTerm = term.name;
-    termYear = term.year;
+    addedTerm = t.name;
+    termYear = t.year;
     //TODO: add hypothetical field?
-    // isCompletedTerm = term.isCompletedTerm;
+    // manuallyEnteredGPA = term.manuallyEnteredGPA;
+    gpaController.text = t.gpa.toStringAsFixed(2);
   }
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
     TermService termService = new TermService();
 
     List<String> listOfTermsRaw = ["Fall", "Winter", "Spring", "Summer"];
@@ -57,7 +61,7 @@ class _TermOptionsState extends State<TermOptions> {
     }
 
     Container container = Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(top: 10),
 
       child: Row(
         children: [
@@ -106,15 +110,15 @@ class _TermOptionsState extends State<TermOptions> {
         children: [
           Switch(
             activeColor: Theme.of(context).accentColor,
-            value: isCompletedTerm,
-            onChanged: (updateIsHypothetical) {
+            value: manuallyEnteredGPA,
+            onChanged: (manuallyEntered) {
               setState(() {
-                isCompletedTerm = updateIsHypothetical;
+                manuallyEnteredGPA = manuallyEntered;
               });
             },
           ),
           Text(
-            "Completed term",
+            "Manually enter GPA",
             style: Theme.of(context).textTheme.headline3,
           ),
           SizedBox(height: 20,),
@@ -122,33 +126,44 @@ class _TermOptionsState extends State<TermOptions> {
     );
 
     TextFormField gpaFormField = TextFormField(
+      autofocus: true,
       textAlign: TextAlign.center,
       controller: gpaController,
       keyboardType: TextInputType.number,
+      validator:
+          (value) {
+        if (value == null || value.isEmpty || double.tryParse(value) == null) {
+          MessageBar(
+            context: context,
+            title: 'Invalid Term GPA',
+            msg: 'Please enter a valid Term GPA.',
+          ).show();
+          return 'Required field.';
+        }
+        return null;
+      },
       decoration: const InputDecoration(
         hintText: "ex 4.00",
         labelText: 'Term GPA',
       ),
     );
 
-    SizedBox gpaBox = SizedBox(
-      width: 154.00,
-      child: gpaFormField,
-    );
 
-    if(isCompletedTerm) {
+    if(manuallyEnteredGPA) {
       form = Form(
+        key: _formKey,
           child: Column(
               children: [
                 container,
+                gpaFormField,
+                SizedBox(height: 5,),
                 row,
-                gpaBox,
-                SizedBox(height: 15,),
               ]
           )
       );
     } else{
       form = Form(
+        key: _formKey,
           child: Column(
               children: [
                 container,
@@ -169,8 +184,11 @@ class _TermOptionsState extends State<TermOptions> {
           onPressed: () async {
             //TODO: send update to database --- (By Mohd) this is done but the switch for completed term is still not doing anything
             //TODO: add isCompleted to the updateTerm method
-            
-            termService.updateTerm(term.termID, addedTerm, termYear);
+            //TODO: add manually entered term gpa to database using gpaController.text
+            if(_formKey.currentState.validate()){
+              print(gpaController.text);
+              termService.updateTerm(term.termID, addedTerm, termYear);
+            }
             // print(addedTerm); To get the term name
             // print(termYear); To get the term year
             // print(isHypothetical); Bool for if this is a hypothetical term

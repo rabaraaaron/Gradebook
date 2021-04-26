@@ -5,6 +5,7 @@ import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/model/Course.dart';
 import 'package:gradebook/services/category_service.dart';
 import 'package:gradebook/services/dueDateQuery.dart';
+import 'package:gradebook/utils/calculator.dart';
 
 
 class AssessmentService {
@@ -45,7 +46,7 @@ class AssessmentService {
            .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
            .catchError((error) => print("Failed to add assessment: $error"));
 
-       await CategoryService(termID, courseID).calculateGrade(catID);
+       await Calculator().calcCategoryGrade(termID, courseID, catID);
      } catch (e){
        print('Error in adding assessment: ' + e.toString());
     }
@@ -127,7 +128,7 @@ class AssessmentService {
 
     await assessmentRef.doc(id).delete().then((value) => print("Deleted assessment "))
         .catchError((error) => print("Failed to delete assessment: $error"));
-    await CategoryService(termID, courseID).calculateGrade(catID);
+    await Calculator().calcCategoryGrade(termID, courseID, catID);
   }
   Future<void> updateAssessmentName(id, name) async {
     // print(id);
@@ -181,7 +182,7 @@ class AssessmentService {
       'isCompleted' : isCompleted,
       'dueDate': dateTime ?? null
     });
-    await CategoryService(termID, courseID).calculateGrade(catID);
+    await Calculator().calcCategoryGrade(termID, courseID, catID);
 
   }
 
