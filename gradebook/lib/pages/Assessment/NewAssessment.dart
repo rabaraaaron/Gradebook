@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:gradebook/utils/MyAppTheme.dart';
 import 'package:gradebook/utils/customDialog.dart';
 import 'package:gradebook/utils/messageBar.dart';
 import 'package:gradebook/utils/timePicker.dart';
@@ -66,6 +67,8 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
   double dialogueHeight = 325;
   double dialogueWidth = 170;
   double buttonHeight = 50;
+
+
 
 
   @override
@@ -262,15 +265,25 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                   ),
                 ),
               ),
-              IconButton(
+              new Theme(
+                data: Theme.of(context).copyWith(
+                  primaryColor: Colors.amber,
+                ),
+                child: IconButton(
                 iconSize: 40,
                 icon: Icon(Icons.date_range),
                 onPressed: (){
+
                   showDatePicker(
                     context: context,
                     initialDate: dueDate,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2025),
+                    builder: (BuildContext context, Widget child) {
+
+                      return MyAppTheme().getPickerTheme(child, context);
+                    }
+
                   ).then((v) {
                     if(v == null){
                       return null;
@@ -283,6 +296,7 @@ class _AssessmentPopUpState extends State<AssessmentPopUp> {
                     }
                   });
                 },
+              )
               )
             ],
           ),

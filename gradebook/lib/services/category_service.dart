@@ -1,13 +1,6 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:gradebook/model/Assessment.dart';
-import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/utils/calculator.dart';
-import 'assessment_service.dart';
 import 'course_service.dart';
 import 'package:gradebook/model/Category.dart';
 

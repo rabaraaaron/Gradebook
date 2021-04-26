@@ -65,7 +65,6 @@ class SettingsPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
                 child: Icon(Icons.notification_important_sharp, size: 37,)
-                //Image.asset('assets/password.png', scale: 12, color: Theme.of(context).dividerColor,),
               ),
               Expanded(
                 child: ListTile(
@@ -74,7 +73,9 @@ class SettingsPage extends StatelessWidget {
               ),
             ],
           ),
-          children: [NotificationsSettingsTile(),],
+          children: [
+            NotificationsSettingsTile(),
+          ],
         ),
 
         divider,
@@ -86,7 +87,6 @@ class SettingsPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
                 child: Image.asset('assets/brush_icon2.png', scale: 14, color: Theme.of(context).dividerColor,),
-                //Icon(Icons.format_paint_rounded, size: 37,),
               ),
               Expanded(
                 child: ListTile(
