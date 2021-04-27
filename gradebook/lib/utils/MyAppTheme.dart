@@ -454,12 +454,53 @@ class MyAppTheme with ChangeNotifier{
   //   notifyListeners();
   // }
 
+  Theme getPickerTheme(child, context){
+    if(Theme.of(context).brightness == Brightness.dark) {
+      return  Theme(
+        data: ThemeData.dark().copyWith(
+          brightness: Theme.of(context).brightness,
+          primaryColor: Theme.of(context).primaryColor,
+          accentColor: Theme.of(context).accentColor,
+          colorScheme: ColorScheme(
+            primaryVariant: Color(0xffef07eb),
+            surface: Color(0xff5c5c5c),
+            background: Color(0xff121212),
+            error: Color(0xfff50531),
+            onPrimary: Colors.black,
+            onSecondary: Colors.black,
+            onSurface: Colors.white,
+            onBackground: Colors.white,
+            onError: Colors.black,
+            secondaryVariant: Theme.of(context).accentColor,
+            primary: Theme.of(context).primaryColor,
+            brightness: Brightness.dark,
+            secondary: Theme.of(context).accentColor,
+          ),
+          buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.accent
+          ),
+        ),
+        child: child,
+      );
+    } else {
 
+      return  Theme(
+        data: ThemeData.light().copyWith(
+          brightness: Theme.of(context).brightness,
+          primaryColor: Theme.of(context).primaryColor,
+          accentColor: Theme.of(context).accentColor,
+          colorScheme: ColorScheme.light(primary: Theme.of(context).primaryColor),
+          buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.primary
+          ),
+        ),
+        child: child,
+      );
 
-
-  void changeTheme(String themeID){
+    }
 
   }
+
 }
 
 

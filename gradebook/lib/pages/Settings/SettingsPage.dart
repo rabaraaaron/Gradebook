@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradebook/pages/Settings/ChangePasswordTile.dart';
+import 'package:gradebook/pages/Settings/NotificationsSettingsTile.dart';
 import 'package:gradebook/pages/Settings/ProfileTile.dart';
 import 'package:gradebook/pages/Settings/ThemeSelectionTile.dart';
 
@@ -24,11 +25,8 @@ class SettingsPage extends StatelessWidget {
           title:  Row(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 5.0, left: 5, bottom: 10),
-                child:  Container(
-                    padding: EdgeInsets.all(1.0),
-                    child: Icon(Icons.account_circle, size: 45,)
-                ),
+                  padding: EdgeInsets.all(1.0),
+                  child: Icon(Icons.account_circle, size: 45,)
               ),
               Expanded(
                 child: ListTile(
@@ -46,10 +44,8 @@ class SettingsPage extends StatelessWidget {
           title:  Row(
             children: [
               Container(
-                child:  Container(
-                  padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
-                  child: Image.asset('assets/password.png', scale: 12, color: Theme.of(context).dividerColor,),
-                ),
+                padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
+                child: Image.asset('assets/password.png', scale: 12, color: Theme.of(context).dividerColor,),
               ),
               Expanded(
                 child: ListTile(
@@ -62,17 +58,35 @@ class SettingsPage extends StatelessWidget {
         ),
 
         divider,
+        ExpansionTile(
+          tilePadding: EdgeInsets.all(10),
+          title:  Row(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
+                child: Icon(Icons.notification_important_sharp, size: 37,)
+              ),
+              Expanded(
+                child: ListTile(
+                  title: Text("Notifications", style: Theme.of(context).textTheme.headline5,),
+                ),
+              ),
+            ],
+          ),
+          children: [
+            NotificationsSettingsTile(),
+          ],
+        ),
+
+        divider,
 
         ExpansionTile(
           tilePadding: EdgeInsets.all(10),
           title:  Row(
             children: [
               Container(
-                child:  Container(
-                  padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
-                  child: Icon(Icons.format_paint_rounded, size: 37,),
-                  //Image.asset('assets/password.png', scale: 12, color: Theme.of(context).dividerColor,),
-                ),
+                padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
+                child: Image.asset('assets/brush_icon2.png', scale: 14, color: Theme.of(context).dividerColor,),
               ),
               Expanded(
                 child: ListTile(
