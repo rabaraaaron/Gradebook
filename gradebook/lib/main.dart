@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gradebook/model/User.dart';
+import 'package:gradebook/pages/Assessment/ImagePage.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/pages/Courses/CoursePage.dart';
 import 'package:gradebook/pages/Settings/SettingsPage.dart';
@@ -122,6 +123,7 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/resetPassword': (context) => ResetPassword(),
               '/Settings': (context) => SettingsPage(),
               '/Upcoming': (context) => UpcomingAssignments(),
+              '/ImagePage': (context) => ImagePage(),
             },
           ),
         ),

@@ -1,11 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradebook/api/FirebaseApi.dart';
+import 'package:gradebook/api/FirebaseFile.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
 import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
+import 'package:gradebook/pages/Assessment/ImagePage.dart';
+import 'package:gradebook/pages/Assessment/PickFileToUpload.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/course_service.dart';
@@ -37,15 +42,40 @@ class _AssessmentListState extends State<AssessmentList> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
+
     AssessmentService assServ = new AssessmentService(termID, courseID, categoryID);
     final assessments = Provider.of<List<Assessment>>(context);
     Text isDroppedText;
     List<Widget> entries = [];
+
     if (assessments != null)
       assessments.forEach((element) {
 
+        Widget attachedButton;
+        if(element.downloadURL == null){
+          attachedButton = Container();
+        } else{
+          attachedButton = IconButton(
+            iconSize: 30,
+              icon: Icon(Icons.attach_file),
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImagePageWrap(
+                      termID: termID,
+                      courseID: courseID,
+                      catID: categoryID,
+                      a: element,
+                    ),
+                  ),
+                );
+              }
+          );
+        }
 
         if(element.isDropped == true){
           isDroppedText = Text(
@@ -58,15 +88,14 @@ class _AssessmentListState extends State<AssessmentList> {
         String dateOrGrade;
         var totalPoints = element.getFormattedNumber(element.totalPoints);
         var yourPoints = element.getFormattedNumber(element.yourPoints);
+
+
         if(element.isCompleted){
           dateOrGrade = yourPoints + " / " + totalPoints;
 
         } else{
-          //var h = element.dueDate.
           dateOrGrade =
           DateFormat('M-d-yyyy, h:mm a').format(element.dueDate)?? yourPoints + " / " + totalPoints;
-          //DateFormat('MM-dd-yyyy').format(element.dueDate) ?? "${element.yourPoints} / ${element.totalPoints}";
-          // element.dueDate,
 
         }
         Row r;
@@ -82,6 +111,7 @@ class _AssessmentListState extends State<AssessmentList> {
               isDroppedText,//expanded, //to display "(dropped)" if this assessment is dropped
               //Text(element.createDate.toString()),
               Expanded(child: Container(),),
+              attachedButton,
               Text(
                 dateOrGrade,
                 style: Theme.of(context).textTheme.bodyText1,
@@ -119,8 +149,9 @@ class _AssessmentListState extends State<AssessmentList> {
               // SizedBox(width: 10, height: 60,),
               ],),
               Expanded(child: Container(),),
-
+              attachedButton,
               IconButton(
+                iconSize: 30,
                 icon: Icon(Icons.check),
                 color: Colors.white,
                 onPressed: () async {
@@ -139,38 +170,60 @@ class _AssessmentListState extends State<AssessmentList> {
           );
         }
 
+        IconSlideAction settings = IconSlideAction(
+          color: Colors.transparent,
+          closeOnTap: true,
+          iconWidget: Icon(
+            Icons.settings,
+            color: Theme.of(context).dividerColor,
+            size: 35,
+          ),
+          onTap: () async {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AssessmentOptions(context, termID,
+                      courseID, categoryID, element);
+                });
+          },
+        );
+        IconSlideAction garbage = IconSlideAction(
+          color: Colors.transparent,
+          closeOnTap: true,
+          iconWidget: Icon(
+            Icons.delete,
+            color: Theme.of(context).dividerColor,
+            size: 35,
+          ),
+          onTap: ()async {
+            await assServ.deleteAssessment(element.id);
+          },
+        );
+        IconSlideAction uploadFile = IconSlideAction(
+          color: Colors.transparent,
+          closeOnTap: true,
+          iconWidget: Icon(
+            Icons.attach_file,
+            color: Theme.of(context).dividerColor,
+            size: 35,
+          ),
+          onTap: ()async {
+            await showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                  PickFileToUploadWrapper(termID: termID,
+                    courseID: courseID, catID: categoryID, index: assessments.indexOf(element),)
+            );
+            setState(() {});
+          },
+        );
+
         List<Widget> slidableActions;
         if(element.isCompleted){
           slidableActions = [
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.settings,
-                color: Theme.of(context).dividerColor,
-                size: 35,
-              ),
-              onTap: () async {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AssessmentOptions(context, termID,
-                          courseID, categoryID, element);
-                    });
-              },
-            ),
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.delete,
-                color: Theme.of(context).dividerColor,
-                size: 35,
-              ),
-              onTap: ()async {
-                await assServ.deleteAssessment(element.id);
-              },
-            )
+            settings,
+            uploadFile,
+            garbage,
           ];
         } else{
           slidableActions = [
@@ -184,35 +237,9 @@ class _AssessmentListState extends State<AssessmentList> {
               ),
               onTap: () => scheduleNotification(courseID, element.name),
             ),
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.settings,
-                color: Theme.of(context).dividerColor,
-                size: 35,
-              ),
-              onTap: () async {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AssessmentOptions(context, termID,
-                          courseID, categoryID, element);
-                    });
-              },
-            ),
-            IconSlideAction(
-              color: Colors.transparent,
-              closeOnTap: true,
-              iconWidget: Icon(
-                Icons.delete,
-                color: Theme.of(context).dividerColor,
-                size: 35,
-              ),
-              onTap: ()async {
-                await assServ.deleteAssessment(element.id);
-              },
-            )
+            settings,
+            uploadFile,
+            garbage,
           ];
         }
 
@@ -290,14 +317,14 @@ class _AssessmentListState extends State<AssessmentList> {
 
           String courseName = await CourseService(termID).getCourseName(courseID);
 
-          String message1stHalf = 'Do ' + assignmentName + 'from ' + courseName;
+          String message = 'Do ' + assignmentName + 'from ' + courseName;
 
           if(!d.toLocal().isBefore(DateTime.now())){
 
             await localNotification.zonedSchedule(
                 0,
                 'Assignment Reminder',
-                message1stHalf,
+                message,
                 scheduleNotificationDateTime,
                 generalNotificationDetails,
                 uiLocalNotificationDateInterpretation:

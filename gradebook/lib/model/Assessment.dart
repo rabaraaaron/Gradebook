@@ -15,7 +15,7 @@ class Assessment with ChangeNotifier{
   final int createDate;
   bool isDropped = false;
   bool isCompleted = false;
-
+  String downloadURL = "";
   DateTime dueDate;
 
 
@@ -31,6 +31,8 @@ class Assessment with ChangeNotifier{
     this.createDate,
     this.isCompleted,
     this.dueDate,
+    this.downloadURL,
+
   });
 
   // bool LowestScoreCompare(Assessment a1, Assessment a2) {
@@ -68,9 +70,10 @@ class Assessment with ChangeNotifier{
     String isDropped = "\n   isDropped: " + this.isDropped.toString();
     String isCompleted = "\n   isCompleted: " + this.isCompleted.toString();
     String dueDate = "\n   dueDate: " + this.dueDate.toString();
+    String downloadURL = "\n  downloadURL: " + this.downloadURL;
     String line2 = "\n---------------------------------------------" ;
 
-      return {line, name, tp, yp, id, catID, termID, courseID, createDate, isDropped, isCompleted, dueDate, line2}.toString();
+      return {line, name, tp, yp, id, catID, termID, courseID, createDate, isDropped, isCompleted, dueDate, downloadURL,line2}.toString();
     }
   String getFormattedNumber( num ) {
     //double x = ((cat.gradePercentAsDecimal / cat.categoryWeight)* 100);

@@ -29,7 +29,8 @@ class AssessmentService {
   }
 
 
-  Future<void> addAssessment(name, totalPoints, yourPoints, isCompleted, [dueDate]) async {
+  Future<void> addAssessment(name, totalPoints, yourPoints, isCompleted,
+      [dueDate, downloadURL]) async {
 
      try{
        await assessmentRef
@@ -40,8 +41,8 @@ class AssessmentService {
          'isDropped' : false,
          'createDate' : getFormattedDate(),
          'isCompleted' : isCompleted,
-         'dueDate' : dueDate ?? null
-
+         'dueDate' : dueDate ?? null,
+         'downloadURL' : downloadURL ?? null,
        })
            .then((value) => print("Assessment Added ( name: " + name + ", YP: " + yourPoints + ", TP: " + totalPoints ))
            .catchError((error) => print("Failed to add assessment: $error"));
@@ -114,7 +115,8 @@ class AssessmentService {
           catID: catID,
           courseID: courseID,
           termID: termID,
-          dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1))
+          dueDate: dueDate ?? DateTime.now().subtract(Duration(days: 1)),
+          downloadURL: doc.get('downloadURL') ?? null,
       );
     }).toList();
 
@@ -186,6 +188,10 @@ class AssessmentService {
 
   }
 
+  void updateDownloadURL(Assessment a, String url) async {
+    await assessmentRef.doc(a.id).update({'downloadURL' : url});
+  }
+
   void displayMessage(context, String msg, String title){
     Flushbar(
       title: title,
@@ -196,6 +202,9 @@ class AssessmentService {
     ).show(context);
 
   }
+
+
+
 
 
 }
