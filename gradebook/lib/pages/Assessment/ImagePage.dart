@@ -97,7 +97,7 @@ class _ImagePageState extends State<ImagePage> {
                     return Image.network(
                       f.url,
                       height: double.infinity,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     );
                   } else{
                     // return Text('Will show pdf soon.');

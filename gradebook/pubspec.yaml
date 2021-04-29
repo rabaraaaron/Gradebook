@@ -27,6 +27,8 @@ dependencies:
   flutter_slidable:
   theme_provider:
   shared_preferences:
+  flutter_linkify: ^5.0.2
+  url_launcher: ^6.0.3
   flutter_pdfview: ^1.0.1
   file_picker: ^3.0.1
   http:
@@ -44,6 +46,7 @@ dependencies:
   firebase_dynamic_links: ^0.8.0
   cloud_firestore: ^1.0.3
   firebase_storage: ^8.0.3
+  image_picker: ^0.7.4
   flushbar: ^1.10.4
   intl: ^0.17.0
   sizer: ^1.1.8

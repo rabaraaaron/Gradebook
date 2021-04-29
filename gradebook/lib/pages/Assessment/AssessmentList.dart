@@ -1,11 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gradebook/api/FirebaseApi.dart';
-import 'package:gradebook/api/FirebaseFile.dart';
 import 'package:gradebook/model/Assessment.dart';
 import 'package:gradebook/pages/Assessment/AssessmentCompleted.dart';
 import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
@@ -19,6 +16,9 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../../main.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 // ignore: must_be_immutable
 class AssessmentList extends StatefulWidget {
@@ -58,21 +58,46 @@ class _AssessmentListState extends State<AssessmentList> {
         if(element.downloadURL == null){
           attachedButton = Container();
         } else{
+          String url = element.downloadURL;
+          bool isImage = url.contains(new RegExp('.png'))
+              || url.contains(new RegExp('.jpg'))
+              || url.contains(new RegExp('.jpeg'));
+          Icon icon;
+          if(isImage){
+            icon = Icon(Icons.image, size: 30,);
+          } else{
+            icon = Icon(Icons.attach_file, size: 30,);
+          }
           attachedButton = IconButton(
+            color: Colors.white,
             iconSize: 30,
-              icon: Icon(Icons.attach_file),
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ImagePageWrap(
-                      termID: termID,
-                      courseID: courseID,
-                      catID: categoryID,
-                      a: element,
+              icon: icon,
+              onPressed: () async {
+                String url = element.downloadURL;
+                bool isImage = url.contains(new RegExp('.png'))
+                    || url.contains(new RegExp('.jpg'))
+                    || url.contains(new RegExp('.jpeg'));
+                if(isImage){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImagePageWrap(
+                        termID: termID,
+                        courseID: courseID,
+                        catID: categoryID,
+                        a: element,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else{
+                  String url = element.downloadURL.substring(13);
+                  await canLaunch(url) ? await launch(
+                      url,
+                    universalLinksOnly: true,
+                  ) :
+                  throw 'Could not launch $url';
+                }
+
               }
           );
         }
@@ -203,7 +228,7 @@ class _AssessmentListState extends State<AssessmentList> {
           color: Colors.transparent,
           closeOnTap: true,
           iconWidget: Icon(
-            Icons.attach_file,
+            Icons.folder,
             color: Theme.of(context).dividerColor,
             size: 35,
           ),

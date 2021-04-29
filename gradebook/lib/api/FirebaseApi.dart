@@ -27,7 +27,7 @@ class FirebaseApi{
       final ref = FirebaseStorage
           .instance
           .ref(auth.currentUser.uid);
-      ref.child(filename).delete().then((value) => print('Delete successful'));
+      ref.child(filename).delete();
       return true;
     } on FirebaseException catch (e){
       return false;
