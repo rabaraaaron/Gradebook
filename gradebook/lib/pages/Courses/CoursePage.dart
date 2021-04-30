@@ -5,10 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/services/course_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Category/CategoryPage.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:gradebook/model/Course.dart';
+import 'CourseURL.dart';
 import 'DeleteCourseConfirmation.dart';
 import 'CourseOptions.dart';
 import 'package:gradebook/utils/IconOptions.dart';
@@ -48,6 +50,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
   final SlidableController slidableController = new SlidableController();
   final GlobalKey scaffoldKey = new GlobalKey();
   Term term;
+  Widget linkButton;
 
   @override
   _TermCoursePageState(Term tID) {
@@ -64,6 +67,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
     //Widget test = ChangeNotifierProvider(create: (context) => Course(),);
 
     if (Provider.of<List<Course>>(context) != null) {
+
       listView = ListView.separated(
           separatorBuilder: (context, index) => Divider(
                 color: Theme.of(context).dividerColor,
@@ -75,6 +79,19 @@ class _TermCoursePageState extends State<TermCoursePage> {
 
             courseIcon = IconOptions(term.termID, classes[index].id)
                 .getIconFromString(classes[index].iconName);
+
+            linkButton = classes[index].url != "" && classes[index].url != null ?
+                IconButton(
+                  iconSize: 45,
+                    icon: Icon(Icons.link),
+                    onPressed: () async {
+                      String url = classes[index].url;
+                      await canLaunch(url) ? await launch(
+                        url,
+                      ) :
+                      throw 'Could not launch $url';
+                    }
+                ) : Container();
 
             return Column(
               children: [
@@ -99,6 +116,25 @@ class _TermCoursePageState extends State<TermCoursePage> {
                               builder: (BuildContext context) {
                                 return CourseOptions(
                                     term.termID, classes[index]);
+                              });
+                        },
+                      ),
+                      IconSlideAction(
+                        color: Colors.transparent,
+                        closeOnTap: true,
+                        iconWidget: Icon(
+                          Icons.cloud_upload,
+                          color: Theme.of(context).dividerColor,
+                          size: 35,
+                        ),
+                        onTap: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CourseURLWrapper(
+                                  termID: term.termID,
+                                  index: index,
+                                );
                               });
                         },
                       ),
@@ -164,6 +200,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
                               ),
                             ),
                           ),
+                          linkButton,
                           Container(
                             child: Column(
                               children: [

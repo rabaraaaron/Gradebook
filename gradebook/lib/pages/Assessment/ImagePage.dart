@@ -54,7 +54,6 @@ class _ImagePageState extends State<ImagePage> {
     futureFiles = FirebaseApi
         .listAll('${auth.currentUser.uid}/');
     futureFiles.then((value) {
-      print("Length: " + value.length.toString());
       // value.forEach((element) {print(element.url + " " + element.name);});
     });
 
@@ -83,13 +82,9 @@ class _ImagePageState extends State<ImagePage> {
               int i;
               List<FirebaseFile> fileList = snapshot.data;
               for(i = 0; i < fileList.length; i++) {
-                print(fileList[i].url);
-                print(a.downloadURL);
                 if(fileList[i].url.contains(new RegExp(a.downloadURL))){
-                  print("Found!!!");
                   f = fileList[i];
                   i = fileList.length;
-
 
                   if(a.downloadURL.contains(new RegExp('.png'))
                    || a.downloadURL.contains(new RegExp('.jpg'))
@@ -101,7 +96,6 @@ class _ImagePageState extends State<ImagePage> {
                     );
                   } else{
                     // return Text('Will show pdf soon.');
-                    print("From here: "+f.url);
 
                     return Stack(
                       children: <Widget>[

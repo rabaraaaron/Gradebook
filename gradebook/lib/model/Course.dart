@@ -20,7 +20,7 @@ class Course with ChangeNotifier {
   int countOfIncompleteItems = 0;
   bool equalWeights = false;
   bool passFail = false;
-
+  var url;
   double remainingWeight;
 
 
@@ -38,6 +38,7 @@ class Course with ChangeNotifier {
     this.remainingWeight,
     this.equalWeights,
     this.passFail,
+    this.url
   });
 
   @override

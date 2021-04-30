@@ -221,7 +221,7 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.attach_file, color: Colors.white,),
+            icon: Icon(Icons.link, color: Colors.white,),
             iconSize: 35,
           ),
         ],
@@ -241,7 +241,7 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
           uploadFile(urlController.text);
         }
       },
-      child: Icon(Icons.cloud_upload,
+      child: Icon(Icons.upload_outlined,
         color: Colors.white,
         size: 35,
       ),

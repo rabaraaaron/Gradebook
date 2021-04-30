@@ -9,6 +9,7 @@ import 'package:gradebook/pages/Assessment/AssessmentOptions.dart';
 import 'package:gradebook/pages/Assessment/ImagePage.dart';
 import 'package:gradebook/pages/Assessment/PickFileToUpload.dart';
 import 'package:gradebook/pages/Assessment/ReminderConfirmation.dart';
+import 'package:gradebook/pages/Courses/CourseURL.dart';
 import 'package:gradebook/services/assessment_service.dart';
 import 'package:gradebook/services/course_service.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,7 @@ class _AssessmentListState extends State<AssessmentList> {
           if(isImage){
             icon = Icon(Icons.image, size: 30,);
           } else{
-            icon = Icon(Icons.attach_file, size: 30,);
+            icon = Icon(Icons.link, size: 30,);
           }
           attachedButton = IconButton(
             color: Colors.white,
@@ -78,22 +79,20 @@ class _AssessmentListState extends State<AssessmentList> {
                     || url.contains(new RegExp('.jpg'))
                     || url.contains(new RegExp('.jpeg'));
                 if(isImage){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ImagePageWrap(
-                        termID: termID,
-                        courseID: courseID,
-                        catID: categoryID,
-                        a: element,
-                      ),
-                    ),
-                  );
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context){
+                        return ImagePageWrap(
+                          termID: termID,
+                          courseID: courseID,
+                          catID: categoryID,
+                          a: element,
+                        );
+                      });
                 } else{
                   String url = element.downloadURL.substring(13);
                   await canLaunch(url) ? await launch(
                       url,
-                    universalLinksOnly: true,
                   ) :
                   throw 'Could not launch $url';
                 }
@@ -228,7 +227,7 @@ class _AssessmentListState extends State<AssessmentList> {
           color: Colors.transparent,
           closeOnTap: true,
           iconWidget: Icon(
-            Icons.folder,
+            Icons.cloud_upload,
             color: Theme.of(context).dividerColor,
             size: 35,
           ),

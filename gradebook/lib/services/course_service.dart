@@ -46,6 +46,7 @@ class CourseService {
             'countOfIncompleteItems' : 0,
             'remainingWeight' : 100.0,
             'equalWeights': equalWeights,
+            'url': null,
           })
           .then((value) => print("Course Added"))
           .catchError((error) => print("Failed to add course: $error"));
@@ -74,6 +75,7 @@ class CourseService {
           remainingWeight: doc.get('remainingWeight').toDouble() ?? 100.0,
           equalWeights: doc.get('equalWeights') ?? false,
           passFail: doc.get('passFail') ?? false,
+          url: doc.get('url') ?? null,
         );
       }).toList();
       return v;
@@ -93,6 +95,7 @@ class CourseService {
             remainingWeight: doc.get('remainingWeight').toDouble() ?? 100.0,
             equalWeights: doc.get('equalWeights') ?? false,
             passFail: doc.get('passFail') ?? false,
+            url: doc.get('url') ?? null,
         );
       }).toList();
       return v2;
@@ -156,6 +159,11 @@ class CourseService {
     });
   }
 
+  Future<void> updateCourseURL(courseID, String url) async {
+    await courseRef.doc(courseID).update({
+      'url': url,
+    });
 
+  }
 
 }
