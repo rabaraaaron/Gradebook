@@ -89,10 +89,13 @@ class _ImagePageState extends State<ImagePage> {
                   if(a.downloadURL.contains(new RegExp('.png'))
                    || a.downloadURL.contains(new RegExp('.jpg'))
                    || a.downloadURL.contains(new RegExp('.jpeg'))){
-                    return Image.network(
-                      f.url,
-                      height: double.infinity,
-                      fit: BoxFit.contain,
+                    return InteractiveViewer(
+                      child: Image.network(
+
+                        f.url,
+                        height: double.infinity,
+                        fit: BoxFit.contain,
+                      ),
                     );
                   } else{
                     // return Text('Will show pdf soon.');

@@ -176,6 +176,7 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
       );
 
 
+
   @override
   Widget build(BuildContext context) {
     a = Provider.of<List<Assessment>>(context);
@@ -196,12 +197,20 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
       }
     }
 
-    ElevatedButton enterURLButton = ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateColor.resolveWith(
-                  (states) => Theme.of(context).accentColor.withOpacity(.7)
-          )
-      ),
+    RaisedButton enterURLButton = RaisedButton(
+      color: Theme.of(context).accentColor.withOpacity(.3),
+
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32.0)),
+          side: BorderSide(
+              width: 2,
+              color: Theme.of(context).dividerColor.withOpacity(.3)
+          ),
+        ),
+          //backgroundColor: MaterialStateColor.resolveWith(
+            //      (states) => Theme.of(context).accentColor.withOpacity(.7)
+          //)
+
       onPressed: () {
         setState(() {
           urlBeingSelected = true;
@@ -210,26 +219,35 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
       },
       child: Row(
         children: [
-          Expanded(
-            child: Text(
-              "URL ",
+          //Expanded(
+            //child:
+            Text(
+              "URL   ",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: FontWeight.normal,
               ),
             ),
-          ),
+          //),
           IconButton(
             icon: Icon(Icons.link, color: Colors.white,),
             iconSize: 35,
           ),
+          SizedBox(width: 20,),
         ],
       ),
     );
 
     ElevatedButton uploadButton = ElevatedButton(
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          alignment: Alignment.centerLeft,
           backgroundColor: MaterialStateColor.resolveWith(
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
@@ -251,24 +269,34 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
         selectFile(gallery: true);
       },
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          alignment: Alignment.centerLeft,
           backgroundColor: MaterialStateColor.resolveWith(
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
       ),
-      child: Row(
-        children: [
-          Text('Camera',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              fontWeight: FontWeight.normal,
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          children: [
+            Text('Camera ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+              ),
             ),
-          ),
-          Icon(Icons.camera_alt,
-            color: Colors.white,
-            size: 35,
-          ),
-        ],
+            Icon(Icons.camera_alt,
+              color: Colors.white,
+              size: 35,
+            ),
+          ],
+        ),
       ),
     ) 
         : Container();
@@ -278,36 +306,55 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
         selectFile();
       },
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
         alignment: Alignment.centerLeft,
           backgroundColor: MaterialStateColor.resolveWith(
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
       ),
-      child: Row(
-        children: [
-          Text('Gallery  ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              fontWeight: FontWeight.normal,
+      child: SizedBox(
+
+        height: 50,
+        child: Row(
+          children: [
+            Text('Gallery  ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+              ),
             ),
-          ),
-          Icon(Icons.image,
-            color: Colors.white,
-            size: 35,
-          ),
-        ],
+            Icon(Icons.image,
+              color: Colors.white,
+              size: 35,
+            ),
+          ],
+        ),
       ),
     )
         : Container();
 
-    Widget selectImageButton = !selectingFile ? Expanded(
-      child: ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Theme.of(context).accentColor.withOpacity(.7)
-            )
+    Widget selectImageButton = Expanded(
+      child: RaisedButton(
+        color: Theme.of(context).accentColor.withOpacity(.3),
+
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(32.0)),
+          side: BorderSide(
+              width: 2,
+              color: Theme.of(context).dividerColor.withOpacity(.3)
+          ),
         ),
+        // style: ButtonStyle(
+        //     backgroundColor: MaterialStateColor.resolveWith(
+        //             (states) => Theme.of(context).accentColor.withOpacity(.7)
+        //     )
+        // ),
         child: Row(
           children: [
             Expanded(
@@ -315,7 +362,7 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
                 "Image ",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 25,
+                  fontSize: 20,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -333,27 +380,42 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
           });
         },
       ),
-    ) :
-      Column(
-        children: [
-          getFromGalleryButton,
-          takeImageButton,
-        ],
-      );
+    );
+   // : Container();
+      // Column(
+      //   children: [
+      //     getFromGalleryButton,
+      //     takeImageButton,
+      //   ],
+      // );
 
 
     selectFileWidget = selectingFile ?
         Column(
           children: [
+            Row(
+              children: [
+                SizedBox(width: 5,),
+                getFromGalleryButton,
+                SizedBox(width: 5,),
+                takeImageButton,
+                SizedBox(width: 5,),
+              ],
+            ),
             SizedBox(height: 20,),
             isThere != null ?
             Row(
               children: [
+                SizedBox(width: 15,),
                 SizedBox(
-                    width: 200,
+                    //width: 200,
                     height: 75,
+                    width: 200,
                     child: Text(
-                        "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}"
+                        "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        maxLines: 2,
                     )
                 ),
                 ElevatedButton(
@@ -370,15 +432,19 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
                 )
               ],
             ) :
-            Text("No image uploaded"),
+            Text("No image uploaded "),
             SizedBox(height: 20,),
             Row(
               children: [
+                SizedBox(width: 15,),
                 SizedBox(
                   height: 75,
                   width: 200,
                   child: Text(
                     "Chosen image: \n"+fileName,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    maxLines: 2,
                     style: TextStyle(
                       color: Theme.of(context).dividerColor,
                     ),
@@ -391,12 +457,34 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
           ],
     ) : Container();
 
+    ElevatedButton deleteButton = ElevatedButton(
+        child: Icon(Icons.delete, size: 35,),
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                side: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            alignment: Alignment.centerLeft,
+            backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Theme.of(context).accentColor.withOpacity(.7)
+            )
+        ),
+        onPressed: (){
+          deleteFile();
+          setState(() {
+          });
+        }
+    );
+
 
     urlFieldWidget = urlBeingSelected ?
     Column(
       children: [
         Row(
           children: [
+            SizedBox(width: 20,),
             SizedBox(
               width: 200,
               child: TextFormField(
@@ -415,28 +503,33 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
         isThere != null ?
         Row(
           children: [
+            SizedBox(width: 20,),
             SizedBox(
-                width: 200,
+                //width: 200,
                 height: 75,
+                width: 200,
                 child: Text(
-                    "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}"
+                    "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  maxLines: 2,
                 )
             ),
-            ElevatedButton(
-                child: Icon(Icons.delete, size: 35,),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Theme.of(context).accentColor.withOpacity(.7))
-                ),
-                onPressed: (){
-                  deleteFile();
-                  setState(() {
-                  });
-                }
-            )
+            deleteButton,
+            SizedBox(width: 20,),
           ],
         ) :
-        Text("No url uploaded"),
+        Row(
+          children: [
+            SizedBox(width: 20,),
+            Expanded(
+              flex: 2,
+                child: Text("No url uploaded")),
+            deleteButton,
+            SizedBox(width: 20,),
+          ],
+        ),
+        SizedBox(height: 20,),
       ],
     ) :
         Container();
@@ -445,33 +538,53 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
 
 
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 0.0),
       content: SingleChildScrollView(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "Content Uploader",
-                style: Theme.of(context).textTheme.headline6,
+              // Text(
+              //   "Content Uploader",
+              //   style: Theme.of(context).textTheme.headline5,
+              // ),
+              Container(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                decoration: BoxDecoration(
+
+                  color: Theme.of(context).accentColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0)),
+                ),
+                child: Center(child: Text("Content Uploader", style: Theme.of(context).textTheme.bodyText1,),),
               ),
-              Divider(color: Theme.of(context).dividerColor,),
+              //Divider(color: Theme.of(context).dividerColor,),
+              SizedBox(height: 20,),
               Text(
                 "Attach content to: $str",
                 style: Theme.of(context).textTheme.headline3,
               ),
               SizedBox(height: 20,),
-              enterURLButton,
+              urlFieldWidget,
+              selectFileWidget,
+
               Row(
                 children: [
-                  urlFieldWidget,
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
+
+                  enterURLButton,
                   selectImageButton,
                 ],
               ),
-              selectFileWidget,
+
+              //SizedBox(height: 10,),
+              // Row(
+              //   children: [
+              //     selectImageButton,
+              //   ],
+              // ),
+
             ]
         ),
       ),

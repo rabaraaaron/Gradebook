@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
 
           if (result == null) {
             setState(() {
-            error = 'There was an error with your login. Please try again.';
+            error = 'Failed Login. Please try again.';
             loading = false;
             });
           }
