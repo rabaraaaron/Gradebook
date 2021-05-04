@@ -10,6 +10,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   build(BuildContext context) {
+    Color color = Theme.of(context).accentColor;
 
     final Divider divider =  Divider(
       color: Theme.of(context).dividerColor,
@@ -26,7 +27,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               Container(
                   padding: EdgeInsets.all(1.0),
-                  child: Icon(Icons.account_circle, size: 45,)
+                  child: Icon(Icons.account_circle, size: 45, color: color,)
               ),
               Expanded(
                 child: ListTile(
@@ -45,7 +46,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
-                child: Image.asset('assets/password.png', scale: 12, color: Theme.of(context).dividerColor,),
+                child: Image.asset('assets/password.png', scale: 12, color: color,)
               ),
               Expanded(
                 child: ListTile(
@@ -64,7 +65,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
-                child: Icon(Icons.notification_important_sharp, size: 37,)
+                child: Icon(Icons.notification_important_sharp, size: 37,color: color,)
               ),
               Expanded(
                 child: ListTile(
@@ -86,7 +87,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 5, bottom: 10),
-                child: Image.asset('assets/brush_icon2.png', scale: 14, color: Theme.of(context).dividerColor,),
+                child: Image.asset('assets/brush_icon2.png', scale: 14, color: color,)
               ),
               Expanded(
                 child: ListTile(

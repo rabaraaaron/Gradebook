@@ -40,16 +40,13 @@ class _ChangePasswordTileState extends State<ChangePasswordTile> {
     final submitBtn =
     Center(
       child: RaisedButton(
-        color:Theme.of(context).accentColor,
-        //Colors.transparent,
-        //elevation: 0,
+        color:Theme.of(context).primaryColor,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
+            borderRadius: BorderRadius.circular(13.0),
             //side: BorderSide(color: Theme.of(context).primaryColor, width: 4)
         ),
         onPressed: () async {
           // Navigator.pushNamed(context, '/Terms');
-
 
             checkCurrentPasswordValid = await UserService().validateCurrentPassword(currentPswdController.text);
             setState(() => loading = true);

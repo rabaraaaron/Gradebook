@@ -43,26 +43,27 @@ class _NotificationsSettingsTileState extends State<NotificationsSettingsTile> {
       padding: EdgeInsets.only(left: 20),
       child: Column(
         children: [
-          SwitchListTile(
-            title: const Text('Allow Notifications'),
-            value: _allowNotifications,
-            onChanged: (bool value) {
-              setState(() {
-                _allowNotifications = value;
-              });
-            },
-            //secondary: const Icon(Icons.lightbulb_outline),
-          ),
-          SwitchListTile(
-            title: const Text('Allow Notifications'),
-            value: _allowNotifications,
-            onChanged: (bool value) {
-              setState(() {
-                _allowNotifications = value;
-              });
-            },
-            //secondary: const Icon(Icons.lightbulb_outline),
-          ),
+          Image.asset('assets/under-construction.png', scale: 4,)
+          // SwitchListTile(
+          //   title: const Text('Allow Notifications'),
+          //   value: _allowNotifications,
+          //   onChanged: (bool value) {
+          //     setState(() {
+          //       _allowNotifications = value;
+          //     });
+          //   },
+          //   //secondary: const Icon(Icons.lightbulb_outline),
+          // ),
+          // SwitchListTile(
+          //   title: const Text('Allow Notifications'),
+          //   value: _allowNotifications,
+          //   onChanged: (bool value) {
+          //     setState(() {
+          //       _allowNotifications = value;
+          //     });
+          //   },
+          //   //secondary: const Icon(Icons.lightbulb_outline),
+          // ),
         ],
       ),
     );

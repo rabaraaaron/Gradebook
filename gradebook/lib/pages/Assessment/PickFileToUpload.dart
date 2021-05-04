@@ -243,7 +243,7 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(8.0),
               side: BorderSide(color: Theme.of(context).primaryColor),
             ),
           ),
@@ -280,10 +280,11 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
       ),
-      child: SizedBox(
-        height: 50,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: [
+            SizedBox(width: 40,),
             Text('Camera ',
               style: TextStyle(
                 color: Colors.white,
@@ -317,11 +318,11 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
       ),
-      child: SizedBox(
-
-        height: 50,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Row(
           children: [
+            SizedBox(width: 40,),
             Text('Gallery  ',
               style: TextStyle(
                 color: Colors.white,
@@ -391,85 +392,101 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
 
 
     selectFileWidget = selectingFile ?
-        Column(
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 5,),
-                getFromGalleryButton,
-                SizedBox(width: 5,),
-                takeImageButton,
-                SizedBox(width: 5,),
-              ],
-            ),
-            SizedBox(height: 20,),
-            isThere != null ?
-            Row(
-              children: [
-                SizedBox(width: 15,),
-                SizedBox(
-                    //width: 200,
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            children: [
+              getFromGalleryButton,
+              SizedBox(height: 10,),
+              takeImageButton,
+              // Row(
+              //   children: [
+              //     SizedBox(width: 5,),
+              //     getFromGalleryButton,
+              //     SizedBox(width: 5,),
+              //     takeImageButton,
+              //     SizedBox(width: 5,),
+              //   ],
+              // ),
+              SizedBox(height: 20,),
+              isThere != null ?
+              Row(
+                children: [
+                  //SizedBox(width: 15,),
+                  SizedBox(
+                      //width: 200,
+                      height: 75,
+                      width: 200,
+                      child: Text(
+                          "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          maxLines: 2,
+                      )
+                  ),
+                  SizedBox(width: 15,),
+                  ElevatedButton(
+                      child: Icon(Icons.delete, size: 35,),
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              side: BorderSide(color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                          alignment: Alignment.centerLeft,
+                          backgroundColor: MaterialStateColor.resolveWith(
+                                  (states) => Theme.of(context).accentColor.withOpacity(.7)
+                          )
+                      ),
+                      onPressed: (){
+                        deleteFile();
+                        setState(() {
+                        });
+                      }
+                  )
+                ],
+              ) :
+              Text("No image uploaded "),
+              //SizedBox(height: 5,),
+              Row(
+                children: [
+                  //SizedBox(width: 15,),
+                  SizedBox(
                     height: 75,
                     width: 200,
                     child: Text(
-                        "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        maxLines: 2,
-                    )
-                ),
-                ElevatedButton(
-                    child: Icon(Icons.delete, size: 35,),
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => Theme.of(context).accentColor.withOpacity(.7))
-                    ),
-                    onPressed: (){
-                      deleteFile();
-                      setState(() {
-                      });
-                    }
-                )
-              ],
-            ) :
-            Text("No image uploaded "),
-            SizedBox(height: 20,),
-            Row(
-              children: [
-                SizedBox(width: 15,),
-                SizedBox(
-                  height: 75,
-                  width: 200,
-                  child: Text(
-                    "Chosen image: \n"+fileName,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                    maxLines: 2,
-                    style: TextStyle(
-                      color: Theme.of(context).dividerColor,
+                      "Chosen image: \n"+fileName,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Theme.of(context).dividerColor,
+                      ),
                     ),
                   ),
-                ),
-                uploadButton,
-              ],
-            ),
-            task != null ? buildUploadStatus(task) : Container(),
-          ],
-    ) : Container();
+                  SizedBox(width: 15,),
+                  uploadButton,
+                ],
+              ),
+              task != null ? buildUploadStatus(task) : Container(),
+            ],
+    ),
+        ) : Container();
 
     ElevatedButton deleteButton = ElevatedButton(
         child: Icon(Icons.delete, size: 35,),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(color: Theme.of(context).primaryColor),
-              ),
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              side: BorderSide(color: Theme.of(context).primaryColor),
             ),
-            alignment: Alignment.centerLeft,
-            backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Theme.of(context).accentColor.withOpacity(.7)
-            )
+          ),
+          alignment: Alignment.centerLeft,
+          backgroundColor: MaterialStateColor.resolveWith(
+                  (states) => Theme.of(context).accentColor.withOpacity(.7)
+          ),
         ),
         onPressed: (){
           deleteFile();
@@ -480,57 +497,57 @@ class _PickFileToUploadState extends State<PickFileToUpload> {
 
 
     urlFieldWidget = urlBeingSelected ?
-    Column(
-      children: [
-        Row(
-          children: [
-            SizedBox(width: 20,),
-            SizedBox(
-              width: 200,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                controller: urlController,
-                decoration: const InputDecoration(
-                  labelText: 'URL',
+    Container(
+      padding: EdgeInsets.only(right: 15, left: 15, bottom: 5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  controller: urlController,
+                  decoration: const InputDecoration(
+                    labelText: 'URL',
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 5,),
-            uploadButton,
-          ],
-        ),
-        SizedBox(height: 10,),
-        isThere != null ?
-        Row(
-          children: [
-            SizedBox(width: 20,),
-            SizedBox(
-                //width: 200,
-                height: 75,
-                width: 200,
-                child: Text(
-                    "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  maxLines: 2,
-                )
-            ),
-            deleteButton,
-            SizedBox(width: 20,),
-          ],
-        ) :
-        Row(
-          children: [
-            SizedBox(width: 20,),
-            Expanded(
-              flex: 2,
-                child: Text("No url uploaded")),
-            deleteButton,
-            SizedBox(width: 20,),
-          ],
-        ),
-        SizedBox(height: 20,),
-      ],
+              SizedBox(width: 10,),
+              uploadButton,
+            ],
+          ),
+          SizedBox(height: 10,),
+          isThere != null ?
+          Row(
+            children: [
+
+              SizedBox(
+                  //width: 200,
+                  height: 75,
+                  width: 200,
+                  child: Text(
+                      "Uploaded: ${a.elementAt(index).downloadURL.substring(13)}",
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    maxLines: 2,
+                  )
+              ),
+              SizedBox(width: 10,),
+              deleteButton,
+              //SizedBox(width: 20,),
+            ],
+          ) :
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                  child: Text("No url uploaded")),
+              deleteButton,
+            ],
+          ),
+        ],
+      ),
     ) :
         Container();
 

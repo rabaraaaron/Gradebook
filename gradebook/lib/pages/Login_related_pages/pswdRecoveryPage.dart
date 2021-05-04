@@ -75,7 +75,7 @@ class _resetPageState extends State<ResetPassword> {
           children:[ Center(
             child: Container(
               child: Padding(
-                padding: const EdgeInsets.all(36.0),
+                padding: const EdgeInsets.only(top: 250, left:36, right: 36),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -83,7 +83,7 @@ class _resetPageState extends State<ResetPassword> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       emailField,
-                      SizedBox(height: 25.0),
+                      SizedBox(height: 320.0),
                       submitButton,
                       SizedBox(height: 15.0),
                       Text(

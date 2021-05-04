@@ -8,6 +8,7 @@ class MenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle t = Theme.of(context).textTheme.headline5;
+    Color color = Theme.of(context).primaryColor;
 
     return Drawer(
       child: ListView(
@@ -16,7 +17,9 @@ class MenuDrawer extends StatelessWidget {
               child: Text("Menu", style: t),
           ),
           ListTile(
-            title: Text("Settings", style: t,),
+              leading: Icon(Icons.settings, size: 38, color: color),
+              horizontalTitleGap: 5,
+              title: Text("Settings", style: t,),
             onTap: (){
               Navigator.pop(context);
               Navigator.pushNamed(context, '/Settings');
@@ -24,14 +27,18 @@ class MenuDrawer extends StatelessWidget {
           ),
           Divider(thickness: .5,),
           ListTile(
-            title: Text("Membership", style: t,),
+              horizontalTitleGap: 5,
+              leading: Icon(Icons.supervisor_account_outlined, size: 40, color: color,),
+              title: Text("Membership", style: t,),
               onTap: (){
-                //Navigator.pop(context);
-                //Navigator.pushNamed(context, '/AccountManagement');
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/MembershipPage');
               }
           ),
           Divider(thickness: .5,),
           ListTile(
+              horizontalTitleGap: 5,
+              leading: Icon(Icons.toc_outlined, size: 40, color: color,),
               title: Text(
                 "Upcoming Assignments",
                 style: t,
@@ -43,6 +50,8 @@ class MenuDrawer extends StatelessWidget {
           ),
           Divider(thickness: .5,),
           ListTile(
+            horizontalTitleGap: 5,
+            leading: Icon(Icons.logout, size: 35, color: color,),
             title: Text("Log Out", style: t,),
             onTap: () async {
               while (Navigator.canPop(context))

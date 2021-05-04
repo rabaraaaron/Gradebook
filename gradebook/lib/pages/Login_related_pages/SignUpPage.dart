@@ -96,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 OutlineInputBorder(borderRadius: BorderRadius.circular(13.0))),
             validator: (value) => ValidatorService().validateRepeatPassword(passwordController.text, value),
           ),
-          SizedBox(height: 25.0),
+          SizedBox(height: 200.0),
         ],
       ),
     );

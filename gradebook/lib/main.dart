@@ -4,6 +4,7 @@ import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/Assessment/ImagePage.dart';
 import 'package:gradebook/pages/Category/CategoryPage.dart';
 import 'package:gradebook/pages/Courses/CoursePage.dart';
+import 'package:gradebook/pages/Settings/MembershipPaga.dart';
 import 'package:gradebook/pages/Settings/SettingsPage.dart';
 import 'package:gradebook/pages/Term/TermsPage.dart';
 import 'package:gradebook/pages/Assessment/UpcomingAssignmentsPage.dart';
@@ -124,6 +125,7 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/Settings': (context) => SettingsPage(),
               '/Upcoming': (context) => UpcomingAssignments(),
               '/ImagePage': (context) => ImagePage(),
+              '/MembershipPage' : (context) => MembershipPage(),
             },
           ),
         ),

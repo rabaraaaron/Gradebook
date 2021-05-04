@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
         children:[ Center(
                 child: Container(
                   child: Padding(
-                    padding: const EdgeInsets.all(36.0),
+                    padding: const EdgeInsets.only(top:200, left:36, right: 36 ),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           focusScope,
                           //checkbox,
                           forgotPasswordButton,
-                          SizedBox(height: 45.0),
+                          SizedBox(height: 250.0),
                           loginButton,
                           SizedBox(height: 15.0),
                           Text(
