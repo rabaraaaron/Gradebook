@@ -89,6 +89,13 @@ class _CourseURLState extends State<CourseURL> {
 
     ElevatedButton uploadButton = ElevatedButton(
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          alignment: Alignment.centerLeft,
           backgroundColor: MaterialStateColor.resolveWith(
                   (states) => Theme.of(context).accentColor.withOpacity(.7)
           )
@@ -105,65 +112,92 @@ class _CourseURLState extends State<CourseURL> {
 
 
     urlFieldWidget =
-    Column(
-      children: [
-        Row(
-          children: [
-            SizedBox(
-              width: 200,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                controller: urlController,
-                decoration: const InputDecoration(
-                  labelText: 'URL',
+    Padding(
+      padding: const EdgeInsets.only(left:15, right: 15, bottom: 20, top: 0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  controller: urlController,
+                  decoration: const InputDecoration(
+                    labelText: 'URL',
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 5,),
-            uploadButton,
-          ],
-        ),
-        SizedBox(height: 10,),
-        isThere != null ?
-        Row(
-          children: [
-            SizedBox(
-                width: 200,
-                height: 75,
-                child: Text(
-                    "Uploaded: ${c.elementAt(index).url}"
-                )
-            ),
-            ElevatedButton(
-                child: Icon(Icons.delete, size: 35,),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Theme.of(context).accentColor.withOpacity(.7))
-                ),
-                onPressed: (){
-                  setState(() {
-                  });
-                }
-            )
-          ],
-        ) :
-        Text("No url uploaded"),
-      ],
+              SizedBox(width: 5,),
+              uploadButton,
+            ],
+          ),
+          SizedBox(height: 10,),
+          isThere != null ?
+          Row(
+            children: [
+              SizedBox(
+                  width: 200,
+                  height: 75,
+                  child: Text(
+                      "Uploaded: ${c.elementAt(index).url}"
+                  )
+              ),
+              SizedBox(width: 10,),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Theme.of(context).accentColor.withOpacity(.7)
+                      )
+                  ),
+                  child: Icon(Icons.delete, size: 35,),
+                  onPressed: (){
+                    setState(() {
+                    });
+                  }
+              )
+            ],
+          ) :
+          Text("No url uploaded"),
+        ],
+      ),
     );
 
 
 
 
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 0.0),
       content: SingleChildScrollView(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "Content Uploader",
-                style: Theme.of(context).textTheme.headline6,
+              // Text(
+              //   "Content Uploader",
+              //   style: Theme.of(context).textTheme.headline5,
+              // ),
+              // Divider(color: Theme.of(context).dividerColor,),
+              Container(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                decoration: BoxDecoration(
+
+                  color: Theme.of(context).accentColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0)),
+                ),
+                child: Center(child: Text("Content Uploader", style: Theme.of(context).textTheme.bodyText1,),),
               ),
-              Divider(color: Theme.of(context).dividerColor,),
+              SizedBox(height: 20,),
               Text(
                 "Attach content to: $str",
                 style: Theme.of(context).textTheme.headline3,
