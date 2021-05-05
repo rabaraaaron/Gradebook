@@ -273,10 +273,10 @@ class _NewCourseState extends State<NewCourse> {
                 //TODO: add manually entered course grade into database using
                 // courseGradeController.text
                 if (creditHoursController.text.isEmpty) {
-                  await CourseService(termID).addCourse(classTitleController.text, "0" , passFail, equalWeights);
+                  await CourseService(termID).addCourse(classTitleController.text, "0" , passFail, equalWeights, isManuallyEntered, courseGradeController.text);
                 } else{
                   await CourseService(termID).addCourse(classTitleController.text,
-                      creditHoursController.text, passFail, equalWeights);
+                      creditHoursController.text, passFail, equalWeights, isManuallyEntered, courseGradeController.text);
                 }
                 Navigator.pop(context);
                 setState(() {});

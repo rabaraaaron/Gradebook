@@ -206,35 +206,38 @@ class Calculator {
         .collection('terms')
         .doc(termID)
         .collection('courses');
-    QuerySnapshot categories = await courseRef.doc(courseID).collection('categories').get();
-    double courseGradeDecimal = 0.0;
-    int counter = 0;
-    double allocatedWeight = 0.0;
+    DocumentSnapshot courseSnap = await courseRef.doc(courseID).get();
+    if(!courseSnap.get('manuallySetGrade')) {
+      QuerySnapshot categories = await courseRef.doc(courseID).collection(
+          'categories').get();
+      double courseGradeDecimal = 0.0;
+      int counter = 0;
+      double allocatedWeight = 0.0;
 
-    for ( DocumentSnapshot category in categories.docs){
-      courseGradeDecimal += category.get('gradePercentAsDecimal');
-      counter += category.get('countOfIncompleteItems');
-      allocatedWeight += category.get('weight');
+      for (DocumentSnapshot category in categories.docs) {
+        courseGradeDecimal += category.get('gradePercentAsDecimal');
+        counter += category.get('countOfIncompleteItems');
+        allocatedWeight += category.get('weight');
+      }
+      double gradePercent = 0.0;
+      if (allocatedWeight < 100) {
+        gradePercent = courseGradeDecimal / allocatedWeight * 100;
+      } else {
+        gradePercent = courseGradeDecimal;
+      }
+      if (allocatedWeight == 0) {
+        gradePercent = 100;
+      }
+
+      String letterGrade = getLetterGrade(gradePercent);
+
+      print(courseGradeDecimal);
+      await courseRef.doc(courseID).update({
+        'gradePercent': gradePercent,
+        'letterGrade': letterGrade,
+        'countOfIncompleteItems': counter,
+      });
     }
-    double gradePercent = 0.0;
-    if(allocatedWeight<100){
-      gradePercent = courseGradeDecimal/allocatedWeight *100;
-    }else{
-      gradePercent = courseGradeDecimal;
-    }
-    if(allocatedWeight==0){
-      gradePercent=100;
-    }
-
-    String letterGrade = getLetterGrade(gradePercent);
-
-    print(courseGradeDecimal);
-    await courseRef.doc(courseID).update({
-      'gradePercent' : gradePercent,
-      'letterGrade' : letterGrade,
-      'countOfIncompleteItems': counter,
-    });
-
     await TermService().calculateGPA(courseRef.parent.id);
 
   }
