@@ -62,7 +62,13 @@ class _NewTermState extends State<NewTerm> {
       child: Row(
         children: [
           Expanded(
-            child: DropdownButton(
+            child: DropdownButtonFormField(
+              validator: (value) {
+                if(value == null){
+                  return "Required Field";
+                }
+                return null;
+              },
               hint: Center(
                 child: Text(
                   "Term",
