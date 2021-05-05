@@ -13,14 +13,12 @@ class CourseOptions extends StatefulWidget {
   Course course;
 
   CourseOptions(String tID, Course course) {
-
     termID = tID;
     this.course = course;
   }
 
   @override
-  _CourseOptionsState createState() =>
-      _CourseOptionsState(termID, course);
+  _CourseOptionsState createState() => _CourseOptionsState(termID, course);
 }
 
 // ignore: camel_case_types
@@ -39,8 +37,6 @@ class _CourseOptionsState extends State<CourseOptions> {
   final FocusScopeNode focusScopeNode = FocusScopeNode();
   final _formKey = GlobalKey<FormState>();
 
-
-
   _CourseOptionsState(String tID, Course course) {
     this.termID = tID;
     this.course = course;
@@ -52,32 +48,28 @@ class _CourseOptionsState extends State<CourseOptions> {
         double.tryParse(course.gradePercent).toStringAsFixed(2);
   }
 
-
   void handleSubmitted() {
     focusScopeNode.nextFocus();
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     SizedBox confirmButton = SizedBox(
       height: 50,
       width: 300,
       child: RaisedButton(
         color: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
         onPressed: () async {
-          if(_formKey.currentState.validate()){
-
-            if(courseTitleController == null){
+          if (_formKey.currentState.validate()) {
+            if (courseTitleController == null) {
               courseTitleController = TextEditingController();
               courseTitleController.text = initialTitle;
               initialTitle = null;
             }
-            if(creditHoursController == null){
+            if (creditHoursController == null) {
               creditHoursController = TextEditingController();
               creditHoursController.text = initialCredits;
               initialCredits = null;
@@ -85,25 +77,26 @@ class _CourseOptionsState extends State<CourseOptions> {
 
             //TODO: send course grade to database with courseGradeController.text;
             await CourseService(termID).updateCourse(
-              courseTitleController.text,
-              creditHoursController.text,
-              course.id,
-              isPassFail,
-              isEquallyWeighted,);
-            if (int.parse(creditHoursController.text) is int) {
-              // print(creditHoursController.text);
-            }
+                courseTitleController.text,
+                creditHoursController.text,
+                course.id,
+                isPassFail,
+                isEquallyWeighted,
+                isManuallyEntered,
+                courseGradeController.text);
+            if (int.parse(creditHoursController.text) is int) {}
             Navigator.pop(context);
             setState(() {});
           }
         },
-        child: Text( "Confirm",
+        child: Text(
+          "Confirm",
           style: Theme.of(context).textTheme.headline3,
         ),
       ),
     );
 
-    if(!isManuallyEntered){
+    if (!isManuallyEntered) {
       form = Form(
         key: _formKey,
         child: FocusScope(
@@ -121,38 +114,49 @@ class _CourseOptionsState extends State<CourseOptions> {
                       hintText: "ex CS 101",
                       labelText: 'Course Title',
                     ),
-                    validator: (value){
-                      if(value == null || value.isEmpty) {
-                        MessageBar(context: context,
-                            msg:"Please enter a name for the new course.",
-                            title: "Missing course title").show();
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        MessageBar(
+                                context: context,
+                                msg: "Please enter a name for the new course.",
+                                title: "Missing course title")
+                            .show();
                         return 'Required field';
-                      } else {return null;}
+                      } else {
+                        return null;
+                      }
                     },
                     onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(courseTitleController == null){
+                    onTap: () {
+                      if (courseTitleController == null) {
                         courseTitleController = TextEditingController();
                         courseTitleController.text = initialTitle;
                         initialTitle = null;
-                        setState(() {
-
-                        });
+                        setState(() {});
                       }
                     },
                   ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   child: TextFormField(
                     textAlign: TextAlign.center,
-                    validator: (value){
-                      if(value == null || value.isEmpty || int.tryParse(value) == null) {
-                        MessageBar(context: context,
-                            msg:"Please enter the credit hours of this course.",
-                            title: "Invalid credit hours").show();
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          int.tryParse(value) == null) {
+                        MessageBar(
+                                context: context,
+                                msg:
+                                    "Please enter the credit hours of this course.",
+                                title: "Invalid credit hours")
+                            .show();
                         return 'Required field';
-                      } else {return null;}
+                      } else {
+                        return null;
+                      }
                     },
                     initialValue: initialCredits,
                     controller: creditHoursController,
@@ -162,19 +166,16 @@ class _CourseOptionsState extends State<CourseOptions> {
                       labelText: 'Credit Hours',
                     ),
                     onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(creditHoursController == null){
+                    onTap: () {
+                      if (creditHoursController == null) {
                         creditHoursController = TextEditingController();
                         creditHoursController.text = initialCredits;
                         initialCredits = null;
-                        setState(() {
-
-                        });
+                        setState(() {});
                       }
                     },
                   ),
                 ),
-
               ],
             ),
             Row(
@@ -188,7 +189,8 @@ class _CourseOptionsState extends State<CourseOptions> {
                     });
                   },
                 ),
-                Text("Manually enter grade", style: Theme.of(context).textTheme.headline3),
+                Text("Manually enter grade",
+                    style: Theme.of(context).textTheme.headline3),
               ],
             ),
             Row(
@@ -223,7 +225,7 @@ class _CourseOptionsState extends State<CourseOptions> {
           ]),
         ),
       );
-    } else{
+    } else {
       form = Form(
         key: _formKey,
         child: FocusScope(
@@ -240,38 +242,49 @@ class _CourseOptionsState extends State<CourseOptions> {
                       hintText: "ex CS 101",
                       labelText: 'Course Title',
                     ),
-                    validator: (value){
-                      if(value == null || value.isEmpty) {
-                        MessageBar(context: context,
-                            msg:"Please enter a name for the new course.",
-                            title: "Missing course title").show();
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        MessageBar(
+                                context: context,
+                                msg: "Please enter a name for the new course.",
+                                title: "Missing course title")
+                            .show();
                         return 'Required field';
-                      } else {return null;}
+                      } else {
+                        return null;
+                      }
                     },
                     onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(courseTitleController == null){
+                    onTap: () {
+                      if (courseTitleController == null) {
                         courseTitleController = TextEditingController();
                         courseTitleController.text = initialTitle;
                         initialTitle = null;
-                        setState(() {
-
-                        });
+                        setState(() {});
                       }
                     },
                   ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   child: TextFormField(
                     textAlign: TextAlign.center,
-                    validator: (value){
-                      if(value == null || value.isEmpty || int.tryParse(value) == null) {
-                        MessageBar(context: context,
-                            msg:"Please enter the credit hours of this course.",
-                            title: "Invalid credit hours").show();
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          int.tryParse(value) == null) {
+                        MessageBar(
+                                context: context,
+                                msg:
+                                    "Please enter the credit hours of this course.",
+                                title: "Invalid credit hours")
+                            .show();
                         return 'Required field';
-                      } else {return null;}
+                      } else {
+                        return null;
+                      }
                     },
                     initialValue: initialCredits,
                     controller: creditHoursController,
@@ -281,14 +294,12 @@ class _CourseOptionsState extends State<CourseOptions> {
                       labelText: 'Credit Hours',
                     ),
                     onEditingComplete: handleSubmitted,
-                    onTap: (){
-                      if(creditHoursController == null){
+                    onTap: () {
+                      if (creditHoursController == null) {
                         creditHoursController = TextEditingController();
                         creditHoursController.text = initialCredits;
                         initialCredits = null;
-                        setState(() {
-
-                        });
+                        setState(() {});
                       }
                     },
                   ),
@@ -302,13 +313,19 @@ class _CourseOptionsState extends State<CourseOptions> {
                 hintText: "ex 95.5",
                 labelText: 'Course Grade',
               ),
-              validator: (value){
-                if(value == null || value.isEmpty || double.tryParse(value) == null) {
-                  MessageBar(context: context,
-                      msg:"Please enter a valid course grade.",
-                      title: "Invalid course grade").show();
+              validator: (value) {
+                if (value == null ||
+                    value.isEmpty ||
+                    double.tryParse(value) == null) {
+                  MessageBar(
+                          context: context,
+                          msg: "Please enter a valid course grade.",
+                          title: "Invalid course grade")
+                      .show();
                   return 'Required field';
-                } else {return null;}
+                } else {
+                  return null;
+                }
               },
               onEditingComplete: handleSubmitted,
             ),
@@ -323,7 +340,8 @@ class _CourseOptionsState extends State<CourseOptions> {
                     });
                   },
                 ),
-                Text("Manually enter grade", style: Theme.of(context).textTheme.headline3),
+                Text("Manually enter grade",
+                    style: Theme.of(context).textTheme.headline3),
               ],
             ),
             Row(
@@ -340,15 +358,16 @@ class _CourseOptionsState extends State<CourseOptions> {
                 Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
               ],
             ),
-
           ]),
         ),
       );
     }
 
-
-    return CustomDialog(title: "Course Options", form: form, button: confirmButton, context: context).show();
-
+    return CustomDialog(
+            title: "Course Options",
+            form: form,
+            button: confirmButton,
+            context: context)
+        .show();
   }
 }
-

@@ -35,40 +35,42 @@ class CourseService {
     });
     print("DUPE: " + duplicate.toString());
 
-    if (!duplicate) if (manuallySetGrade) {
-      await courseRef.add({
-        'name': name,
-        'credits': int.parse(credits),
-        'gradePercent': double.parse(grade),
-        'letterGrade': Calculator().getLetterGrade(double.parse(grade)),
-        'passFail': passFail,
-        'iconName': "default",
-        'countOfIncompleteItems': 0,
-        'remainingWeight': 100.0,
-        'equalWeights': equalWeights,
-        'url': null,
-        'manuallySetGrade': manuallySetGrade,
-      }).then((value) async {
-        print("Course Added");
-        await TermService().calculateGPA(courseRef.parent.id);
-      }).catchError((error) => print("Failed to add course: $error"));
-    } else {
-      await courseRef
-          .add({
-            'name': name,
-            'credits': int.parse(credits),
-            'gradePercent': 0,
-            'letterGrade': "",
-            'passFail': passFail,
-            'iconName': "default",
-            'countOfIncompleteItems': 0,
-            'remainingWeight': 100.0,
-            'equalWeights': equalWeights,
-            'url': null,
-            'manuallySetGrade': manuallySetGrade,
-          })
-          .then((value) => print("Course Added"))
-          .catchError((error) => print("Failed to add course: $error"));
+    if (!duplicate) {
+      if (manuallySetGrade) {
+        await courseRef.add({
+          'name': name,
+          'credits': int.parse(credits),
+          'gradePercent': double.parse(grade),
+          'letterGrade': Calculator().getLetterGrade(double.parse(grade)),
+          'passFail': passFail,
+          'iconName': "default",
+          'countOfIncompleteItems': 0,
+          'remainingWeight': 100.0,
+          'equalWeights': equalWeights,
+          'url': null,
+          'manuallySetGrade': manuallySetGrade,
+        }).then((value) async {
+          print("Course Added");
+          await TermService().calculateGPA(courseRef.parent.id);
+        }).catchError((error) => print("Failed to add course: $error"));
+      } else {
+        await courseRef
+            .add({
+          'name': name,
+          'credits': int.parse(credits),
+          'gradePercent': 0,
+          'letterGrade': "",
+          'passFail': passFail,
+          'iconName': "default",
+          'countOfIncompleteItems': 0,
+          'remainingWeight': 100.0,
+          'equalWeights': equalWeights,
+          'url': null,
+          'manuallySetGrade': manuallySetGrade,
+        })
+            .then((value) => print("Course Added"))
+            .catchError((error) => print("Failed to add course: $error"));
+      }
     }
   }
 
@@ -136,7 +138,7 @@ class CourseService {
   }
 
   Future<void> updateCourse(
-      name, credits, courseID, passFail, equalWeights) async {
+      name, credits, courseID, passFail, equalWeights, manuallySetGrade, grade) async {
     DocumentSnapshot courseSnap = await courseRef.doc(courseID).get();
     bool ew = courseSnap.get('equalWeights');
 
@@ -149,13 +151,25 @@ class CourseService {
         await Calculator().recalculateGrades(termID, courseID);
       }
     }
+    if(manuallySetGrade){
+      await courseRef.doc(courseID).update({
+        'name': name,
+        'gradePercent': double.parse(grade),
+        'letterGrade': Calculator().getLetterGrade(double.parse(grade)),
+        'credits': int.parse(credits),
+        'passFail': passFail,
+        'equalWeights': equalWeights,
+        'manuallySetGrade': manuallySetGrade,
+      });
+    }else{
 
     await courseRef.doc(courseID).update({
       'name': name,
       'credits': int.parse(credits),
       'passFail': passFail,
       'equalWeights': equalWeights,
-    });
+      'manuallySetGrade': false,
+    });}
     //Todo: check with Mike if this is needed
     Calculator().calcCourseGrade(termID, courseID);
   }
