@@ -44,8 +44,8 @@ class _CourseOptionsState extends State<CourseOptions> {
     initialCredits = course.credits;
     isPassFail = course.passFail;
     isEquallyWeighted = course.equalWeights;
-    courseGradeController.text =
-        double.tryParse(course.gradePercent).toStringAsFixed(2);
+    courseGradeController.text = course.getFormattedNumber(double.tryParse(course.gradePercent));
+        //double.tryParse(course.gradePercent).toStringAsFixed(2);
   }
 
   void handleSubmitted() {
