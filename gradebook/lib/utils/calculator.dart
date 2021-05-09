@@ -281,7 +281,7 @@ class Calculator {
       'D-': 0.7,
       'F': 0.0
     };
-    double creditCount = 0;
+    double creditCount = 0.0;
 
     for (DocumentSnapshot course in courses.docs) {
       double gradePoints = letterToPoints[course.get('letterGrade')];
@@ -297,6 +297,34 @@ class Calculator {
 
     await termsCollection.doc(termID).update({
       'gpa': gpa,
+      'credits': creditCount
     });
+    await calcCumulativeGPA();
   }
+
+  Future<void> calcCumulativeGPA() async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    QuerySnapshot terms = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('terms').get();
+    double gradePoints = 0;
+    double cumulativeCredits = 0;
+
+    for(DocumentSnapshot term in terms.docs){
+      double gpa = term.get('gpa');
+      double credits = term.get('credits');
+      gradePoints += gpa * credits;
+      cumulativeCredits += credits;
+    }
+
+    double cumulativeGPA = gradePoints/cumulativeCredits;
+
+    FirebaseFirestore.instance.collection('users').doc(uid).update({
+      'cumulativeGPA' : double.parse((cumulativeGPA).toStringAsFixed(2)),
+      'cumulativeCredits' : cumulativeCredits
+    });
+
+  }
+
 }

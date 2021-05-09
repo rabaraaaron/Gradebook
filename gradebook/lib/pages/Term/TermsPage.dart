@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gradebook/model/Term.dart';
+import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/Term/TermOptions.dart';
 import '../Courses/CoursePage.dart';
 import 'package:gradebook/services/term_service.dart';
@@ -13,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/user_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
+import 'package:gradebook/model/User.dart';
 
 class TermsPage extends StatefulWidget {
   @override
@@ -22,10 +25,15 @@ class TermsPage extends StatefulWidget {
 class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Term>>.value(
-      value: TermService().terms,
-      child: TermsList(),
-    );
+    return MultiProvider(providers: [
+    StreamProvider<List<Term>>.value(
+        value: TermService().terms,
+    ),
+      StreamProvider<GradeBookUser>.value(
+        value: UserService(uid:FirebaseAuth.instance.currentUser.uid).user,
+      ),
+    ],
+    child: TermsList(),);
   }
 }
 
@@ -43,6 +51,8 @@ class _TermsListState extends State<TermsList> {
   Widget build(BuildContext context) {
     List terms;
     Widget listView = Container();
+    GradeBookUser user = Provider.of<GradeBookUser>(context);
+    print("USERID::::::"+ user.toString());
 
     if (Provider.of<List<Term>>(context) != null) {
       terms = Provider.of<List<Term>>(context);
@@ -222,7 +232,7 @@ class _TermsListState extends State<TermsList> {
                 TableRow(
                     children: [
                       Text(" Cumulative GPA:",),
-                      Center(child: Text("3.33", style: TextStyle(fontWeight: FontWeight.bold),)),
+                      Center(child: Text("${user.cumulativeGPA}", style: TextStyle(fontWeight: FontWeight.bold),)),
                       Container(child: Row(children:[Expanded(flex: 2, child: Container(height: 30,),),])),
 
                     ]),
@@ -230,7 +240,7 @@ class _TermsListState extends State<TermsList> {
                     children: [
                       Text(" Cumulative Credits",),
                       Center(
-                          child: Text("55", style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: Text("${user.cumulativeCredits}", style: TextStyle(fontWeight: FontWeight.bold),)),
                       Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),])),
                     ]
                 )

@@ -21,7 +21,7 @@ class UserService {
       'displayName': displayName,
       'email': email,
       'username': username,
-      'window': 7
+      'window': 7,
     },
 
     );
@@ -32,14 +32,18 @@ class UserService {
     return userCollection.doc(FirebaseAuth.instance.currentUser.uid).snapshots().map(_userDataFromSnapshot);
   }
 
-  GradeBookUser _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return GradeBookUser(
-        uid: FirebaseAuth.instance.currentUser.uid,
-        email: snapshot.get('email'),
-        displayName: snapshot.get('displayName'),
-        photoUrl: snapshot.get('displayPhoto'),
-        username: snapshot.get('username'),
-    );
+  GradeBookUser _userDataFromSnapshot(DocumentSnapshot snapshot)  {
+
+      return GradeBookUser(
+          uid: FirebaseAuth.instance.currentUser.uid,
+          email: snapshot.get('email'),
+          displayName: snapshot.get('displayName'),
+          photoUrl: snapshot.get('displayPhoto'),
+          username: snapshot.get('username'),
+          cumulativeGPA: snapshot.get('cumulativeGPA'),
+          cumulativeCredits: snapshot.get('cumulativeCredits')
+      );
+
   }
 
   Future<int> getUserWindow(String uID) async{

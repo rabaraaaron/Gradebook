@@ -10,13 +10,15 @@ class GradeBookUser {
   final String username;
   String displayName;
   List<Term> terms;
+  double cumulativeGPA;
+  double cumulativeCredits;
 
 
-  GradeBookUser({this.uid, this.email, this.photoUrl, this.displayName, this.username});
+  GradeBookUser({this.uid, this.email, this.photoUrl, this.displayName, this.username, this.cumulativeGPA, this.cumulativeCredits});
 
   @override
   String toString() {
-    return {uid, email, displayName, username}.toString();
+    return {uid, email, displayName, username, cumulativeGPA, cumulativeCredits}.toString();
   }
 
 }

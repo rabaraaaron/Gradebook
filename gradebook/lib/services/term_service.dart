@@ -25,7 +25,7 @@ class TermService {
 
     if (!duplicate)
       await termsCollection
-          .add({'name': name, 'year': year, 'gpa': 0.0})
+          .add({'name': name, 'year': year, 'gpa': 0.0, 'credits': 0.0})
           .then((value) => print("Term Added"))
           .catchError((error) => print("Failed to add term: $error"));
   }
@@ -46,6 +46,7 @@ class TermService {
         year: doc.get('year') ?? "",
         termID: doc.id ?? "",
         gpa: doc.get('gpa'),
+        credits: doc.get('credits')
       );
     }).toList();
     return v;
