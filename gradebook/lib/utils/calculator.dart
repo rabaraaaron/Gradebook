@@ -311,13 +311,28 @@ class Calculator {
     double gradePoints = 0.0;
     double cumulativeCredits = 0.0;
 
-    for(DocumentSnapshot term in terms.docs){
+    for (DocumentSnapshot term in terms.docs) {
       double gpa = term.get('gpa');
-      double credits = term.get('credits');
+      double credits = term.get('credits').toDouble();
       gradePoints += gpa * credits;
       cumulativeCredits += credits;
     }
 
+// try {
+//   for (DocumentSnapshot term in terms.docs) {
+//     double gpa = term.get('gpa');
+//     double credits = term.get('credits');
+//     gradePoints += gpa * credits;
+//     cumulativeCredits += credits;
+//   }
+// } catch(e) {
+//   for (DocumentSnapshot term in terms.docs) {
+//     double gpa = term.get('gpa');
+//     double credits = term.get('credits').toDouble();
+//     gradePoints += gpa * credits;
+//     cumulativeCredits += credits;
+//   }
+// }
     double cumulativeGPA = gradePoints/cumulativeCredits;
     if(cumulativeCredits==0)
       cumulativeGPA=0.0;
