@@ -51,7 +51,7 @@ class CourseService {
           'manuallySetGrade': manuallySetGrade,
         }).then((value) async {
           print("Course Added");
-          await TermService().calculateGPA(courseRef.parent.id);
+          await Calculator().calculateGPA(courseRef.parent.id);
         }).catchError((error) => print("Failed to add course: $error"));
       } else {
         await courseRef
@@ -126,7 +126,7 @@ class CourseService {
 
   Future<void> deleteCourse(id) async {
     await courseRef.doc(id).delete();
-    await TermService().calculateGPA(courseRef.parent.id);
+    await Calculator().calculateGPA(courseRef.parent.id);
   }
 
   Future<String> getCourseName(id) async {

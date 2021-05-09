@@ -19,18 +19,15 @@ class TermService {
         .where('year', isEqualTo: year)
         .get()
         .then((value) {
-      duplicate = value.docs.isNotEmpty;});
+      duplicate = value.docs.isNotEmpty;
+    });
     print("DUPE: " + duplicate.toString());
 
-    if(!duplicate)
-    await termsCollection
-        .add({
-          'name': name,
-          'year': year,
-      'gpa' : 0.0
-        })
-        .then((value) => print("Term Added"))
-        .catchError((error) => print("Failed to add term: $error"));
+    if (!duplicate)
+      await termsCollection
+          .add({'name': name, 'year': year, 'gpa': 0.0})
+          .then((value) => print("Term Added"))
+          .catchError((error) => print("Failed to add term: $error"));
   }
 
   Stream<List<Term>> get terms {
@@ -48,10 +45,9 @@ class TermService {
         name: doc.get('name'),
         year: doc.get('year') ?? "",
         termID: doc.id ?? "",
-        gpa:  doc.get('gpa'),
+        gpa: doc.get('gpa'),
       );
-    }).toList()
-    ;
+    }).toList();
     return v;
   }
 
@@ -74,53 +70,11 @@ class TermService {
     //     .get()
     //     .then((value) {
     //   String id = value.docs.first.id;
-      termsCollection.doc(termID).update({
-        "name" : name,
-        'year' : year,
-      });
-  }
-
-
-  Future<void> calculateGPA (termID) async {
-    QuerySnapshot courses = await termsCollection.doc(termID).collection('courses').get();
-    double gpa = 0.0;
-    double totalGradePoints = 0.0;
-
-    Map<String, double> letterToPoints = {
-      'A': 4.0,
-      'A-': 3.7,
-      'B+': 3.3,
-      'B' : 3.0,
-      'B-': 2.7,
-      'C+': 2.3,
-      'C' : 2.0,
-      'C-' : 1.7,
-      'D+' : 1.3,
-      'D' : 1.0,
-      'D-' : 0.7,
-      'F' : 0.0
-    };
-double creditCount = 0;
-
-    for ( DocumentSnapshot course in courses.docs){
-
-      double gradePoints = letterToPoints[course.get('letterGrade')];
-
-      print("${course.get('letterGrade')} , $gradePoints");
-
-      int credits = course.get('credits');
-      creditCount += credits;
-      if(gradePoints != null)
-        totalGradePoints += credits*gradePoints;
-    }
-
-    gpa = totalGradePoints/creditCount;
-
-    await termsCollection.doc(termID).update({
-      'gpa' : gpa,
+    termsCollection.doc(termID).update({
+      "name": name,
+      'year': year,
     });
   }
 
+
 }
-
-
