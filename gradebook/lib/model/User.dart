@@ -10,8 +10,8 @@ class GradeBookUser {
   final String username;
   String displayName;
   List<Term> terms;
-  double cumulativeGPA;
-  double cumulativeCredits;
+  final double cumulativeGPA;
+  final double cumulativeCredits;
 
 
   GradeBookUser({this.uid, this.email, this.photoUrl, this.displayName, this.username, this.cumulativeGPA, this.cumulativeCredits});

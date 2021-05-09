@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradebook/model/Term.dart';
 import 'package:gradebook/model/User.dart';
 import 'package:gradebook/pages/Term/TermOptions.dart';
+import 'package:gradebook/utils/loading.dart';
 import '../Courses/CoursePage.dart';
 import 'package:gradebook/services/term_service.dart';
 import 'package:gradebook/utils/menuDrawer.dart';
@@ -148,6 +150,39 @@ class _TermsListState extends State<TermsList> {
       terms = [];
     }
 
+     Widget cumulativeGPAData(){
+      while(Provider.of<GradeBookUser>(context)==null){
+        return Container(child: SpinKitCircle(color: Theme.of(context).primaryColor,
+          size: 50,));
+      }
+          return Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: {
+          0: FractionColumnWidth(0.5),
+          1: FractionColumnWidth(0.2),
+          2: FractionColumnWidth(0.43),
+          3: FractionColumnWidth(0.17),
+        },
+        children: [
+          TableRow(
+              children: [
+                Text(" Cumulative GPA:",),
+                Center(child: Text("${user.cumulativeGPA}", style: TextStyle(fontWeight: FontWeight.bold),)),
+                Container(child: Row(children:[Expanded(flex: 2, child: Container(height: 30,),),])),
+
+              ]),
+          TableRow(
+              children: [
+                Text(" Cumulative Credits",),
+                Center(
+                    child: Text("${user.cumulativeCredits}", style: TextStyle(fontWeight: FontWeight.bold),)),
+                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),])),
+              ]
+          )
+        ],
+      );
+    }
+
     seasonIcons.clear();
     double scale = 9.5;
     for (int i = 0; i < terms.length; i++) {
@@ -220,32 +255,7 @@ class _TermsListState extends State<TermsList> {
             ),
 
 
-            child: Table(
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              columnWidths: {
-                0: FractionColumnWidth(0.5),
-                1: FractionColumnWidth(0.2),
-                2: FractionColumnWidth(0.43),
-                3: FractionColumnWidth(0.17),
-              },
-              children: [
-                TableRow(
-                    children: [
-                      Text(" Cumulative GPA:",),
-                      Center(child: Text("${user.cumulativeGPA}", style: TextStyle(fontWeight: FontWeight.bold),)),
-                      Container(child: Row(children:[Expanded(flex: 2, child: Container(height: 30,),),])),
-
-                    ]),
-                TableRow(
-                    children: [
-                      Text(" Cumulative Credits",),
-                      Center(
-                          child: Text("${user.cumulativeCredits}", style: TextStyle(fontWeight: FontWeight.bold),)),
-                      Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),])),
-                    ]
-                )
-              ],
-            ),
+            child: cumulativeGPAData()
           ),
           Expanded(flex:1, child: listView),
         ],

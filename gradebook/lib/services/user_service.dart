@@ -40,8 +40,8 @@ class UserService {
           displayName: snapshot.get('displayName'),
           photoUrl: snapshot.get('displayPhoto'),
           username: snapshot.get('username'),
-          cumulativeGPA: snapshot.get('cumulativeGPA'),
-          cumulativeCredits: snapshot.get('cumulativeCredits')
+          cumulativeGPA: snapshot.get('cumulativeGPA') ?? 0.0,
+          cumulativeCredits: snapshot.get('cumulativeCredits') ?? 0.0
       );
 
   }
