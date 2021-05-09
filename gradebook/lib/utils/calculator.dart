@@ -308,8 +308,8 @@ class Calculator {
         .collection('users')
         .doc(uid)
         .collection('terms').get();
-    double gradePoints = 0;
-    double cumulativeCredits = 0;
+    double gradePoints = 0.0;
+    double cumulativeCredits = 0.0;
 
     for(DocumentSnapshot term in terms.docs){
       double gpa = term.get('gpa');
@@ -319,6 +319,8 @@ class Calculator {
     }
 
     double cumulativeGPA = gradePoints/cumulativeCredits;
+    if(cumulativeCredits==0)
+      cumulativeGPA=0.0;
 
     FirebaseFirestore.instance.collection('users').doc(uid).update({
       'cumulativeGPA' : double.parse((cumulativeGPA).toStringAsFixed(2)),

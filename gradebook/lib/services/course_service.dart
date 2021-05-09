@@ -131,9 +131,6 @@ class CourseService {
 
   Future<String> getCourseName(id) async {
     DocumentSnapshot courseSnap = await courseRef.doc(id).get();
-    //print("----" + courseSnap.get('name'));
-
-    //await TermService().calculateGPA(courseRef.parent.id);
     return courseSnap.get('name');
   }
 

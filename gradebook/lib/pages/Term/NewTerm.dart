@@ -22,9 +22,10 @@ class _NewTermState extends State<NewTerm> {
   var thisTerms;
   var termYear = DateTime.now().year;
   var addedTerm;
-  var termIsCompleted = false;
+  var manuallySetGPA = false;
   Form form;
   TextEditingController gpaController = TextEditingController();
+  TextEditingController creditController = TextEditingController();
 
   _NewTermState(context, terms) {
     thisContext = context;
@@ -135,15 +136,42 @@ class _NewTermState extends State<NewTerm> {
       child: gpaFormField,
     );
 
+    TextFormField creditFormField = TextFormField(
+      autofocus: true,
+      textAlign: TextAlign.center,
+      controller: creditController,
+      keyboardType: TextInputType.number,
+      validator:
+          (value) {
+        if (value == null || value.isEmpty || double.tryParse(value) == null) {
+          MessageBar(
+            context: context,
+            title: 'Invalid Term Credits',
+            msg: 'Please enter a valid number of Credits.',
+          ).show();
+          return 'Required field.';
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        hintText: "ex 16.0",
+        labelText: 'Term Credits',
+      ),
+    );
+
+    SizedBox creditsBox = SizedBox(
+      child: creditFormField,
+    );
+
 
     Row row = Row(
         children: [
           Switch(
             activeColor: Theme.of(context).accentColor,
-            value: termIsCompleted,
+            value: manuallySetGPA,
             onChanged: (updateTermIsCompleted) {
               setState(() {
-                termIsCompleted = updateTermIsCompleted;
+                manuallySetGPA = updateTermIsCompleted;
               });
             },
           ),
@@ -156,13 +184,14 @@ class _NewTermState extends State<NewTerm> {
     );
 
 
-    if(termIsCompleted){
+    if(manuallySetGPA){
       form = Form(
         key: _formKey,
           child: Column(
               children: [
                 container,
                 gpaBox,
+                creditsBox,
                 row,
               ]
           )
@@ -193,7 +222,7 @@ class _NewTermState extends State<NewTerm> {
           onPressed: () async {
             //TODO: add manually entered term gpa to database using gpaController.text
             if(_formKey.currentState.validate()){
-              await term.addTerm(addedTerm, termYear);
+              await term.addTerm(addedTerm, termYear, manuallySetGPA, double.tryParse(gpaController.text), double.tryParse(creditController.text) );
               Navigator.pop(context);
             }
 

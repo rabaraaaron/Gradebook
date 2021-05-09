@@ -27,15 +27,17 @@ class TermsPage extends StatefulWidget {
 class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-    StreamProvider<List<Term>>.value(
-        value: TermService().terms,
-    ),
-      StreamProvider<GradeBookUser>.value(
-        value: UserService(uid:FirebaseAuth.instance.currentUser.uid).user,
-      ),
-    ],
-    child: TermsList(),);
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Term>>.value(
+          value: TermService().terms,
+        ),
+        StreamProvider<GradeBookUser>.value(
+          value: UserService(uid: FirebaseAuth.instance.currentUser.uid).user,
+        ),
+      ],
+      child: TermsList(),
+    );
   }
 }
 
@@ -49,12 +51,14 @@ class _TermsListState extends State<TermsList> {
   final GlobalKey scaffoldKey = new GlobalKey();
   List<Image> seasonIcons = [];
 
+
+
   @override
   Widget build(BuildContext context) {
     List terms;
     Widget listView = Container();
     GradeBookUser user = Provider.of<GradeBookUser>(context);
-    print("USERID::::::"+ user.toString());
+    print("USER::::::" + user.toString());
 
     if (Provider.of<List<Term>>(context) != null) {
       terms = Provider.of<List<Term>>(context);
@@ -104,6 +108,9 @@ class _TermsListState extends State<TermsList> {
                       return DeleteTermConfirmation(terms, index);
                     },
                   );
+                  setState(() {
+
+                  });
                 },
               )
             ],
@@ -150,12 +157,66 @@ class _TermsListState extends State<TermsList> {
       terms = [];
     }
 
-     Widget cumulativeGPAData(){
-      while(Provider.of<GradeBookUser>(context)==null){
-        return Container(child: SpinKitCircle(color: Theme.of(context).primaryColor,
-          size: 50,));
+    Widget cumulativeGPAData() {
+      while (Provider.of<GradeBookUser>(context) == null) {
+        return Container(
+            child: SpinKitCircle(
+          color: Theme.of(context).primaryColor,
+          size: 50,
+        ));
       }
-          return Table(
+      if(terms.isEmpty){
+        return Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: {
+            0: FractionColumnWidth(0.5),
+            1: FractionColumnWidth(0.2),
+            2: FractionColumnWidth(0.43),
+            3: FractionColumnWidth(0.17),
+          },
+          children: [
+            TableRow(children: [
+              Text(
+                " Cumulative GPA:",
+              ),
+              Center(
+                  child: Text(
+                    "",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+              Container(
+                  child: Row(children: [
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        height: 30,
+                      ),
+                    ),
+                  ])),
+            ]),
+            TableRow(children: [
+              Text(
+                " Cumulative Credits:",
+              ),
+              Center(
+                  child: Text(
+                    "",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+              Container(
+                  child: Row(children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        height: 30,
+                      ),
+                    ),
+                  ])),
+            ])
+          ],
+        );
+      } else{
+      return Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
           0: FractionColumnWidth(0.5),
@@ -164,23 +225,46 @@ class _TermsListState extends State<TermsList> {
           3: FractionColumnWidth(0.17),
         },
         children: [
-          TableRow(
-              children: [
-                Text(" Cumulative GPA:",),
-                Center(child: Text("${user.cumulativeGPA}", style: TextStyle(fontWeight: FontWeight.bold),)),
-                Container(child: Row(children:[Expanded(flex: 2, child: Container(height: 30,),),])),
-
-              ]),
-          TableRow(
-              children: [
-                Text(" Cumulative Credits",),
-                Center(
-                    child: Text("${user.cumulativeCredits}", style: TextStyle(fontWeight: FontWeight.bold),)),
-                Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),])),
-              ]
-          )
+          TableRow(children: [
+            Text(
+              " Cumulative GPA:",
+            ),
+            Center(
+                child: Text(
+              "${user.cumulativeGPA}",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+            Container(
+                child: Row(children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 30,
+                ),
+              ),
+            ])),
+          ]),
+          TableRow(children: [
+            Text(
+              " Cumulative Credits",
+            ),
+            Center(
+                child: Text(
+              "${user.cumulativeCredits}",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+            Container(
+                child: Row(children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: 30,
+                ),
+              ),
+            ])),
+          ])
         ],
-      );
+      );}
     }
 
     seasonIcons.clear();
@@ -249,15 +333,12 @@ class _TermsListState extends State<TermsList> {
       body: Column(
         children: [
           Card(
-            //color: color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-
-
-            child: cumulativeGPAData()
-          ),
-          Expanded(flex:1, child: listView),
+              //color: color,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+              child: cumulativeGPAData()),
+          Expanded(flex: 1, child: listView),
         ],
       ),
     );

@@ -20,18 +20,20 @@ class _TermOptionsState extends State<TermOptions> {
   Term term;
   var termYear;
   var addedTerm;
-  var manuallyEnteredGPA = false;
+  var manuallySetGPA;
   // TODO: add isCompleted to terms
   Form form;
   TextEditingController gpaController = TextEditingController();
+  TextEditingController creditController = TextEditingController();
 
   _TermOptionsState(t) {
     term = t;
     addedTerm = t.name;
     termYear = t.year;
     //TODO: add hypothetical field?
-    // manuallyEnteredGPA = term.manuallyEnteredGPA;
+    manuallySetGPA = t.manuallySetGPA ?? false;
     gpaController.text = t.gpa.toStringAsFixed(2);
+    creditController.text = t.credits.toString();
   }
 
   @override
@@ -110,10 +112,10 @@ class _TermOptionsState extends State<TermOptions> {
         children: [
           Switch(
             activeColor: Theme.of(context).accentColor,
-            value: manuallyEnteredGPA,
+            value: manuallySetGPA,
             onChanged: (manuallyEntered) {
               setState(() {
-                manuallyEnteredGPA = manuallyEntered;
+                manuallySetGPA = manuallyEntered;
               });
             },
           ),
@@ -148,14 +150,41 @@ class _TermOptionsState extends State<TermOptions> {
       ),
     );
 
+    TextFormField creditFormField = TextFormField(
+      autofocus: true,
+      textAlign: TextAlign.center,
+      controller: creditController,
+      keyboardType: TextInputType.number,
+      validator:
+          (value) {
+        if (value == null || value.isEmpty || double.tryParse(value) == null) {
+          MessageBar(
+            context: context,
+            title: 'Invalid Term Credits',
+            msg: 'Please enter a valid number of Credits.',
+          ).show();
+          return 'Required field.';
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        hintText: "ex 16.0",
+        labelText: 'Term Credits',
+      ),
+    );
 
-    if(manuallyEnteredGPA) {
+    SizedBox creditsBox = SizedBox(
+      child: creditFormField,
+    );
+
+    if(manuallySetGPA) {
       form = Form(
         key: _formKey,
           child: Column(
               children: [
                 container,
                 gpaFormField,
+                creditFormField,
                 SizedBox(height: 5,),
                 row,
               ]
@@ -187,7 +216,7 @@ class _TermOptionsState extends State<TermOptions> {
             //TODO: add manually entered term gpa to database using gpaController.text
             if(_formKey.currentState.validate()){
               print(gpaController.text);
-              termService.updateTerm(term.termID, addedTerm, termYear);
+              termService.updateTerm(term.termID, addedTerm, termYear, manuallySetGPA, double.tryParse(gpaController.text), double.tryParse(creditController.text));
             }
             // print(addedTerm); To get the term name
             // print(termYear); To get the term year

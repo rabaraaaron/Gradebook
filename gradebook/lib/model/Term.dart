@@ -6,9 +6,10 @@ class Term {
   final double gpa;
   final String termID;
   final double credits;
+  bool manuallySetGPA = false;
 
 
-  Term({this.name, this.year, this.courses, this.gpa, this.termID, this.credits});
+  Term({this.name, this.year, this.courses, this.gpa, this.termID, this.credits, this.manuallySetGPA});
 
   @override
   String toString() {
