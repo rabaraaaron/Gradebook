@@ -14,7 +14,6 @@ import 'package:gradebook/services/auth_service.dart';
 import 'package:gradebook/services/user_service.dart';
 import 'package:gradebook/utils/MyAppTheme.dart';
 
-
 class TermsPage extends StatefulWidget {
   @override
   _TermsPageState createState() => _TermsPageState();
@@ -30,7 +29,6 @@ class _TermsPageState extends State<TermsPage> {
   }
 }
 
-
 class TermsList extends StatefulWidget {
   @override
   _TermsListState createState() => _TermsListState();
@@ -41,13 +39,12 @@ class _TermsListState extends State<TermsList> {
   final GlobalKey scaffoldKey = new GlobalKey();
   List<Image> seasonIcons = [];
 
-
   @override
   Widget build(BuildContext context) {
     List terms;
-    Widget listView;
+    Widget listView = Container();
 
-    if(Provider.of<List<Term>>(context) != null){
+    if (Provider.of<List<Term>>(context) != null) {
       terms = Provider.of<List<Term>>(context);
       listView = ListView.separated(
         separatorBuilder: (context, index) => Divider(
@@ -115,8 +112,8 @@ class _TermsListState extends State<TermsList> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-
-                                  builder: (context) => TermClassesPageWrap(term: terms[index])));
+                                  builder: (context) =>
+                                      TermClassesPageWrap(term: terms[index])));
                         },
                         child: new Padding(
                           padding: new EdgeInsets.all(20.0),
@@ -137,23 +134,34 @@ class _TermsListState extends State<TermsList> {
           ),
         ),
       );
-    } else{
+    } else {
       terms = [];
     }
 
-
-
     seasonIcons.clear();
     double scale = 9.5;
-    for(int i = 0; i < terms.length; i++){
-      if(terms[i].name == "Fall"){
-        seasonIcons.add(Image.asset('assets/Fall_icon.png', scale: scale, color: Theme.of(context).dividerColor,));
-      } else if(terms[i].name == "Winter"){
-        seasonIcons.add(Image.asset('assets/Winter.png', scale: scale, color: Theme.of(context).dividerColor,));
-      } else if(terms[i].name == "Spring"){
-        seasonIcons.add(Image.asset('assets/Flower.png', scale: scale, color: Theme.of(context).dividerColor,));
-      } else{
-        seasonIcons.add(Image.asset('assets/Sun.png', scale: scale, color: Theme.of(context).dividerColor));
+    for (int i = 0; i < terms.length; i++) {
+      if (terms[i].name == "Fall") {
+        seasonIcons.add(Image.asset(
+          'assets/Fall_icon.png',
+          scale: scale,
+          color: Theme.of(context).dividerColor,
+        ));
+      } else if (terms[i].name == "Winter") {
+        seasonIcons.add(Image.asset(
+          'assets/Winter.png',
+          scale: scale,
+          color: Theme.of(context).dividerColor,
+        ));
+      } else if (terms[i].name == "Spring") {
+        seasonIcons.add(Image.asset(
+          'assets/Flower.png',
+          scale: scale,
+          color: Theme.of(context).dividerColor,
+        ));
+      } else {
+        seasonIcons.add(Image.asset('assets/Sun.png',
+            scale: scale, color: Theme.of(context).dividerColor));
       }
     }
 
@@ -187,15 +195,51 @@ class _TermsListState extends State<TermsList> {
               onPressed: () async {
                 await showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      NewTerm(context, terms),
+                  builder: (BuildContext context) => NewTerm(context, terms),
                 );
                 setState(() {});
               })
         ],
       ),
-      body: listView,
+      body: Column(
+        children: [
+          Card(
+            //color: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7.0),
+            ),
+
+
+            child: Table(
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              columnWidths: {
+                0: FractionColumnWidth(0.5),
+                1: FractionColumnWidth(0.2),
+                2: FractionColumnWidth(0.43),
+                3: FractionColumnWidth(0.17),
+              },
+              children: [
+                TableRow(
+                    children: [
+                      Text(" Cumulative GPA:",),
+                      Center(child: Text("3.33", style: TextStyle(fontWeight: FontWeight.bold),)),
+                      Container(child: Row(children:[Expanded(flex: 2, child: Container(height: 30,),),])),
+
+                    ]),
+                TableRow(
+                    children: [
+                      Text(" Cumulative Credits",),
+                      Center(
+                          child: Text("55", style: TextStyle(fontWeight: FontWeight.bold),)),
+                      Container(child: Row(children:[Expanded(flex: 3, child: Container(height: 30,),),])),
+                    ]
+                )
+              ],
+            ),
+          ),
+          Expanded(flex:1, child: listView),
+        ],
+      ),
     );
   }
 }
-
