@@ -23,7 +23,7 @@ class CategoryService {
   }
 
   Future<void> addCategory(
-      name, weight, dropLowest, numberDropped, equalWeights) async {
+      name, weight, dropLowest, numberDropped, equalWeights, isManuallySet) async {
     if (numberDropped == "") {
       numberDropped = "0";
     }
@@ -49,6 +49,7 @@ class CategoryService {
             'gradePercentAsDecimal': 0.0,
             'equalWeights': equalWeights,
             'countOfIncompleteItems': 0,
+            'isManuallySet': isManuallySet,
           })
           .then((value) => print("Category Added"))
           .catchError((error) {
@@ -78,6 +79,7 @@ class CategoryService {
           equalWeights: doc.get('equalWeights') ?? false,
           countOfIncompleteItems: doc.get('countOfIncompleteItems') ?? 0,
           gradePercentAsDecimal: doc.get('gradePercentAsDecimal') ?? 0,
+          isManuallySet: doc.get('isManuallySet') ?? false,
         );
       }).toList();
       listOfCategories = v;
@@ -124,7 +126,7 @@ class CategoryService {
   }
 
   Future<void> updateCategory(name, newWeight, oldWeight, dropLowest,
-      numberDropped, equalWeights, catID) async {
+      numberDropped, equalWeights, catID, gradePercentAsDecimal) async {
     var result = double.parse(newWeight) - oldWeight;
 
     await categoryRef.doc(catID).update({
@@ -133,6 +135,7 @@ class CategoryService {
       'dropLowest': dropLowest,
       'equalWeights': equalWeights,
       'numberDropped': dropLowest ? int.parse(numberDropped) : 0,
+      'gradePercentAsDecimal' : gradePercentAsDecimal,
     });
 
     if (result < 0) {

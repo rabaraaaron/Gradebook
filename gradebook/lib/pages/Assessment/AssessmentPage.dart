@@ -48,19 +48,48 @@ class _AssessmentPageState extends State<AssessmentPage> {
     //     catFromProvider = category;
     //   }
     // }
+
+
+    //cat.isManuallyEntered = true;
+
+    var textForManuallySet = Row();
+    if(cat.isManuallySet) {
+      textForManuallySet = Row(
+        children: [
+          Icon(Icons.lock_outline_sharp, size: 22,),
+          Text(" Manually Set",
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodyText2,
+            textScaleFactor: 0.8,
+          ),
+        ],
+      );
+    }
+
     return Container(
       child: ExpansionTile(
         title: Row(
           children: [
             Expanded(
-              child: Text(
-                "${cat.categoryName}",
-                style: Theme.of(context).textTheme.headline6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 10,),
+                  Text(
+                    "${cat.categoryName}",
+                    style: Theme.of(context).textTheme.headline5,
+                    textScaleFactor: 1.3,
+                  ),
+                  textForManuallySet,
+                ],
               ),
             ),
             //SizedBox(width: 20,),
             Text(cat.getFormattedNumber(cat.categoryWeight)+"%",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline5,
+              textScaleFactor: 1.2,
             ),
           ],
         ),

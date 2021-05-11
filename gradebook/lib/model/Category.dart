@@ -6,6 +6,7 @@ class Category {
   double categoryWeight = 0;
   List<Assessment> categoryItems;
   bool dropLowestScore = false;
+  bool isManuallySet = false;
   int numberDropped;
   bool equalWeights = false;
   String id;
@@ -27,6 +28,7 @@ class Category {
     this.equalWeights,
     this.countOfIncompleteItems,
     this.gradePercentAsDecimal,
+    this.isManuallySet,
 
   });
 

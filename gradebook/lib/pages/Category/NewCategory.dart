@@ -293,7 +293,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
         if(_formKey.currentState.validate()) {
           await categoryService.addCategory(
               addedCategory, categoryWeightController.text,
-              dropLowest_isChecked, numberDroppedController.text, course.equalWeights);
+              dropLowest_isChecked, numberDroppedController.text, course.equalWeights, isManuallyEntered);
           Navigator.pop(context);
         }
       },

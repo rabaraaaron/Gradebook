@@ -48,10 +48,6 @@ class Course with ChangeNotifier {
     return {name, year, categories, _gradeLetter, term, credits}.toString();
   }
 
-  // void updateGrade( double grade){
-  //   this.grade = (grade * 100).roundToDouble()/100;
-  //   notifyListeners();
-  // }
   String get getGradeLetter {
     return _gradeLetter;
   }

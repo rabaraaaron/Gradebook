@@ -82,6 +82,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
 
             linkButton = classes[index].url != "" && classes[index].url != null ?
                 IconButton(
+                  padding: EdgeInsets.only(right: 20,),
                   iconSize: 45,
                     icon: Icon(Icons.link),
                     onPressed: () async {
@@ -92,6 +93,22 @@ class _TermCoursePageState extends State<TermCoursePage> {
                       throw 'Could not launch $url';
                     }
                 ) : Container();
+
+            var manuallySetText = Row();
+            if(classes[index].manuallySetGrade){
+              manuallySetText = Row(
+                children: [
+                  Icon(Icons.lock_outline_sharp, size: 22,),
+                  Text(" Manually Set",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyText2,
+                    textScaleFactor: 0.8,
+                  ),
+                ],
+              );
+            }
 
             return Column(
               children: [
@@ -159,7 +176,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
                     ],
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -179,10 +196,11 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                 );
                               },
                             ),
-                            padding: EdgeInsets.all(10.0),
+                           // padding: EdgeInsets.all(10.0),
                           ),
                           Expanded(
                             child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -192,10 +210,18 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                             course: classes[index])));
                               },
                               child: new Padding(
-                                padding: new EdgeInsets.all(20.0),
-                                child: Text(
-                                  "${classes[index].name}",
-                                  style: Theme.of(context).textTheme.headline6,
+                                padding: new EdgeInsets.all(3.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${classes[index].name}",
+                                      style: Theme.of(context).textTheme.headline5,
+                                      textScaleFactor: 1.3,
+                                    ),
+                                    manuallySetText,
+
+                                  ],
                                 ),
                               ),
                             ),
@@ -216,7 +242,7 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                         style: TextStyle(
                                           color: Theme.of(context).dividerColor,
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 15.0,
+                                          fontSize: 14.0,
                                         ),
                                       ),
                                     ),
@@ -233,7 +259,8 @@ class _TermCoursePageState extends State<TermCoursePage> {
                                         fontSize: 20.0,
                                         ),
                                 ),
-                                )],
+                                ),
+                              ],
                             ),
                           ),
                         ],

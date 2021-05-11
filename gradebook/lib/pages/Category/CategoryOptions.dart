@@ -33,11 +33,12 @@ class _CategoryOptions extends State<CategoryOptions> {
   String initialWeight;
   String initialnumberDropped;
   bool equalWeights;
-  bool isManuallyEntered = false;
+  bool isManuallySet = false;
   Course course;
   Form form;
   FocusScopeNode focusScopeNode = FocusScopeNode();
   Calculator calculator;
+  double catPercent;
 
   CategoryService categoryService;
 
@@ -53,8 +54,12 @@ class _CategoryOptions extends State<CategoryOptions> {
     initialWeight = c.categoryWeight.toString();
     initialnumberDropped = c.numberDropped.toString();
     equalWeights = c.equalWeights;
-    //TODO: add isManuallyEntered into the database
-    // isManuallyEntered = c.isManuallyEntered;
+    //TODO: add isManuallyEntered into the database  --  (updated by Mohd: done)
+     isManuallySet = c.isManuallySet;
+
+     if(isManuallySet){
+       catPercentController.text = c.gradePercentAsDecimal.toString();
+     }
     if (c.dropLowestScore == null) {
       dropLowest = false;
     } else {
@@ -202,11 +207,11 @@ class _CategoryOptions extends State<CategoryOptions> {
     Row manuallyEnterSwitch = Row(
       children: [
         Switch(
-          value: isManuallyEntered,
+          value: isManuallySet,
           activeColor: Theme.of(context).accentColor,
           onChanged: (updateChecked) {
             setState(() {
-              isManuallyEntered = updateChecked;
+              isManuallySet = updateChecked;
             });
           },
         ),
@@ -297,7 +302,7 @@ class _CategoryOptions extends State<CategoryOptions> {
       );
     }
 
-    if(isManuallyEntered) {
+    if(isManuallySet) {
       form = Form(
           key: _formKey,
           child: FocusScope(
@@ -345,7 +350,7 @@ class _CategoryOptions extends State<CategoryOptions> {
             initialnumberDropped = null;
           }
 
-          //TODO: push manually entered percentage
+          //TODO: push manually entered percentage -->> (Update by Mohd: now it is being pused to the database but I think the calculator resets it to zero for some reason. It could be because there are no assessments or something related to that.)
           //get this by using catPercentController.text
           if(_formKey.currentState.validate()) {
             await categoryService.updateCategory(
@@ -355,7 +360,9 @@ class _CategoryOptions extends State<CategoryOptions> {
                 dropLowest,
                 numberDroppedController.text,
                 equalWeights,
-                c.id);
+                c.id,
+                double.tryParse(catPercentController.text), /// <<<<---- here is how it is pushed.
+            );
             await calculator.calcCategoryGrade(term.termID, course.id, c.id);
 
             Navigator.pop(context);

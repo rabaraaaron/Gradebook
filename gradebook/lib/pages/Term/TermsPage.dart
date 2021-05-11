@@ -69,89 +69,131 @@ class _TermsListState extends State<TermsList> {
           endIndent: 25.0,
         ),
         itemCount: terms.length,
-        itemBuilder: (context, index) => Container(
-          child: Slidable(
-            controller: slidableController,
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: .2,
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(
-                  Icons.more_vert,
-                  color: Theme.of(context).dividerColor,
-                  size: 35,
-                ),
-                onTap: () async {
-                  Term t = terms[index];
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return TermOptions(t);
-                    },
-                  );
-                },
-              ),
-              IconSlideAction(
-                color: Colors.transparent,
-                closeOnTap: true,
-                iconWidget: Icon(
-                  Icons.delete,
-                  color: Theme.of(context).dividerColor,
-                  size: 35,
-                ),
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return DeleteTermConfirmation(terms, index);
-                    },
-                  );
-                  setState(() {
+        itemBuilder: (context, index) {
+          var textForManuallySet = Row();
+          if(terms[index].manuallySetGPA){
+             textForManuallySet = Row(
+               children: [
+                 Icon(Icons.lock_outline_sharp, size: 22,),
+                 Text(" Manually Set",
+                   style: Theme
+                       .of(context)
+                       .textTheme
+                       .bodyText2,
+                   textScaleFactor: 0.8,
+                 ),
+               ],
+             );
+          }
 
-                  });
-                },
-              )
-            ],
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: seasonIcons[index],
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          // Navigator.pushNamed(context, "/Home");
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TermClassesPageWrap(term: terms[index])));
-                        },
-                        child: new Padding(
-                          padding: new EdgeInsets.all(20.0),
-                          child: Text(
-                            "${terms[index].name} ${terms[index].year}",
-                            style: Theme.of(context).textTheme.headline6,
+          return Container(
+            child: Slidable(
+              controller: slidableController,
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: .2,
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(
+                    Icons.more_vert,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
+                    size: 35,
+                  ),
+                  onTap: () async {
+                    Term t = terms[index];
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return TermOptions(t);
+                      },
+                    );
+                  },
+                ),
+                IconSlideAction(
+                  color: Colors.transparent,
+                  closeOnTap: true,
+                  iconWidget: Icon(
+                    Icons.delete,
+                    color: Theme
+                        .of(context)
+                        .dividerColor,
+                    size: 35,
+                  ),
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DeleteTermConfirmation(terms, index);
+                      },
+                    );
+                    setState(() {
+
+                    });
+                  },
+                )
+              ],
+              child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        //width: MediaQuery.of(context).size.width,
+                        //padding: EdgeInsets.all(5.0),
+                        child: seasonIcons[index],
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            // Navigator.pushNamed(context, "/Home");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TermClassesPageWrap(
+                                            term: terms[index])));
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              new Padding(
+                                padding: new EdgeInsets.only(left: 8.0, right: 8),
+                                child: Text(
+                                  "${terms[index].name} ${terms[index].year}" ,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline6,
+                                  //textScaleFactor: 1.2,
+                                ),
+                              ),
+                              textForManuallySet,
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                    Text(
-                      "${terms[index].gpa.toStringAsFixed(2)}",
-                      style: Theme.of(context).textTheme.headline5,
-                      textScaleFactor: 2,
-                    ),
-                  ],
-                )),
-          ),
-        ),
+                      Text(
+                        "${terms[index].gpa.toStringAsFixed(2)}",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5,
+                        textScaleFactor: 1.3,
+                      ),
+                    ],
+                  )),
+            ),
+          );
+        }
       );
     } else {
       terms = [];
