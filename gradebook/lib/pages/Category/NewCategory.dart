@@ -266,7 +266,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
             child: Column(children: [
               topRow,
               manEntered,
-              manuallyEnterSwitch,
+              // manuallyEnterSwitch,
             ]),
           )
       );
@@ -277,7 +277,7 @@ class _NewCategoriesPopUpState extends State<NewCategoriesPopUp> {
             node: focusScopeNode,
             child: Column(children: [
               topRow,
-              manuallyEnterSwitch,
+              // manuallyEnterSwitch,
               c,
             ]),
           )

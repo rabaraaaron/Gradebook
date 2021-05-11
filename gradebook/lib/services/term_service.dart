@@ -104,7 +104,7 @@ class TermService {
         'credits':0.0
       });
     }
-    await Calculator().calcCumulativeGPA();
+    await Calculator().calculateGPA(termID);
   }
 
 

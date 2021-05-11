@@ -310,7 +310,7 @@ class _CategoryOptions extends State<CategoryOptions> {
             child: Column(children: [
               topRow,
               manEntered,
-              manuallyEnterSwitch,
+              // manuallyEnterSwitch,
             ]),
           )
       );
@@ -321,7 +321,7 @@ class _CategoryOptions extends State<CategoryOptions> {
             node: focusScopeNode,
             child: Column(children: [
               topRow,
-              manuallyEnterSwitch,
+              // manuallyEnterSwitch,
               col,
             ]),
           )
