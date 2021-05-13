@@ -64,7 +64,7 @@ class _ChangePasswordTileState extends State<ChangePasswordTile> {
         },
         padding: const EdgeInsets.all(18.0),
         child: Text('Change Password',
-          style: Theme.of(context).textTheme.headline5,),
+          style: Theme.of(context).textTheme.bodyText1,),
       ),
     );
 

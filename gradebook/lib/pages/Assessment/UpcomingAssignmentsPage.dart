@@ -48,7 +48,6 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
   }
 
   Future<List<Assessment>> getWindow() async{
-    print("Im inside getWindow " + window.toString());
     await userService.getUserWindow(uID).then((value) => window = value);
     return await dueDateQuery.getAssessmentsDue(window);
   }
@@ -87,10 +86,8 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
           builder: (context, snapshot){
           print("HELLO " + window.toString());
           if(snapshot.connectionState != ConnectionState.done){
-            print("We are waiting at loading");
             return Loading();
           }
-          print("No longer waiting");
           if(snapshot.data.length == 0){
             return Column(
               children: [
@@ -112,13 +109,8 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
                       items: dayList,
                       onChanged: (days) async {
                         userService.setUserWindow(uID, days);
-
                         window = await Future.value(userService.getUserWindow(uID));
-                        print(window.toString() + " changed");
-
-                        setState(() {
-                        });
-
+                        setState(() { });
                       },
                       isExpanded: false,
                     ),
@@ -218,7 +210,6 @@ class _UpcomingAssignments extends State<UpcomingAssignments> {
                             .accentColor
                             .withOpacity(.2),
                         child: ListTile(
-                          leading: Icon(Icons.album_sharp),
                           title: Text(snapshot.data[index].name,),
                           subtitle: Row(
                             children: [
