@@ -26,13 +26,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  var initializeAndroid =
-    AndroidInitializationSettings('icon');
+  var initializeAndroid = AndroidInitializationSettings('icon');
 
   var initializeIOS = IOSInitializationSettings();
 
-  var initializationSettings = InitializationSettings(
-      android: initializeAndroid, iOS: initializeIOS);
+  var initializationSettings =
+      InitializationSettings(android: initializeAndroid, iOS: initializeIOS);
 
   localNotification = FlutterLocalNotificationsPlugin();
 
@@ -75,28 +74,24 @@ class _GradebookState extends State<Gradebook> {
   void initState() {
     initializeFlutterFire();
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    if(_initialized)
+    if (_initialized)
       return StreamProvider<GradeBookUser>.value(
         value: AuthService().gradebookuser,
         child: ChangeNotifierProvider<MyAppTheme>(
-          create: (_) => MyAppTheme(),
-            child: new MaterialAppWithTheme()
-        ),
+            create: (_) => MyAppTheme(), child: new MaterialAppWithTheme()),
       );
     else
       return Loading();
   }
 }
 
-class MaterialAppWithTheme extends StatelessWidget{
+class MaterialAppWithTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final theme = Provider.of<MyAppTheme>(context);
     List<AppTheme> themes = theme.getThemes();
 
@@ -104,11 +99,9 @@ class MaterialAppWithTheme extends StatelessWidget{
       saveThemesOnChange: true,
       loadThemeOnInit: true,
       defaultThemeId: 'my_default',
-      themes:
-        List.generate(themes.length, (index) {
-          return themes[index];
-        }),
-
+      themes: List.generate(themes.length, (index) {
+        return themes[index];
+      }),
       child: ThemeConsumer(
         child: Builder(
           builder: (themeContext) => MaterialApp(
@@ -125,12 +118,11 @@ class MaterialAppWithTheme extends StatelessWidget{
               '/Settings': (context) => SettingsPage(),
               '/Upcoming': (context) => UpcomingAssignments(),
               '/ImagePage': (context) => ImagePage(),
-              '/MembershipPage' : (context) => MembershipPage(),
+              '/MembershipPage': (context) => MembershipPage(),
             },
           ),
         ),
       ),
     );
   }
-
 }

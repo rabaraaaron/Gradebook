@@ -173,6 +173,17 @@ class _CategoryOptions extends State<CategoryOptions> {
             keyboardType: TextInputType.number,
             initialValue: initialWeight,
             onEditingComplete: handleSubmitted,
+            onTap: (){
+              if (categoryWeightController == null) {
+                print("controller created");
+                categoryWeightController = TextEditingController();
+                categoryWeightController.text = initialWeight;
+                initialWeight = null;
+                setState(() {
+
+                });
+              }
+            },
             validator:
                 (value) {
               if (value == null || value.isEmpty) {
@@ -186,7 +197,7 @@ class _CategoryOptions extends State<CategoryOptions> {
               if (double.parse(value) > course.remainingWeight) {
                 MessageBar(
                     context: context,
-                    msg: 'Weight cannot be grater than ' +
+                    msg: 'Weight cannot be greater than ' +
                         course.remainingWeight.toString(),
                     title: "invalid weight value.").show();
                 return course

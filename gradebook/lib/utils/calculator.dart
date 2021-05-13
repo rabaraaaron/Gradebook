@@ -295,6 +295,9 @@ class Calculator {
 
     gpa = totalGradePoints / creditCount;
 
+    if (creditCount == 0)
+      gpa =0.0;
+
     await termsCollection.doc(termID).update({
       'gpa': gpa,
       'credits': creditCount
@@ -318,21 +321,7 @@ class Calculator {
       cumulativeCredits += credits;
     }
 
-// try {
-//   for (DocumentSnapshot term in terms.docs) {
-//     double gpa = term.get('gpa');
-//     double credits = term.get('credits');
-//     gradePoints += gpa * credits;
-//     cumulativeCredits += credits;
-//   }
-// } catch(e) {
-//   for (DocumentSnapshot term in terms.docs) {
-//     double gpa = term.get('gpa');
-//     double credits = term.get('credits').toDouble();
-//     gradePoints += gpa * credits;
-//     cumulativeCredits += credits;
-//   }
-// }
+
     double cumulativeGPA = gradePoints/cumulativeCredits;
     if(cumulativeCredits==0)
       cumulativeGPA=0.0;
