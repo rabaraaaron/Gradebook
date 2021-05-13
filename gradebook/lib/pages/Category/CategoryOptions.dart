@@ -196,7 +196,7 @@ class _CategoryOptions extends State<CategoryOptions> {
               if (double.parse(value) > course.remainingWeight) {
                 MessageBar(
                     context: context,
-                    msg: 'Weight cannot be grater than ' +
+                    msg: 'Weight cannot be greater than ' +
                         course.remainingWeight.toString(),
                     title: "invalid weight value.").show();
                 return course
