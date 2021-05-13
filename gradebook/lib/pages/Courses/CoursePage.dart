@@ -202,13 +202,16 @@ class _TermCoursePageState extends State<TermCoursePage> {
                             child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CategoryPageWrap(
-                                            term: term,
-                                            course: classes[index])));
-                              },
+                                if(!classes[index].manuallySetGrade) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoryPageWrap(
+                                                  term: term,
+                                                  course: classes[index])));
+                                }
+                                },
                               child: new Padding(
                                 padding: new EdgeInsets.all(3.0),
                                 child: Column(

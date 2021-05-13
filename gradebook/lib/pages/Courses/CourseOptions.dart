@@ -194,20 +194,20 @@ class _CourseOptionsState extends State<CourseOptions> {
                     style: Theme.of(context).textTheme.headline3),
               ],
             ),
-            Row(
-              children: [
-                Switch(
-                  value: isPassFail,
-                  activeColor: Theme.of(context).accentColor,
-                  onChanged: (updateChecked) {
-                    setState(() {
-                      isPassFail = updateChecked;
-                    });
-                  },
-                ),
-                Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-              ],
-            ),
+            // Row(
+            //   children: [
+                // Switch(
+                //   value: isPassFail,
+                //   activeColor: Theme.of(context).accentColor,
+                //   onChanged: (updateChecked) {
+                //     setState(() {
+                //       isPassFail = updateChecked;
+                //     });
+                //   },
+                // ),
+                // Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+              // ],
+            // ),
             Row(
               children: [
                 Switch(
@@ -345,20 +345,20 @@ class _CourseOptionsState extends State<CourseOptions> {
                     style: Theme.of(context).textTheme.headline3),
               ],
             ),
-            Row(
-              children: [
-                Switch(
-                  value: isPassFail,
-                  activeColor: Theme.of(context).accentColor,
-                  onChanged: (updateChecked) {
-                    setState(() {
-                      isPassFail = updateChecked;
-                    });
-                  },
-                ),
-                Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Switch(
+            //       value: isPassFail,
+            //       activeColor: Theme.of(context).accentColor,
+            //       onChanged: (updateChecked) {
+            //         setState(() {
+            //           isPassFail = updateChecked;
+            //         });
+            //       },
+            //     ),
+            //     Text("Pass/Fail", style: Theme.of(context).textTheme.headline3),
+            //   ],
+            // ),
           ]),
         ),
       );

@@ -27,10 +27,11 @@ class ReminderConfirmation extends StatelessWidget {
         ),
         Text(
           '\n$assignmentName reminder was set for:\n\n'
-              '${d.toString()}',
+              'Day: ${d.toString().substring(0, 10)}'
+              '\nTime: ${d.toString().substring(10, 16)}',
           style: TextStyle(
               fontWeight: FontWeight.w300,
-              fontSize: 20.0
+              fontSize: 25.0
           ),
         ),
         SizedBox(height: 20),

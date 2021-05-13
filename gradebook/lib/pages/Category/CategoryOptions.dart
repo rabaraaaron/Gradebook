@@ -173,6 +173,16 @@ class _CategoryOptions extends State<CategoryOptions> {
             keyboardType: TextInputType.number,
             initialValue: initialWeight,
             onEditingComplete: handleSubmitted,
+            onTap: (){
+              if (categoryWeightController == null) {
+                categoryWeightController = TextEditingController();
+                categoryWeightController.text = initialWeight;
+                initialWeight = null;
+                setState(() {
+
+                });
+              }
+            },
             validator:
                 (value) {
               if (value == null || value.isEmpty) {
@@ -353,6 +363,7 @@ class _CategoryOptions extends State<CategoryOptions> {
           //TODO: push manually entered percentage -->> (Update by Mohd: now it is being pused to the database but I think the calculator resets it to zero for some reason. It could be because there are no assessments or something related to that.)
           //get this by using catPercentController.text
           if(_formKey.currentState.validate()) {
+            print(categoryWeightController.text);
             await categoryService.updateCategory(
                 addedCategory,
                 categoryWeightController.text,

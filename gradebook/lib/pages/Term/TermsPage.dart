@@ -58,7 +58,6 @@ class _TermsListState extends State<TermsList> {
     List terms;
     Widget listView = Container();
     GradeBookUser user = Provider.of<GradeBookUser>(context);
-    print("USER::::::" + user.toString());
 
     if (Provider.of<List<Term>>(context) != null) {
       terms = Provider.of<List<Term>>(context);
@@ -155,12 +154,14 @@ class _TermsListState extends State<TermsList> {
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
                             // Navigator.pushNamed(context, "/Home");
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        TermClassesPageWrap(
-                                            term: terms[index])));
+                            if(!terms[index].manuallySetGPA) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TermClassesPageWrap(
+                                              term: terms[index])));
+                            }
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
