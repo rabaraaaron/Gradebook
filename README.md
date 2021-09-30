@@ -1,2 +1,2 @@
 # Gradebook
-This is a cross-platform app that runs on both iOS and Android. The purpose of this app is to provide students with a tool of keeping track of their own grades, assignments, and overall academic progress.
+This is a feature-rich cross-platform mobile application on iOS and Android tailored towards students looking for a centralized app to personally keep track of their grades, coursework, and overall academic progress.
