@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "863918674080",
+    "firebase_url": "https://gradebook-9bfd4.firebaseio.com",
+    "project_id": "gradebook-9bfd4",
+    "storage_bucket": "gradebook-9bfd4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863918674080:android:c460afd1745db66d01b9c5",
+        "android_client_info": {
+          "package_name": "com.example.gradebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863918674080-l4p3n82qlr7acdqbhd6528hfre4cmgm3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gradebook",
+            "certificate_hash": "ed44102e100829301dc42d9dad4a55075cbd4b57"
+          }
+        },
+        {
+          "client_id": "863918674080-m7pi4nmm4scrgqdk18ak0uih5sl3umuo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoEHGxgdiR5VYwf3xUiedv6YpSnq3D_5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863918674080-m7pi4nmm4scrgqdk18ak0uih5sl3umuo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
